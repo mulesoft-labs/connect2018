@@ -1,0 +1,20 @@
+{
+  "configs": [
+    "facility-locator.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "facility-locator",
+  "minMuleVersion": "4.1.1",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedResources": []
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}
