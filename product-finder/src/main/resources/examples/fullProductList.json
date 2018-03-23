@@ -1,0 +1,95 @@
+[{
+	"id": 123,
+	"price": {
+		"value": 123.45,
+		"currency": "Dollar"
+	},
+	"description": "Super Exciting Tent",
+	"copy": "This tent is the best tent ever! You can do amazing things with it!",
+	"image": {
+		"id": 1234,
+		"url": "https://s7d2.scene7.com/is/image/dkscdn/16FNSUFS7X6X463PRCAT_Orange_is/"
+	},
+	"company": {
+		"id": 123,
+		"name": "Sports Basement",
+		"address": {
+			"country": "USA",
+			"state": "CA",
+			"city": "San Francisco",
+			"street_address": "1 Market",
+			"zip": 94029
+		}
+	},
+	"category": "Outdoor Sports",
+	"review": [
+		{
+			"reviewer_name": "Renan",
+			"review": "Best Product ever",
+			"date": "2018-03-19",
+			"rate": 5
+		},
+		{
+			"reviewer_name": "Other Reviewer",
+			"review": "I hate it!",
+			"date": "2018-03-19",
+			"rate": 1
+		}
+	],
+	"quantity": 1010,
+	"location": {
+		"country": "USA",
+		"state": "CA",
+		"city": "San Francisco",
+		"street_address": "77 Geary St",
+		"zip": 94108
+	}
+},
+{
+	"id": 123,
+	"price": {
+		"value": 123.45,
+		"currency": "Dollar"
+	},
+	"description": "Super Exciting Tent",
+	"copy": "This tent is the best tent ever! You can do amazing things with it!",
+	"image": {
+		"id": 1234,
+		"url": "https://s7d2.scene7.com/is/image/dkscdn/16FNSUFS7X6X463PRCAT_Orange_is/"
+	},
+	"company": {
+		"id": 123,
+		"name": "Sports Basement",
+		"address": {
+			"country": "USA",
+			"state": "CA",
+			"city": "San Francisco",
+			"street_address": "1 Market",
+			"zip": 94029
+		}
+	},
+	"category": "Outdoor Sports",
+	"review": [
+		{
+			"reviewer_name": "Renan",
+			"review": "Best Product ever",
+			"date": "2018-03-19",
+			"rate": 5
+		},
+		{
+			"reviewer_name": "Other Reviewer",
+			"review": "I hate it!",
+			"date": "2018-03-19",
+			"rate": 1
+		}
+	],
+	"quantity": 1010,
+	"location": {
+		"country": "USA",
+		"state": "CA",
+		"city": "San Francisco",
+		"street_address": "77 Geary St",
+		"zip": 94108
+	}
+}
+]

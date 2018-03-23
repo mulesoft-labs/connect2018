@@ -49,6 +49,18 @@
             <version>1.1.0</version>
             <classifier>mule-plugin</classifier>
         </dependency>
+        <dependency>
+		  <groupId>org.mule.modules</groupId>
+		  <artifactId>mule-scripting-module</artifactId>
+		  <version>1.1.0</version> <!-- or newer -->
+		  <classifier>mule-plugin</classifier>
+		</dependency>
+    	<dependency>
+            <groupId>org.mule.module</groupId>
+            <artifactId>mule-java-module</artifactId>
+            <version>1.0.0</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
     </dependencies>
 
 	<repositories>

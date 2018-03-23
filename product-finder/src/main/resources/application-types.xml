@@ -11,10 +11,10 @@
       <types:example format="json" location="examples/inventory.json"/>
     </types:type>
     <types:type name="productCollectionjson" format="json">
-      <types:example format="json" location="examples/product.json"/>
+      <types:example format="json" location="examples/productList.json"/>
     </types:type>
-    <types:type name="arraylist" format="java">
-      <types:shape format="java" element="java.util.ArrayList"/>
+    <types:type name="fullproductList" format="json">
+      <types:example format="json" location="examples/fullProductList.json"/>
     </types:type>
   </types:catalog>
   <types:enrichment select="#a88c1b93-4dba-42b0-9a9e-029047d3f279">
@@ -32,24 +32,38 @@
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
-  <types:enrichment select="#c4783662-dd63-4e3c-beb0-13d4b8d7be79">
+  <types:enrichment select="#cc2ec033-39a2-40b6-ba2e-fa46ed16432c">
     <types:processor-declaration>
       <types:output-event>
         <types:message>
-          <types:payload type="arraylist"/>
+          <types:payload type="product"/>
         </types:message>
         <types:variables>
-          <types:variable name="fullProductList" type="arraylist"/>
+          <types:variable name="bPayload" type="product"/>
         </types:variables>
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
-  <types:enrichment select="#69cb39e7-8a22-4a66-b217-b3311e5b4a45">
+  <types:enrichment select="#e1976893-0663-41e8-bb31-7158d26c175d">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="inventory"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="fullProduct"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#41ea6efd-5dbe-43b0-96eb-865aecb65ef7">
     <types:processor-declaration>
       <types:output-event>
-        <types:variables>
-          <types:variable name="fullProductList" type="arraylist"/>
-        </types:variables>
+        <types:message>
+          <types:payload type="fullproductList"/>
+        </types:message>
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
