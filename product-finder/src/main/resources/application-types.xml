@@ -1,28 +1,55 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
   <types:catalog>
-    <types:type name="productJson" format="json">
+    <types:type name="product" format="json">
       <types:example format="json" location="examples/product.json"/>
     </types:type>
-    <types:type name="fullProductJson" format="json">
+    <types:type name="fullProduct" format="json">
       <types:example format="json" location="examples/fullProduct.json"/>
     </types:type>
-    <types:type name="inventoryJson" format="json">
+    <types:type name="inventory" format="json">
       <types:example format="json" location="examples/inventory.json"/>
     </types:type>
+    <types:type name="productCollectionjson" format="json">
+      <types:example format="json" location="examples/product.json"/>
+    </types:type>
+    <types:type name="arraylist" format="java">
+      <types:shape format="java" element="java.util.ArrayList"/>
+    </types:type>
   </types:catalog>
-  <types:enrichment select="#f601a2f7-2620-41f4-aeec-6746c818ab35">
+  <types:enrichment select="#a88c1b93-4dba-42b0-9a9e-029047d3f279">
     <types:processor-declaration>
       <types:input-event>
         <types:variables>
-          <types:variable name="product" type="productJson"/>
-          <types:variable name="inventory" type="inventoryJson"/>
+          <types:variable name="product" type="product"/>
+          <types:variable name="inventory" type="inventory"/>
         </types:variables>
       </types:input-event>
       <types:output-event>
         <types:message>
-          <types:payload type="fullProductJson"/>
+          <types:payload type="fullProduct"/>
         </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#c4783662-dd63-4e3c-beb0-13d4b8d7be79">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="arraylist"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="fullProductList" type="arraylist"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#69cb39e7-8a22-4a66-b217-b3311e5b4a45">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:variables>
+          <types:variable name="fullProductList" type="arraylist"/>
+        </types:variables>
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>

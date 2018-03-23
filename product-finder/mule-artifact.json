@@ -23,7 +23,6 @@
         "api/.repository/resourceTypes/collection-item.raml",
         "api/.repository/resourceTypes/collection.raml",
         "api/dataTypes/companyTypes.raml",
-        "api/dataTypes/inventoryTypes.raml",
         "api/dataTypes/locationTypes.raml",
         "api/dataTypes/productTypes.raml",
         "api/dataTypes/utilTypes.raml",

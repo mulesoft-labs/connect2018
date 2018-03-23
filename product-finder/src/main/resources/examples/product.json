@@ -21,14 +21,19 @@
 			"zip": 94029
 		}
 	},
-	"category": {
-		"id": 123,
-		"name": "Outdoor Sports"
-	},
-	"review": {
-		"reviewer_name": "Other Reviewer",
-		"review": "I hate it!",
-		"date": "2018-03-19",
-		"rate": 1
-	}
+	"category": "Outdoor Sports",
+	"review": [
+		{
+			"reviewer_name": "Renan",
+			"review": "Best Product ever",
+			"date": "2018-03-19",
+			"rate": 5
+		},
+		{
+			"reviewer_name": "Other Reviewer",
+			"review": "I hate it!",
+			"date": "2018-03-19",
+			"rate": 1
+		}
+	]
 }

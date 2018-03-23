@@ -10,12 +10,12 @@ get:
         application/json:
           type: <<get-response-type>>
           example: <<get-response-example>>
-patch?:
+patch:
   description: Updates <<resourcePathName | !singularize>> data
   responses:
     200:
       body:
         application/json:
           type: <<patch-response-type>>
-delete?:
+delete:
   description: Removes a <<resourcePathName | !singularize>> from the system 
