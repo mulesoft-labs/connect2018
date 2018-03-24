@@ -189,10 +189,9 @@ output application/java
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-vars.*fullProductList]]></ee:set-payload>
+vars.fullProductList]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="4a0b532f-c0f4-4c09-9d57-5f448fdd04fd" message="#[payload]"/>
     </flow>
     <flow name="post:\products:application\json:product-finder-config">
         <http:request method="POST" doc:name="Post product (CATALOG API)" doc:id="9f56a45f-5da2-4b7f-97c3-699db2225816" config-ref="HTTP_Request_configuration" url="https://mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec/catalog/products" />
