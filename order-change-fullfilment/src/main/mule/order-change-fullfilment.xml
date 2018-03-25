@@ -21,7 +21,7 @@ payload.result.parameters.orderId]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<choice doc:name="Choice" doc:id="68ff972d-69f3-454e-992d-26b4e90328c6" >
-			<when expression="#[orderId]" >
+			<when expression='#[vars.orderId != ""]' >
 				<ee:transform doc:name="Transform Message" doc:id="386e8d90-3b42-4dd3-9450-23f0a93d17ba">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
