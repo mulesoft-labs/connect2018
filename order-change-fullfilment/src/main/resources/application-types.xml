@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="postExample" format="json">
+      <types:example format="json" location="examples/postExample.json"/>
+    </types:type>
+    <types:type name="string" format="java">
+      <types:shape format="raml"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="parameter" format="json">
+      <types:example format="json" location="examples/parameters.json"/>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#f2f2f926-3cb9-4b5e-9126-9f06d9007ce7">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="postExample"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="parameter"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="orderId" type="string"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

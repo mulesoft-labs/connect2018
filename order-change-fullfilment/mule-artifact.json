@@ -1,0 +1,20 @@
+{
+  "configs": [
+    "order-change-fullfilment.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "order-change-fullfilment",
+  "minMuleVersion": "4.1.1",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedResources": []
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}
