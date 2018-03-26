@@ -26,3 +26,9 @@ resourceTypes:
           get-response-example: !include examples/ProductExample.raml
           get-response-type: product.ProductData
           patch-response-type: product.ProductData
+    /price/{price}:
+      type:
+        collection:
+          response-type: product.ProductData
+          request-type: product.NewProductData
+          response-example:  !include examples/ProductCollectionExample.raml
