@@ -17,12 +17,12 @@ resourceTypes:
   /orders:
     type:
       collection:
-        response-type: order.OrderData
-        request-type: order.NewOrderData
+        response-type: order.NewOrder
+        request-type: order.Order
         response-example: !include examples/OrderCollectionExample.raml
     /{order_id}:
       type:
         member:
           get-response-example: !include examples/OrderExample.raml
-          get-response-type: order.OrderProduct
-          patch-response-type: order.OrderProduct
+          get-response-type: order.Order
+          patch-response-type: order.Order
