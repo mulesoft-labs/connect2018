@@ -2,8 +2,9 @@
 
 usage: Product Types
 uses:
-  util: utilTypes.raml
-  company: companyTypes.raml
+  util: ../../Commons-API/datatypes/utilTypes.raml
+  company: ../../Commons-API/datatypes/companyTypes.raml
+  
 types:
   NewProductData:
     properties:
@@ -11,11 +12,11 @@ types:
       description: string
       copy: string
       image: util.ImageData
-      company: company.Company 
+      company: company.Company
       category: string
       review?: util.ReviewData[]
-      
+
   ProductData:
     type: NewProductData
-    properties: 
+    properties:
       id: number

@@ -1,5 +1,5 @@
 #%RAML 1.0
-baseUri: https://mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec # 
+baseUri: https://mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec #
 title: Catalog API
 
 version: 1.0
@@ -7,15 +7,15 @@ mediaType: application/json
 
 uses:
   product: dataTypes/productTypes.raml
-  traits: traits/traits.raml
+  traits: ../Commons-API/traits/traits.raml
 
 resourceTypes:
-  collection: !include resourceTypes/collection.raml
-  member: !include resourceTypes/member.raml
+  collection: !include ../Commons-API/resourceTypes/collection.raml
+  member: !include ../Commons-API/resourceTypes/member.raml
 
 /catalog:
   /products:
-    type: 
+    type:
       collection:
         response-type: product.ProductData
         request-type: product.NewProductData

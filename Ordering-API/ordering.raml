@@ -1,6 +1,28 @@
 #%RAML 1.0
-baseUri: https://mocksvc.mulesoft.com/mocks/835ad7cd-bfef-4573-a65e-a36813f5d8ae # 
+baseUri: https://mocksvc.mulesoft.com/mocks/835ad7cd-bfef-4573-a65e-a36813f5d8ae #
 title: Ordering API
 
 version: 1.0
 mediaType: application/json
+
+uses:
+  order: dataTypes/orderTypes.raml
+  traits: ../Commons-API/traits/traits.raml
+
+resourceTypes:
+    collection: !include ../Commons-API/resourceTypes/collection.raml
+    member: !include ../Commons-API/resourceTypes/member.raml
+
+/ordering:
+  /orders:
+    type:
+      collection:
+        response-type: order.OrderData
+        request-type: order.NewOrderData
+        response-example: !include examples/OrderCollectionExample.raml
+    /{order_id}:
+      type:
+        member:
+          get-response-example: !include examples/OrderExemple.raml
+          get-response-type: order.OrderProduct
+          patch-response-type: order.OrderProduct
