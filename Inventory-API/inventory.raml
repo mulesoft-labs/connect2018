@@ -1,0 +1,22 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/508c2a42-a9ec-4afd-b958-8449818bc086 # 
+title: Inventory API
+
+version: 1.0
+mediaType: application/json
+
+uses:
+  inventory: dataTypes/inventoryTypes.raml
+  traits: traits/traits.raml
+
+resourceTypes:
+  collection: !include resourceTypes/collection.raml
+  member: !include resourceTypes/member.raml
+  
+/inventory:
+  /products/{product_id}: 
+    type:
+        member:
+          get-response-example: !include examples/InventoryExample.raml
+          get-response-type: inventory.Inventory
+          patch-response-type: inventory.Inventory
