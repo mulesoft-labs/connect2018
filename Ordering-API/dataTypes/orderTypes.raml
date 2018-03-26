@@ -1,0 +1,41 @@
+#%RAML 1.0 Library
+
+usage: Order Types
+uses:
+  product: ../../Catalog-API/dataTypes/productTypes.raml
+
+types:
+  ShippedStatus:
+    enum: [shipped, non-shipped, canceled]
+
+  NewOrderProduct:
+    properties:
+      id: number
+      amount: number
+      shippingStatus: ShippedStatus
+
+  OrderProduct:
+    type: NewOrderData
+    properties:
+      id: number
+
+  NewOrderProducts:
+    properties:
+      totalAmountPrice: number
+      totalAmountPriceCurrency: string
+      products: OrderProduct[]
+
+  OrderProducts:
+    type: NewOrderProducts
+    properties:
+      id: number
+
+  NewOrderData:
+    properties:
+      customerID: number
+      orderProducts: OrderProducts
+
+  OrderData:
+    type: NewOrderData
+    properties:
+      id: number
