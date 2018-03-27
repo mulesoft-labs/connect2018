@@ -10,7 +10,13 @@
   "classLoaderModelLoaderDescriptor": {
     "id": "mule",
     "attributes": {
-      "exportedResources": []
+      "exportedResources": [
+        "api/dataTypes",
+        "api/examples",
+        "api/ordering.raml",
+        "api/resourceTypes",
+        "api/traits"
+      ]
     }
   },
   "bundleDescriptorLoader": {

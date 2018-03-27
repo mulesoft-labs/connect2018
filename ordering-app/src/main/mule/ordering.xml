@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core"
-      xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
-      xmlns:http="http://www.mulesoft.org/schema/mule/http"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-      http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
-      http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd" >
-
-    <configuration-properties file="mule-artifact.properties"/>
-
-    <apikit:config name="router-config" raml="api.raml"
-                   outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-
-    <http:listener-config name="httpListenerConfigDefault">
-        <http:listener-connection host="0.0.0.0" port="${http.port}"/>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd ">
+    <http:listener-config name="ordering-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
-
-    <flow name="main-api">
-        <http:listener config-ref="httpListenerConfigDefault" path="/api/*">
+    <apikit:config name="ordering-config" raml="ordering.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="ordering-main">
+        <http:listener config-ref="ordering-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:response>
@@ -26,9 +14,7 @@
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:error-response>
         </http:listener>
-
-        <apikit:router config-ref="router-config" />
-
+        <apikit:router config-ref="ordering-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -62,8 +48,7 @@ output application/json
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Method not allowed"}]]>
-                        </ee:set-payload>
+{message: "Method not allowed"}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">405</ee:set-variable>
@@ -102,7 +87,7 @@ output application/json
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Not implemented"}]]></ee:set-payload>
+{message: "Not Implemented"}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">501</ee:set-variable>
@@ -111,9 +96,8 @@ output application/json
             </on-error-propagate>
         </error-handler>
     </flow>
-
-    <flow name="main-console">
-        <http:listener config-ref="httpListenerConfigDefault" path="/console/*">
+    <flow name="ordering-console">
+        <http:listener config-ref="ordering-httpListenerConfig" path="/console/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:response>
@@ -122,9 +106,7 @@ output application/json
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:error-response>
         </http:listener>
-
-        <apikit:console config-ref="router-config" />
-
+        <apikit:console config-ref="ordering-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:NOT_FOUND">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -132,8 +114,7 @@ output application/json
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Resource not found"}]]>
-                        </ee:set-payload>
+{message: "Resource not found"}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">404</ee:set-variable>
@@ -142,5 +123,129 @@ output application/json
             </on-error-propagate>
         </error-handler>
     </flow>
-
+    <flow name="patch:\ordering\orders\(order_id):ordering-config">
+        <logger level="INFO" message="patch:\ordering\orders\(order_id):ordering-config" />
+    </flow>
+    <flow name="get:\ordering\orders\customer\(customer_id):ordering-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    id: 123,
+    products: [
+      {
+        id: 1,
+        amount: 2
+      }, 
+      {
+        id: 2,
+        amount: 1
+      }
+    ],
+    totalAmountPrice: 130.00,
+    totalAmountPriceCurrency: "USD",
+    shippingStatus: "non-shipped",
+    customerID: 20180355
+  }, 
+  {
+    id: 321,
+    products: [
+      {
+        id: 789,
+        amount: 2
+      }, 
+      {
+        id: 567,
+        amount: 1
+      }
+    ],
+    totalAmountPrice: 120.00,
+    totalAmountPriceCurrency: "USD",
+    shippingStatus: "non-shipped",
+    customerID: 20180355
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\ordering\orders:ordering-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    id: 123,
+    products: [
+      {
+        id: 1,
+        amount: 2
+      }, 
+      {
+        id: 2,
+        amount: 1
+      }
+    ],
+    totalAmountPrice: 130.00,
+    totalAmountPriceCurrency: "USD",
+    shippingStatus: "non-shipped",
+    customerID: 20180355
+  }, 
+  {
+    id: 321,
+    products: [
+      {
+        id: 789,
+        amount: 2
+      }, 
+      {
+        id: 567,
+        amount: 1
+      }
+    ],
+    totalAmountPrice: 120.00,
+    totalAmountPriceCurrency: "USD",
+    shippingStatus: "non-shipped",
+    customerID: 20180355
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\ordering\orders\(order_id):ordering-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: 321,
+  products: [
+    {
+      id: 789,
+      amount: 2
+    }, 
+    {
+      id: 567,
+      amount: 1
+    }
+  ],
+  totalAmountPrice: 120.00,
+  totalAmountPriceCurrency: "USD",
+  shippingStatus: "non-shipped",
+  customerID: 20180355
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\ordering\orders\customer\(customer_id):application\json:ordering-config">
+        <logger level="INFO" message="post:\ordering\orders\customer\(customer_id):application\json:ordering-config" />
+    </flow>
+    <flow name="post:\ordering\orders:application\json:ordering-config">
+        <logger level="INFO" message="post:\ordering\orders:application\json:ordering-config" />
+    </flow>
 </mule>
