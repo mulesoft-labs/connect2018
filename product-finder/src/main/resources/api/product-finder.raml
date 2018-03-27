@@ -4,8 +4,8 @@ title: product-finder
 uses:
   productData: dataTypes/productTypes.raml
 resourceTypes: 
-  collection: !include resourceTypes/collection.raml
-  collection-item: !include resourceTypes/collection-item.raml
+  collection: !include local/resourceTypes/collection.raml  
+  collection-item: !include local/resourceTypes/collection-item.raml
 /products:
   type: 
     collection:

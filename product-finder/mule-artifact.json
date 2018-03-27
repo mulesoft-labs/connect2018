@@ -22,14 +22,11 @@
         "api/.repository/product-finder.raml",
         "api/.repository/resourceTypes/collection-item.raml",
         "api/.repository/resourceTypes/collection.raml",
-        "api/dataTypes/companyTypes.raml",
-        "api/dataTypes/locationTypes.raml",
-        "api/dataTypes/productTypes.raml",
-        "api/dataTypes/utilTypes.raml",
-        "api/examples/ProductExample.raml",
-        "api/product-finder.raml",
-        "api/resourceTypes/collection-item.raml",
-        "api/resourceTypes/collection.raml"
+        "api/catalog.raml",
+        "api/dataTypes",
+        "api/examples",
+        "api/resourceTypes",
+        "api/traits"
       ]
     }
   },

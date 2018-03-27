@@ -1,6 +1,6 @@
 {
   "configs": [
-    "ordering-app.xml"
+    "ordering.xml"
   ],
   "secureProperties": [],
   "redeploymentEnabled": true,
