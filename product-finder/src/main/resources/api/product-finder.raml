@@ -4,9 +4,13 @@ title: product-finder
 
 uses:
   productData: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-datatypes/1.0.1/productTypes.raml
+  traits: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/traits.raml
+
 resourceTypes: 
-  collection: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.1/collection.raml
+  collection: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.1/collection.raml  
   collection-item: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/product-finder-resourcetypes/1.0.0/collection-item.raml
+  member: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.1/member.raml
+
 /products:
   type: 
     collection:
@@ -31,3 +35,9 @@ resourceTypes:
         get-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.0/ProductExample.raml
         get-response-type: productData.ProductData
         patch-response-type: productData.ProductData
+  /price/{price}:
+    type:
+      collection:
+        response-type: productData.ProductData
+        request-type: productData.NewProductData
+        response-example:  !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.0/ProductCollectionExample.raml
