@@ -12,18 +12,18 @@
     "attributes": {
       "exportedResources": [
         "api/.gitignore",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-datatypes/1.0.0/productTypes.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-datatypes/1.0.1/productTypes.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-datatypes/1.0.0/companyTypes.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-datatypes/1.0.0/locationTypes.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-datatypes/1.0.0/utilTypes.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.0/collection.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.0/member.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.1/collection.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.1/member.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/content-cacheable.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/pageable.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/sortable.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/traits.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-datatypes/1.0.0/customer-datatypes.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-datatypes/1.0.0/orderTypes.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-datatypes/1.0.1/customer-datatypes.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-datatypes/1.0.1/orderTypes.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-examples/1.0.0/OrderCollectionExample.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-examples/1.0.0/OrderExample.raml",
         "api/ordering.raml"
