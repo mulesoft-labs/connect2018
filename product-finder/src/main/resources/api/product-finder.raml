@@ -1,16 +1,18 @@
 #%RAML 1.0
+version: v1
 title: product-finder
 
 uses:
-  productData: dataTypes/productTypes.raml
+  productData: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-datatypes/1.0.1/productTypes.raml
 resourceTypes: 
-  collection: !include local/resourceTypes/collection.raml  
-  collection-item: !include local/resourceTypes/collection-item.raml
+  collection: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.1/collection.raml
+  collection-item: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/product-finder-resourcetypes/1.0.0/collection-item.raml
 /products:
   type: 
     collection:
-      response-type: productData.ProductData
-      request-type: productData.NewProductData
+      response-type: productData.NewProductData
+      request-type: productData.ProductData
+      response-example: !include exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.0/ProductCollectionExample.raml
   get:
     queryParameters: 
       category:
@@ -26,6 +28,6 @@ resourceTypes:
   /{product_id}:
     type:
       collection-item:
-        get-response-example: !include examples/ProductExample.raml
+        get-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.0/ProductExample.raml
         get-response-type: productData.ProductData
         patch-response-type: productData.ProductData

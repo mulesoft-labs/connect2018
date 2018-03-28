@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+    <!--  --><http:listener-config name="product-finder-httpListenerConfig" doc:name="HTTP Listener config">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="product-finder-config" raml="product-finder.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" />
+    <http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="318cf683-cd7e-4a48-bce9-44932a89fe9a">
+        <http:request-connection host="mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec" />
+    </http:request-config>
+    <http:request-config name="HTTP_CatalogAPIRequest" doc:name="HTTP Request configuration" doc:id="206c81f4-723a-4308-bdbb-85d89dcba7af">
+        <http:request-connection protocol="HTTPS" host="mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec" />
+    </http:request-config>
+    <http:request-config name="HTTP_InventoryAPI" doc:name="HTTP Request configuration" doc:id="68f432a3-064d-4337-95e3-c6b79bd500d9" basePath="/mocks/508c2a42-a9ec-4afd-b958-8449818bc086">
+        <http:request-connection protocol="HTTPS" host="mocksvc.mulesoft.com" port="443"/>
+    </http:request-config>
+    <flow name="product-finder-main">
+        <http:listener config-ref="product-finder-httpListenerConfig" path="/api/*" doc:name="Listener">
+            <http:response statusCode="#[vars.httpStatus default 200]" />
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="product-finder-config" doc:name="APIkit Router" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST" doc:name="On Error Propagate" enableNotifications="true" logException="true">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="product-finder-console">
+        <http:listener config-ref="product-finder-httpListenerConfig" path="/console/*" doc:name="Listener">
+            <http:response statusCode="#[vars.httpStatus default 200]" />
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="product-finder-config" doc:name="APIkit Console" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="get:\products:product-finder-config">
+		<http:request method="GET" doc:name="Get Product List (CATALOG API)" doc:id="32090aba-daa2-4fdd-8032-51eb4623bf5a" config-ref="HTTP_CatalogAPIRequest" url="https://mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec/catalog/products">
+			<http:headers ><![CDATA[#[output applicaton/java
+---
+{
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+		</http:request>
+		<java:new doc:name="New fullProductList {as an ArrayList}" doc:id="ddf1b6c1-4274-4d18-bb39-3ba272c49cfb" class="java.util.ArrayList" constructor="ArrayList()" target="fullProductList"/>
+		<foreach doc:name="For Each" doc:id="528aebdf-cc7e-4572-a91e-ab85e3e361e7" collection="payload">
+			<ee:transform doc:name="Transform Message" doc:id="cc2ec033-39a2-40b6-ba2e-fa46ed16432c" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="bPayload" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+					<ee:set-variable variableName="productID" ><![CDATA[%dw 2.0
+output application/java
+---
+"/inventory/products/" ++ payload.id]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<http:request method="GET" doc:name="Request" doc:id="0b46805b-f8d2-404c-9d2d-071513145b76" path="#[vars.productID]" config-ref="HTTP_InventoryAPI"/>
+			<!-- <http:request method="GET" doc:name="Request" doc:id="0b46805b-f8d2-404c-9d2d-071513145b76" path="#[vars.url]" target="inventoryInformation" config-ref="HTTP_InventoryAPI"/> -->
+			<ee:transform doc:name="Transform Message" doc:id="e1976893-0663-41e8-bb31-7158d26c175d" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="modifiedPayload" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	id: vars.bPayload.id,
+	price: vars.bPayload.price,
+	description: vars.bPayload.description,
+	copy: vars.bPayload.copy,
+	image: vars.bPayload.image,
+	company: vars.bPayload.company,
+	category: vars.bPayload.category,
+	review: vars.bPayload.review map ( review , indexOfReview ) -> {
+		reviewer_name: review.reviewer_name,
+		review: review.review,
+		date: review.date,
+		rate: review.rate
+	},
+	quantity: payload.quantity,
+	location: payload.location
+}]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<scripting:execute engine="groovy" doc:name="Execute" doc:id="0aa320fa-4386-46b0-88b3-3c7de94b5993" >
+				<scripting:code >vars.fullProductList.add(vars.modifiedPayload)</scripting:code>
+			</scripting:execute>
+		</foreach>
+		<ee:transform doc:name="Transform Message" doc:id="41ea6efd-5dbe-43b0-96eb-865aecb65ef7">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.fullProductList]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+    </flow>
+    <flow name="post:\products:application\json:product-finder-config">
+        <http:request method="POST" doc:name="Post product (CATALOG API)" doc:id="9f56a45f-5da2-4b7f-97c3-699db2225816" config-ref="HTTP_Request_configuration" url="https://mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec/catalog/products" />
+    </flow>
+    <flow name="get:\products\(product_id):product-finder-config">
+        <http:request method="GET" doc:name="Get Product (CATALOG API)" doc:id="32090aba-daa2-4fdd-8032-51eb4623bf5a" config-ref="HTTP_CatalogAPIRequest" url="https://mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec/catalog/products/1" target="product" />
+        <http:request method="GET" doc:name="Get Inventory (CATALOG API)" doc:id="8a99c12f-b1d0-4b12-a2b8-c691918c9704" config-ref="HTTP_InventoryAPI" url="https://mocksvc.mulesoft.com/mocks/508c2a42-a9ec-4afd-b958-8449818bc086/inventory/products/1" target="inventory" />
+        <ee:transform doc:name="Transform Message" doc:id="a88c1b93-4dba-42b0-9a9e-029047d3f279">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	id: vars.product.id,
+	price: vars.product.price,
+	description: vars.product.description,
+	copy: vars.product.copy,
+	image: vars.product.image,
+	company: vars.product.company,
+	category: vars.product.category,
+	review: vars.product.review,
+	quantity: vars.inventory,
+	location: vars.inventory.location
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="delete:\products\(product_id):product-finder-config">
+        <logger level="INFO" message="delete:\products\(product_id):product-finder-config" />
+    </flow>
+    <flow name="patch:\products\(product_id):product-finder-config">
+        <logger level="INFO" message="patch:\products\(product_id):product-finder-config" />
+    </flow>
+    -->
+</mule>
