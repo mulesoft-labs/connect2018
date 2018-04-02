@@ -8,7 +8,7 @@ http://www.mulesoft.org/schema/mule/oauth http://www.mulesoft.org/schema/mule/oa
    <http:request-config basePath="/content/v2" doc:id="8fcb8298-e52c-4a11-b7a7-d698bfd8b921" doc:name="HTTPS Request" doc:timestamp="1522462056836" name="https_request_oauth">
         <http:request-connection host="www.googleapis.com" port="443" protocol="HTTPS">
 			<http:authentication >
-				<oauth:authorization-code-grant-type externalCallbackUrl="http://localhost:8081/oauth2callback" localAuthorizationUrl="http://localhost:8081/oauth2callback" authorizationUrl="https://accounts.google.com/o/oauth2/auth" clientId="406996652622-sok5vadof608kd2f1i6ubu5kp69rhjcv.apps.googleusercontent.com" clientSecret="XOL2_-dw7v5kakiMTHeZEpTI" scopes="https://www.googleapis.com/auth/content" tokenUrl="https://accounts.google.com/o/oauth2/auth" />
+				<oauth:client-credentials-grant-type clientId="406996652622-sok5vadof608kd2f1i6ubu5kp69rhjcv.apps.googleusercontent.com" clientSecret="XOL2_-dw7v5kakiMTHeZEpTI" scopes="https://www.googleapis.com/auth/content" tokenUrl="https://accounts.google.com/o/oauth2/auth" />
 			</http:authentication>
 		</http:request-connection>
     </http:request-config>
@@ -25,7 +25,8 @@ http://www.mulesoft.org/schema/mule/oauth http://www.mulesoft.org/schema/mule/oa
 	<flow name="addproductstomerchat" doc:id="a9c48ff1-edea-4784-ad13-7dd09e20f8c1" >
 		<http:request config-ref="https_request" doc:id="80e06fd1-8534-42f9-9111-f8d299be2a52" doc:name="Request" doc:timestamp="1522461128036" method="GET" path="/catalog/products"/>
 		<foreach doc:id="cb90c3c1-e8d7-4eea-a535-7d41500bba0d" doc:name="Foreach" doc:timestamp="1522461166207">
-            <ee:transform doc:id="9ec51eb3-51d5-4080-ada7-e2252bf8424a" doc:name="Transform" doc:timestamp="1522461690541">
+            <logger level="INFO" doc:name="Logger" doc:id="f6ed2adb-d494-4b0a-813e-d811d208731a" message="#[payload]"/>
+			<ee:transform doc:id="9ec51eb3-51d5-4080-ada7-e2252bf8424a" doc:name="Transform" doc:timestamp="1522461690541">
                 <ee:message>
                     <ee:set-payload><![CDATA[%dw 2.0
 output application/json  
@@ -48,6 +49,7 @@ output application/json
 }]]></ee:set-payload>
                 </ee:message>
             </ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="0d43c7a6-4f22-4ef6-a9c1-e9daaffb01f6" message="#[payload]"/>
 			<http:request config-ref="https_request_oauth" doc:id="48c2ee50-53ae-418c-ba61-8302bfae314a" doc:name="Request" doc:timestamp="1522462061577" method="POST" path="/121330999/products" />
 			<logger level="INFO" doc:name="Logger" doc:id="393924c3-afd0-4e42-96a7-398e78728137" />
         </foreach>
