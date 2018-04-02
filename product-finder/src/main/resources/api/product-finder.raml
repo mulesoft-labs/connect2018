@@ -16,7 +16,7 @@ resourceTypes:
     collection:
       response-type: productData.NewProductData
       request-type: productData.ProductData
-      response-example: !include exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.9/ProductCollectionExample.raml
+      response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.0/ProductCollectionExample.raml
   get:
     queryParameters: 
       category:
@@ -32,7 +32,7 @@ resourceTypes:
   /{product_id}:
     type:
       collection-item:
-        get-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.9/ProductExample.raml
+        get-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.0/ProductExample.raml
         get-response-type: productData.ProductData
         patch-response-type: productData.ProductData
   /price/{price}:
