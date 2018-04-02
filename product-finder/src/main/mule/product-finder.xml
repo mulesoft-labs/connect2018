@@ -8,9 +8,9 @@
         <http:request-connection host="mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec" />
     </http:request-config>
     <http:request-config name="HTTP_CatalogAPIRequest" doc:name="HTTP Request configuration" doc:id="206c81f4-723a-4308-bdbb-85d89dcba7af">
-        <http:request-connection protocol="HTTPS" host="mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec" />
+        <http:request-connection protocol="HTTPS" host="https://mocksvc.mulesoft.com/mocks/83ec2c3b-bfdc-4d0f-9b82-35f329b8ba46" />
     </http:request-config>
-    <http:request-config name="HTTP_InventoryAPI" doc:name="HTTP Request configuration" doc:id="68f432a3-064d-4337-95e3-c6b79bd500d9" basePath="/mocks/508c2a42-a9ec-4afd-b958-8449818bc086">
+    <http:request-config name="HTTP_InventoryAPI" doc:name="HTTP Request configuration" doc:id="68f432a3-064d-4337-95e3-c6b79bd500d9" basePath="/mocks/2a7233f8-2d79-462c-90e5-81bbd317762a">
         <http:request-connection protocol="HTTPS" host="mocksvc.mulesoft.com" port="443" />
     </http:request-config>
     <flow name="product-finder-main">
@@ -127,7 +127,7 @@ output application/json
         </error-handler>
     </flow>
     <flow name="get:\products:product-finder-config">
-        <http:request method="GET" doc:name="Get Product List (CATALOG API)" doc:id="32090aba-daa2-4fdd-8032-51eb4623bf5a" config-ref="HTTP_CatalogAPIRequest" url="https://mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec/catalog/products">
+        <http:request method="GET" doc:name="Get Product List (CATALOG API)" doc:id="32090aba-daa2-4fdd-8032-51eb4623bf5a" config-ref="HTTP_CatalogAPIRequest" url="https://mocksvc.mulesoft.com/mocks/83ec2c3b-bfdc-4d0f-9b82-35f329b8ba46/catalog/products">
             <http:headers><![CDATA[#[output applicaton/java
 ---
 {
@@ -165,12 +165,7 @@ output application/java
 	image: vars.bPayload.image,
 	company: vars.bPayload.company,
 	category: vars.bPayload.category,
-	review: vars.bPayload.review map ( review , indexOfReview ) -> {
-		reviewer_name: review.reviewer_name,
-		review: review.review,
-		date: review.date,
-		rate: review.rate
-	},
+	review: vars.bPayload.review,
 	quantity: payload.quantity,
 	location: payload.location
 }]]></ee:set-variable>
@@ -190,7 +185,7 @@ vars.fullProductList]]></ee:set-payload>
         </ee:transform>
     </flow>
     <flow name="post:\products:application\json:product-finder-config">
-        <http:request method="POST" doc:name="Post product (CATALOG API)" doc:id="9f56a45f-5da2-4b7f-97c3-699db2225816" config-ref="HTTP_Request_configuration" url="https://mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec/catalog/products" />
+        <http:request method="POST" doc:name="Post product (CATALOG API)" doc:id="9f56a45f-5da2-4b7f-97c3-699db2225816" config-ref="HTTP_InventoryAPI" path="/inventory/product"/>
     </flow>
     <flow name="get:\products\(product_id):product-finder-config">
         <http:request method="GET" doc:name="Get Product (CATALOG API)" doc:id="32090aba-daa2-4fdd-8032-51eb4623bf5a" config-ref="HTTP_CatalogAPIRequest" url="https://mocksvc.mulesoft.com/mocks/72f1b03f-d069-4c3e-8011-975d0a18c9ec/catalog/products/1" target="product" />
