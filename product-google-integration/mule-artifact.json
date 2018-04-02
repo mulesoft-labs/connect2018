@@ -1,0 +1,19 @@
+{
+  "configs": [
+    "mule-config.xml"
+  ],
+  "redeploymentEnabled": true,
+  "name": "product-google-integration",
+  "minMuleVersion": "4.1.0",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedResources": []
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

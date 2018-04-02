@@ -1,6 +1,5 @@
 {
   "configs": [
-    "catalog.xml",
     "product-finder.xml"
   ],
   "secureProperties": [],
