@@ -8,7 +8,7 @@ http://www.mulesoft.org/schema/mule/oauth http://www.mulesoft.org/schema/mule/oa
    <http:request-config basePath="/content/v2" doc:id="8fcb8298-e52c-4a11-b7a7-d698bfd8b921" doc:name="HTTPS Request" doc:timestamp="1522462056836" name="https_request_oauth">
         <http:request-connection host="www.googleapis.com" port="443" protocol="HTTPS">
 			<http:authentication >
-				<oauth:authorization-code-grant-type externalCallbackUrl="http://www.example.com/2" localAuthorizationUrl="http://localhost:8081/oauth2callback" authorizationUrl="https://accounts.google.com/o/oauth2/auth" clientId="406996652622-sok5vadof608kd2f1i6ubu5kp69rhjcv.apps.googleusercontent.com" clientSecret="XOL2_-dw7v5kakiMTHeZEpTI" scopes="https://www.googleapis.com/auth/content" tokenUrl="http://www.example.com/1" />
+				<oauth:authorization-code-grant-type externalCallbackUrl="http://localhost:8081/oauth2callback" localAuthorizationUrl="http://localhost:8081/oauth2callback" authorizationUrl="https://accounts.google.com/o/oauth2/auth" clientId="406996652622-sok5vadof608kd2f1i6ubu5kp69rhjcv.apps.googleusercontent.com" clientSecret="XOL2_-dw7v5kakiMTHeZEpTI" scopes="https://www.googleapis.com/auth/content" tokenUrl="https://accounts.google.com/o/oauth2/auth" />
 			</http:authentication>
 		</http:request-connection>
     </http:request-config>

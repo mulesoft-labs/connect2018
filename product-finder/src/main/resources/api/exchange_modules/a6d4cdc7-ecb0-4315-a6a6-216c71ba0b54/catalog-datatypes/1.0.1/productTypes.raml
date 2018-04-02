@@ -1,0 +1,22 @@
+#%RAML 1.0 Library
+
+usage: Product Types
+uses:
+  util: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-datatypes/1.0.0/utilTypes.raml
+  company: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-datatypes/1.0.0/companyTypes.raml
+  
+types:
+  NewProductData:
+    properties:
+      price: util.MonetaryAmountData
+      description: string
+      copy: string
+      image: util.ImageData
+      company: company.Company
+      category: string
+      review?: util.ReviewData[]
+
+  ProductData:
+    type: NewProductData
+    properties:
+      id: number
