@@ -8,46 +8,122 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0fb42499-27d6-4b80-820b-111294c44e78" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
-	<flow name="order-change-fullfilmentFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
-		<http:listener doc:name="Listener" doc:id="31da4c63-7064-4eea-ab24-c43e4a3fba5e" config-ref="HTTP_Listener_config" path="/"/>
-		<ee:transform doc:name="Transform Message" doc:id="f2f2f926-3cb9-4b5e-9126-9f06d9007ce7" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="orderId" ><![CDATA[%dw 2.0
-output application/java
----
-payload.result.parameters.orderId]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<choice doc:name="Choice" doc:id="68ff972d-69f3-454e-992d-26b4e90328c6" >
-			<when expression='#[vars.orderId != ""]' >
-				<ee:transform doc:name="Transform Message" doc:id="386e8d90-3b42-4dd3-9450-23f0a93d17ba">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/json
+	<http:request-config name="DialogFlowAPI" doc:name="HTTP Request configuration" doc:id="d7d35565-feda-463b-afa0-0363bdea65b7" basePath="/api">
+		<http:request-connection protocol="HTTPS" host="api.dialogflow.com" port="443"/>
+	</http:request-config>
+	<http:request-config name="OrderAPI" doc:name="HTTP Request configuration" doc:id="de89657a-b36a-4350-a852-dd9246798d29" >
+		<http:request-connection protocol="HTTPS" host="https://mocksvc.mulesoft.com/mocks/9f4328d0-20e7-4fc2-bf30-b02b61c749cd/ordering/orders" />
+	</http:request-config>
+	<flow name="order-change-fullfilmentFlow" doc:id="c659e6a9-f568-4ac4-a07a-3b06ce163cba" >
+		<http:listener doc:name="Listener" doc:id="589b4cfa-39e0-4ba7-9dc9-21cc45a51025" config-ref="HTTP_Listener_config" path="/chat"/>
+		<http:load-static-resource doc:name="Load static resource" doc:id="8c0972d6-d62a-4917-830f-68c1950e1942" resourceBasePath="/Users/avenuecode/AnypointStudio/connect2018-workspace/order-change-fullfilment/src/main/resources/"/>
+	</flow>
+	<flow name="send-UI-request-to-DialogFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
+		<http:listener doc:name="Listener" doc:id="31da4c63-7064-4eea-ab24-c43e4a3fba5e" config-ref="HTTP_Listener_config" path="/request" outputMimeType="application/json"/>
+		<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json">
+			<http:headers ><![CDATA[#[output applicaton/java
 ---
 {
-	speech: "I could find the order #" ++ vars.orderId ++ " with Product #1, #2 and #3, is this the one you are trying to change?",
-	displayText: "I could find the order #" ++ vars.orderId ++ " with Product #1, #2 and #3, is this the one you are trying to change?"
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-			</when>
-			<otherwise >
-				<ee:transform doc:name="Copy_of_Transform Message" doc:id="386e8d90-3b42-4dd3-9450-23f0a93d17ba">
+	"Authorization" : "Bearer 0b165f1b68644f4d857cb8433b1e0286",
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output applicaton/java
+---
+{
+	"v" : "20150910"
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="d99ee9f2-ddf4-46a3-bf58-fa8a715721c9" message="#[payload]"/>
+	</flow>
+	<flow name="order-change-fullfilmentFlow1" doc:id="9b0e0c03-a2fa-49e5-8f13-65cf587ce84a" >
+		<http:listener doc:name="Listener" doc:id="9e153406-b378-4dbf-921f-2cc3609dcc40" config-ref="HTTP_Listener_config" path="/"/>
+		<logger level="INFO" doc:name="Logger" doc:id="8ef3ec55-0060-4deb-94f1-118f7281249a" message="order-change-fullfilmentFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="dc11db77-2739-4a05-b3dd-3d266e0427fb">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
+payload]]></ee:set-payload>
+					</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="action" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.result.action]]></ee:set-variable>
+			</ee:variables>
+				</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="91688f5c-6910-45a3-bb34-cca01797fb84" message='"Action: " #[vars.action]'/>
+		<choice doc:name="Choice" doc:id="e40a9d16-9329-43cc-8367-a4980ec0acd5" >
+			<when expression='#[vars.action == "list-orders"]'>
+				<flow-ref doc:name="List Orders" doc:id="7313524c-e14c-43cc-921a-4ce6f5878b1d" name="listOrdersFlow"/>
+			</when>
+			<when expression='#[vars.action == "select-order-number"]' >
+				<flow-ref doc:name="showOrderDetails" doc:id="ab09da6f-59f5-4e02-a228-a7efc604ddbe" name="showOrderDetails"/>
+			</when>
+			<when expression='#[vars.action == "change-order-items"]' >
+				<flow-ref doc:name="change-order-items" doc:id="0fa7c6b9-9981-4ffb-8aaa-c37bf1df8388" name="change-order-items"/>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="f69deeb9-6690-484f-afbd-9722bb880573" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
 {
-	speech: "I couldn't find the order number, do you have it?",
-	displayText: "I couldn't find the order number, do you have it?"
+  "speech": "Nope",
+  "displayText": "Nope",
 }]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 			</otherwise>
 		</choice>
-		<logger level="INFO" doc:name="Logger" doc:id="816a228a-3983-4c85-9b88-3f4d2f4c0c2b" message="#[payload].toString()"/>
 	</flow>
+	<sub-flow name="change-order-items" doc:id="2dd7b9c9-96e0-400a-89cb-ec92f709c7e3" >
+		<logger level="INFO" doc:name="Logger" doc:id="d2886cff-1d07-4dfe-b002-9b75b025e070" message="CHANGE ORDER ITEMS"/>
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "speech": "No problem, that has not shipped yet, so I can just change the quantity for “Eureka Cypress 15 Degree Junior Sleeping Bag” from 3 to 2. <BR> Your new order now comes out to \$86.93. <BR>Is that OK?",
+  "displayText": "No problem, that has not shipped yet, so I can just change the quantity for “Eureka Cypress 15 Degree Junior Sleeping Bag” from 3 to 2. <BR> Your new order now comes out to \$86.93. <BR>Is that OK?"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="listOrdersFlow" doc:id="ec6a625c-d90f-44d8-bca8-44e210259c50" >
+		<logger level="INFO" doc:name="Logger" doc:id="15bc2c43-b537-4d98-afa9-9fffce34bb46" message="LIST ORDERS FLOW"/>
+		<http:request method="GET" doc:name="Request" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" url="https://mocksvc.mulesoft.com/mocks/9f4328d0-20e7-4fc2-bf30-b02b61c749cd/ordering/orders"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b802b3ff-38d4-42b3-a4e2-3a20462d1fbf" message="#[payload[0].id]"/>
+		<ee:transform doc:name="Transform Message" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+  speech: payload[0].id,
+  displayText: "Sure, this are your last 3 orders: 1, 2, 3. <BR>Which one would you like to look at?"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+	</sub-flow>
+	<sub-flow name="showOrderDetails" doc:id="c4362728-860f-4cf1-bc26-14777a4c6d52" >
+		<logger level="INFO" doc:name="Logger" doc:id="0ee54046-f3c5-4560-80b0-9241f472c2a6" message="SHOW ORDER DETAILS"/>
+		<ee:transform doc:name="Transform Message" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "speech": "Thanks, Renan. Here is order #2:<br>
+	3 sleeping bags<BR>
+ 	<b>What do you want to change?",
+  "displayText": "Thanks, Renan. Here is order #2:<br>
+	3 sleeping bags<BR>
+ 	<b>What do you want to change?"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
 </mule>

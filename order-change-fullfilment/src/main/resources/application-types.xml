@@ -11,22 +11,37 @@ type: string]]></types:shape>
     <types:type name="parameter" format="json">
       <types:example format="json" location="examples/parameters.json"/>
     </types:type>
+    <types:type name="DialoFlowJson" format="json">
+      <types:example format="json" location="examples/dialogFlow.json"/>
+    </types:type>
+    <types:type name="orderExample" format="json">
+      <types:example format="json" location="examples/orderExample.json"/>
+    </types:type>
   </types:catalog>
-  <types:enrichment select="#f2f2f926-3cb9-4b5e-9126-9f06d9007ce7">
+  <types:enrichment select="#dc11db77-2739-4a05-b3dd-3d266e0427fb">
     <types:processor-declaration>
       <types:input-event>
         <types:message>
-          <types:payload type="postExample"/>
+          <types:payload type="DialoFlowJson"/>
         </types:message>
       </types:input-event>
       <types:output-event>
         <types:message>
-          <types:payload type="parameter"/>
+          <types:payload type="DialoFlowJson"/>
         </types:message>
         <types:variables>
-          <types:variable name="orderId" type="string"/>
+          <types:variable name="action" type="string"/>
         </types:variables>
       </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#2019d878-9ebf-4ce5-a057-01efdd4e7c39">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="orderExample"/>
+        </types:message>
+      </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
 </types:mule>

@@ -1,0 +1,51 @@
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+var settings = {
+		  "async": true,
+		  "crossDomain": true,
+		  "url": "http://localhost:8081/request",
+		  "method": "POST",
+		  "headers": {
+		    "Cache-Control": "no-cache",
+		    "Postman-Token": "b211dabc-b817-4938-b1d6-da38c1fd119e"
+		  },
+		  "data": "{\n\t\"event\": {\"name\":\"custom_welcome\", \n\t\t\"data\": {\n\t\t\t\"user_name\": \"Renan\"\n\t\t}\n\t},\n\t\"lang\": \"en\",\n\t\"sessionId\": \"123\"\n}",
+		  success: function(data){
+			  var answer = "Agent: " + data.result.fulfillment.speech
+				$("#chatbody").text(answer);
+		  }}
+		$.ajax(settings);
+</script>
+
+<body>
+<div style="height: 500px; width: 50%; background-color: powderblue;"  id="chatbody"></div>
+<form action="/" id="form">
+	<input size="100" id="query" type="text">
+	<input type="submit">
+</form>
+
+<script>
+
+ $("#form").submit(function(e) {
+          e.preventDefault();
+          
+          var query = $("#query").val();
+          $("#query").val('');
+          $.ajax({
+        		  "async": true,
+        		  "crossDomain": true,
+        		  "url": "http://localhost:8081/request",
+        		  "method": "POST",
+        		  "headers": {
+        		    "Cache-Control": "no-cache",
+        		    "Postman-Token": "b211dabc-b817-4938-b1d6-da38c1fd119e"
+        		  },
+              "data": "{\"query\": \""  + query + "\",\"lang\": \"en\",\"sessionId\": \"123\"}",
+        		  success: function(data){
+        			  var answer = "<BR><br>Renan: " + query + "<BR>Agent: " + data.result.fulfillment.speech
+        			  $("#chatbody").append(answer);
+        		  }});
+      });
+</script>
+</body></html>
