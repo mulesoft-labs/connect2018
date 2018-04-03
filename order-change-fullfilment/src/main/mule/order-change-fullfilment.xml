@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0fb42499-27d6-4b80-820b-111294c44e78" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
@@ -16,7 +18,11 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	</http:request-config>
 	<flow name="order-change-fullfilmentFlow" doc:id="c659e6a9-f568-4ac4-a07a-3b06ce163cba" >
 		<http:listener doc:name="Listener" doc:id="589b4cfa-39e0-4ba7-9dc9-21cc45a51025" config-ref="HTTP_Listener_config" path="/chat"/>
-		<http:load-static-resource doc:name="Load static resource" doc:id="8c0972d6-d62a-4917-830f-68c1950e1942" resourceBasePath="/Users/avenuecode/AnypointStudio/connect2018-workspace/order-change-fullfilment/src/main/resources/"/>
+		<scripting:execute engine="groovy" doc:name="Execute read index.html file from resource classpath" doc:id="40cafedc-8f29-49d8-9c49-5da60829e60f">
+			<scripting:code>return Thread.currentThread().getContextClassLoader().getResourceAsStream('index.html').text</scripting:code>
+		</scripting:execute>
+		<set-payload value="#[payload]" doc:name="Set Payload mimeType to text/html" doc:id="897645ab-d3b7-40bb-8392-76be680e7521" mimeType="text/html"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b61e2197-be43-480c-9e22-1697b7771567" message="#[payload]"/>
 	</flow>
 	<flow name="send-UI-request-to-DialogFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
 		<http:listener doc:name="Listener" doc:id="31da4c63-7064-4eea-ab24-c43e4a3fba5e" config-ref="HTTP_Listener_config" path="/request" outputMimeType="application/json"/>
@@ -96,17 +102,34 @@ output application/json
 		<logger level="INFO" doc:name="Logger" doc:id="15bc2c43-b537-4d98-afa9-9fffce34bb46" message="LIST ORDERS FLOW"/>
 		<http:request method="GET" doc:name="Request" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" url="https://mocksvc.mulesoft.com/mocks/9f4328d0-20e7-4fc2-bf30-b02b61c749cd/ordering/orders"/>
 		<logger level="INFO" doc:name="Logger" doc:id="b802b3ff-38d4-42b3-a4e2-3a20462d1fbf" message="#[payload[0].id]"/>
-		<ee:transform doc:name="Transform Message" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
+		<ee:transform doc:name="Set the payload and read the order list as an orderLabel" doc:id="e4d4b9aa-014c-4c62-80f5-f9f35d97d2d6">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="ordersLabel"><![CDATA[%dw 2.0
+output application/json
+---
+(payload.id map ($ ++ ", ")) reduce ($$ ++ $) as String
+]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="Appending the orderList size and orderLabel to the payload.displayText field" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/java
+var label = vars.ordersLabel replace /..$/ with ""
 ---
 {
   speech: payload[0].id,
-  displayText: "Sure, this are your last 3 orders: 1, 2, 3. <BR>Which one would you like to look at?"
+  displayText: "Sure, this are your last " ++ sizeOf(payload) ++" orders: " ++ label ++ ". <BR>Which one would you like to look at?"
 }]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="3bb0ddc2-4e9e-49ff-9684-b77c3e35da7c" message="#[payload.displayText]"/>
 	</sub-flow>
 	<sub-flow name="showOrderDetails" doc:id="c4362728-860f-4cf1-bc26-14777a4c6d52" >
 		<logger level="INFO" doc:name="Logger" doc:id="0ee54046-f3c5-4560-80b0-9241f472c2a6" message="SHOW ORDER DETAILS"/>

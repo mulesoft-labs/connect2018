@@ -1,0 +1,36 @@
+[
+  {
+    "id": 3345001,
+    "products": [
+    {
+      "id": 4907996,
+      "amount": 1
+    }],
+    "totalAmountPrice": 35.00,
+    "totalAmountPriceCurrency": "USD",
+    "shippingStatus": "shipped",
+    "customerID": 5640099
+  },{
+    "id": 3345002,
+    "products": [
+    {
+      "id": 17890001,
+      "amount": 3
+    }],
+    "totalAmountPrice": 143.85,
+    "totalAmountPriceCurrency": "USD",
+    "shippingStatus": "non-shipped",
+    "customerID": 5640099
+  },{
+    "id": 3345003,
+    "products": [
+  {
+    "id": 7890004,
+    "amount": 1
+  }],
+    "totalAmountPrice": 9.99,
+    "totalAmountPriceCurrency": "USD",
+    "shippingStatus": "shipped",
+    "customerID": 5640099
+  }
+]

@@ -17,6 +17,9 @@ type: string]]></types:shape>
     <types:type name="orderExample" format="json">
       <types:example format="json" location="examples/orderExample.json"/>
     </types:type>
+    <types:type name="orderCollectionExample" format="json">
+      <types:example format="json" location="examples/orderCollectionExample.json"/>
+    </types:type>
   </types:catalog>
   <types:enrichment select="#dc11db77-2739-4a05-b3dd-3d266e0427fb">
     <types:processor-declaration>
@@ -35,11 +38,28 @@ type: string]]></types:shape>
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
+  <types:enrichment select="#e4d4b9aa-014c-4c62-80f5-f9f35d97d2d6">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="orderCollectionExample"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="orderCollectionExample"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="ordersLabel" type="string"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
   <types:enrichment select="#2019d878-9ebf-4ce5-a057-01efdd4e7c39">
     <types:processor-declaration>
       <types:input-event>
         <types:message>
-          <types:payload type="orderExample"/>
+          <types:payload type="orderCollectionExample"/>
         </types:message>
       </types:input-event>
     </types:processor-declaration>
