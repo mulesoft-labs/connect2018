@@ -59,7 +59,7 @@ type: string]]></types:shape>
     <types:processor-declaration>
       <types:input-event>
         <types:message>
-          <types:payload type="orderCollectionExample"/>
+          <types:payload type="orderExample"/>
         </types:message>
       </types:input-event>
     </types:processor-declaration>

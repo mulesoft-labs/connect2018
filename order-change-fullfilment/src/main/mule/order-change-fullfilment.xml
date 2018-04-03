@@ -132,6 +132,7 @@ var label = vars.ordersLabel replace /..$/ with ""
 	</sub-flow>
 	<sub-flow name="showOrderDetails" doc:id="c4362728-860f-4cf1-bc26-14777a4c6d52" >
 		<logger level="INFO" doc:name="Logger" doc:id="0ee54046-f3c5-4560-80b0-9241f472c2a6" message="SHOW ORDER DETAILS"/>
+		<http:request method="GET" doc:name="Get Order" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" url="https://mocksvc.mulesoft.com/mocks/9f4328d0-20e7-4fc2-bf30-b02b61c749cd/ordering/orders/1" />
 		<ee:transform doc:name="Transform Message" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
