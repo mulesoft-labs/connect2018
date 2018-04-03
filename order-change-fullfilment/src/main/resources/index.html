@@ -46,7 +46,8 @@ var settings = {
         		  success: function(data){
         			  var answer = "<BR><BR>Agent: " + data.result.fulfillment.speech
         			  $("#chatbody").append(answer);
-        		  }});
+        			  $("#chatbody").scrollTop(5000);
+        		}});
       });
 </script>
 </body></html>
