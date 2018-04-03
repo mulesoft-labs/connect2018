@@ -22,7 +22,6 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 			<scripting:code>return Thread.currentThread().getContextClassLoader().getResourceAsStream('index.html').text</scripting:code>
 		</scripting:execute>
 		<set-payload value="#[payload]" doc:name="Set Payload mimeType to text/html" doc:id="897645ab-d3b7-40bb-8392-76be680e7521" mimeType="text/html"/>
-		<logger level="INFO" doc:name="Logger" doc:id="b61e2197-be43-480c-9e22-1697b7771567" message="#[payload]"/>
 	</flow>
 	<flow name="send-UI-request-to-DialogFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
 		<http:listener doc:name="Listener" doc:id="31da4c63-7064-4eea-ab24-c43e4a3fba5e" config-ref="HTTP_Listener_config" path="/request" outputMimeType="application/json"/>
@@ -120,12 +119,12 @@ output application/json
 		<ee:transform doc:name="Appending the orderList size and orderLabel to the payload.displayText field" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
-output application/java
+output application/json
 var label = vars.ordersLabel replace /..$/ with ""
 ---
 {
-  speech: payload[0].id,
-  displayText: "Sure, this are your last " ++ sizeOf(payload) ++" orders: " ++ label ++ ". <BR>Which one would you like to look at?"
+  "speech": "Sure, this are your last " ++ sizeOf(payload) ++" orders: " ++ label ++ ". <BR>Which one would you like to look at?",
+  "displayText": "Sure, this are your last " ++ sizeOf(payload) ++" orders: " ++ label ++ ". <BR>Which one would you like to look at?"
 }]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
