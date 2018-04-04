@@ -14,7 +14,7 @@ http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/jav
 	<http:request-config name="DialogFlowAPI" doc:name="HTTP Request configuration" doc:id="d7d35565-feda-463b-afa0-0363bdea65b7" basePath="/api">
 		<http:request-connection protocol="HTTPS" host="api.dialogflow.com" port="443"/>
 	</http:request-config>
-	<http:request-config name="OrderAPI" doc:name="HTTP Request configuration" doc:id="de89657a-b36a-4350-a852-dd9246798d29" basePath="/mocks/9f4328d0-20e7-4fc2-bf30-b02b61c749cd">
+	<http:request-config name="OrderAPI" doc:name="HTTP Request configuration" doc:id="de89657a-b36a-4350-a852-dd9246798d29" basePath="/mocks/0e1717f4-1fda-4c8c-bd21-a7b7dc1dc200">
 		<http:request-connection protocol="HTTPS" host="mocksvc.mulesoft.com" port="443"/>
 	</http:request-config>
 	<http:request-config name="Catalog_API" doc:name="HTTP Request configuration" doc:id="e992ca9d-8c0d-434e-883f-4ae4c9795d05" basePath="/mocks/765c0c12-c331-4eed-b463-3160a572eae3" >
@@ -89,6 +89,41 @@ output application/json
 	</flow>
 	<sub-flow name="change-order-items" doc:id="2dd7b9c9-96e0-400a-89cb-ec92f709c7e3" >
 		<logger level="INFO" doc:name="Logger" doc:id="d2886cff-1d07-4dfe-b002-9b75b025e070" message="CHANGE ORDER ITEMS"/>
+		<ee:transform doc:name="Transform Message" doc:id="43467a82-7f84-4955-892a-5b4ce6a5becc" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="urlWithOrderID" ><![CDATA[%dw 2.0
+output application/java
+---
+"/ordering/orders/" ++ (payload.result.contexts[0].parameters.order_id as String)]]></ee:set-variable>
+				<ee:set-variable variableName="product_new_quantity" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.result.contexts[0].parameters.new_quantity as Number]]></ee:set-variable>
+				<ee:set-variable variableName="orderID" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.result.contexts[0].parameters.order_id as Number]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="b5d95473-2404-4ff2-8e78-d8f4252bdeb4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "orderID": vars.orderID,
+  "products": [
+  {
+    "id": 7890001,
+    "amount": vars.product_new_quantity
+  }]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="PATCH" doc:name="Updated Order Product quantity" doc:id="6d705c92-eab7-4e57-958a-7198e40a806b" config-ref="OrderAPI" path="#[vars.urlWithOrderID]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="93c9470c-44cb-44b8-b0ce-170bb6a261ba" message="#[payload]"/>
 		<ee:transform doc:name="Copy_of_Transform Message" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0

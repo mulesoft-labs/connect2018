@@ -89,5 +89,92 @@
 			<flow-ref doc:name="Flow-ref to showOrderDetails" doc:id="91d6f5cb-ce82-48a5-aeb1-694a8a980a46" name="showOrderDetails"/>
 		</munit:execution>
 	</munit:test>
+	<munit:test name="order-change-fullfilment-test-suite-change-order-itemsTest" description="Test" doc:id="af7540d8-688d-4a74-ba85-99c595b0a2f2" >
+		<munit:execution >
+			<set-payload value='{
+  "id": "4e98058a-73a8-4d2e-a3b8-e5efe003064c",
+  "timestamp": "2018-04-03T16:19:45.771Z",
+  "lang": "en",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "3345002",
+    "action": "select-order-number",
+    "actionIncomplete": false,
+    "parameters": {
+      "number": "3345002",
+      "user_name": "Renan"
+    },
+    "contexts": [
+      {
+        "name": "changeordersintent-followup",
+        "parameters": {
+		  "new_quantity": "2",
+		  "product": "sleeping bag ",
+		  "user_name": "Renan",
+		  "order_id": "3345002",
+		  "new_product": "lantern"
+      },
+        "lifespan": 1
+      },
+      {
+        "name": "listordersintent-followup",
+        "parameters": {
+          "number": "3345002",
+          "user_name": "Renan",
+          "number.original": "3345002",
+          "user_name.original": ""
+        },
+        "lifespan": 1
+      },
+      {
+        "name": "customwelcomeintent-followup",
+        "parameters": {
+          "number": "3345002",
+          "user_name": "Renan",
+          "number.original": "3345002",
+          "user_name.original": ""
+        },
+        "lifespan": 5
+      },
+      {
+        "name": "listordersintent-selectnumber-followup",
+        "parameters": {
+          "number": "3345002",
+          "user_name": "Renan",
+          "number.original": "3345002",
+          "user_name.original": ""
+        },
+        "lifespan": 2
+      }
+    ],
+    "metadata": {
+      "intentId": "7716dd51-7ae6-43ab-b78e-4dc695936378",
+      "webhookUsed": "true",
+      "webhookForSlotFillingUsed": "false",
+      "webhookResponseTime": 149,
+      "intentName": "List Orders Intent - select.number"
+    },
+    "fulfillment": {
+      "speech": "Thanks, Renan. Here is order #2:&lt;br&gt;\n\t3 sleeping bags&lt;BR&gt;\n \t&lt;b&gt;What do you want to change?",
+      "displayText": "Thanks, Renan. Here is order #2:&lt;br&gt;\n\t3 sleeping bags&lt;BR&gt;\n \t&lt;b&gt;What do you want to change?",
+      "messages": [
+        {
+          "type": 0,
+          "speech": "Thanks, Renan. Here is order #2:&lt;br&gt;\n\t3 sleeping bags&lt;BR&gt;\n \t&lt;b&gt;What do you want to change?"
+        }
+      ]
+    },
+    "score": 0.8799999952316284
+  },
+  "status": {
+    "code": 200,
+    "errorType": "success",
+    "webhookTimedOut": false
+  },
+  "sessionId": "123"
+}' doc:name="Set Payload" doc:id="ef2d362a-52b2-4b53-aeaa-d78119924149" mimeType="application/json"/>
+			<flow-ref doc:name="change-order-items" doc:id="aa5009ec-2889-4faf-9904-9bf0f2ab3069" name="change-order-items"/>
+		</munit:execution>
+	</munit:test>
 
 </mule>

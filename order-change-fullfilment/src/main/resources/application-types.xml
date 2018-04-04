@@ -26,6 +26,9 @@ type: string]]></types:shape>
     <types:type name="productExampleJson" format="json">
       <types:example format="json" location="examples/productExample.json"/>
     </types:type>
+    <types:type name="changeOrderExample" format="json">
+      <types:example format="json" location="examples/changeOrderExample.json"/>
+    </types:type>
   </types:catalog>
   <types:enrichment select="#dc11db77-2739-4a05-b3dd-3d266e0427fb">
     <types:processor-declaration>
@@ -100,6 +103,15 @@ type: string]]></types:shape>
           <types:variable name="productsLabel" type="string"/>
         </types:variables>
       </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#43467a82-7f84-4955-892a-5b4ce6a5becc">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="changeOrderExample"/>
+        </types:message>
+      </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
 </types:mule>
