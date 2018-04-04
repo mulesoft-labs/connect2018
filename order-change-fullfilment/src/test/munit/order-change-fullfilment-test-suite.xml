@@ -13,5 +13,81 @@
 			<flow-ref doc:name="Flow-ref to listOrdersFlow" doc:id="c76f3a5a-b48c-4dfe-bf1f-924cc586524e" name="listOrdersFlow"/>
 		</munit:execution>
 	</munit:test>
+	<munit:test name="order-change-fullfilment-test-suite-showOrderDetailsTest" description="Test" doc:id="91745c54-b089-430d-a1d8-a73a51242ebb" >
+		<munit:execution >
+			<set-payload value='{
+  "id": "4e98058a-73a8-4d2e-a3b8-e5efe003064c",
+  "timestamp": "2018-04-03T16:19:45.771Z",
+  "lang": "en",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "3345002",
+    "action": "select-order-number",
+    "actionIncomplete": false,
+    "parameters": {
+      "number": "3345002",
+      "user_name": "Renan"
+    },
+    "contexts": [
+      {
+        "name": "listordersintent-followup",
+        "parameters": {
+          "number": "3345002",
+          "user_name": "Renan",
+          "number.original": "3345002",
+          "user_name.original": ""
+        },
+        "lifespan": 1
+      },
+      {
+        "name": "customwelcomeintent-followup",
+        "parameters": {
+          "number": "3345002",
+          "user_name": "Renan",
+          "number.original": "3345002",
+          "user_name.original": ""
+        },
+        "lifespan": 5
+      },
+      {
+        "name": "listordersintent-selectnumber-followup",
+        "parameters": {
+          "number": "3345002",
+          "user_name": "Renan",
+          "number.original": "3345002",
+          "user_name.original": ""
+        },
+        "lifespan": 2
+      }
+    ],
+    "metadata": {
+      "intentId": "7716dd51-7ae6-43ab-b78e-4dc695936378",
+      "webhookUsed": "true",
+      "webhookForSlotFillingUsed": "false",
+      "webhookResponseTime": 149,
+      "intentName": "List Orders Intent - select.number"
+    },
+    "fulfillment": {
+      "speech": "Thanks, Renan. Here is order #2:&lt;br&gt;\n\t3 sleeping bags&lt;BR&gt;\n \t&lt;b&gt;What do you want to change?",
+      "displayText": "Thanks, Renan. Here is order #2:&lt;br&gt;\n\t3 sleeping bags&lt;BR&gt;\n \t&lt;b&gt;What do you want to change?",
+      "messages": [
+        {
+          "type": 0,
+          "speech": "Thanks, Renan. Here is order #2:&lt;br&gt;\n\t3 sleeping bags&lt;BR&gt;\n \t&lt;b&gt;What do you want to change?"
+        }
+      ]
+    },
+    "score": 0.8799999952316284
+  },
+  "status": {
+    "code": 200,
+    "errorType": "success",
+    "webhookTimedOut": false
+  },
+  "sessionId": "123"
+}' doc:name="Set Payload" doc:id="15efae63-acbe-4fbc-98cd-5795c382590c" mimeType="application/json"/>
+			<flow-ref doc:name="Flow-ref to showOrderDetails" doc:id="91d6f5cb-ce82-48a5-aeb1-694a8a980a46" name="showOrderDetails"/>
+		</munit:execution>
+	</munit:test>
 
 </mule>

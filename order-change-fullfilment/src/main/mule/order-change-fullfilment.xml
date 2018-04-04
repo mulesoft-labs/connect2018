@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:db="http://www.mulesoft.org/schema/mule/db"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
-http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0fb42499-27d6-4b80-820b-111294c44e78" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
 	<http:request-config name="DialogFlowAPI" doc:name="HTTP Request configuration" doc:id="d7d35565-feda-463b-afa0-0363bdea65b7" basePath="/api">
 		<http:request-connection protocol="HTTPS" host="api.dialogflow.com" port="443"/>
 	</http:request-config>
-	<http:request-config name="OrderAPI" doc:name="HTTP Request configuration" doc:id="de89657a-b36a-4350-a852-dd9246798d29" >
-		<http:request-connection protocol="HTTPS" host="https://mocksvc.mulesoft.com/mocks/9f4328d0-20e7-4fc2-bf30-b02b61c749cd/ordering/orders" />
+	<http:request-config name="OrderAPI" doc:name="HTTP Request configuration" doc:id="de89657a-b36a-4350-a852-dd9246798d29" basePath="/mocks/9f4328d0-20e7-4fc2-bf30-b02b61c749cd">
+		<http:request-connection protocol="HTTPS" host="mocksvc.mulesoft.com" port="443"/>
+	</http:request-config>
+	<http:request-config name="Catalog_API" doc:name="HTTP Request configuration" doc:id="e992ca9d-8c0d-434e-883f-4ae4c9795d05" basePath="/mocks/765c0c12-c331-4eed-b463-3160a572eae3" >
+		<http:request-connection host="mocksvc.mulesoft.com" port="443" protocol="HTTPS"/>
 	</http:request-config>
 	<flow name="order-change-fullfilmentFlow" doc:id="c659e6a9-f568-4ac4-a07a-3b06ce163cba" >
 		<http:listener doc:name="Listener" doc:id="589b4cfa-39e0-4ba7-9dc9-21cc45a51025" config-ref="HTTP_Listener_config" path="/chat"/>
@@ -132,21 +136,109 @@ var label = vars.ordersLabel replace /..$/ with ""
 	</sub-flow>
 	<sub-flow name="showOrderDetails" doc:id="c4362728-860f-4cf1-bc26-14777a4c6d52" >
 		<logger level="INFO" doc:name="Logger" doc:id="0ee54046-f3c5-4560-80b0-9241f472c2a6" message="SHOW ORDER DETAILS"/>
-		<http:request method="GET" doc:name="Get Order" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" url="https://mocksvc.mulesoft.com/mocks/9f4328d0-20e7-4fc2-bf30-b02b61c749cd/ordering/orders/1" />
-		<ee:transform doc:name="Transform Message" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
+		<ee:transform doc:name="building URL and orderID vars" doc:id="c0b3d5bd-1e6b-476a-833e-3727154d11be" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="pathWithOrderID" ><![CDATA[%dw 2.0
+output application/json
+var orderID = payload.result.contexts[0].parameters.number as Number
+---
+("/ordering/orders/" ++ orderID) as String]]></ee:set-variable>
+				<ee:set-variable variableName="orderID" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.result.contexts[0].parameters.number as Number]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<java:new doc:name="New fullProductList {as an ArrayList}" doc:id="d7419e5e-600f-448e-b511-cb9eeec8957e" target="fullProductList" class="java.util.ArrayList" constructor="ArrayList()" />
+		<http:request method="GET" doc:name="Get Order" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" path='#[vars.pathWithOrderID]'/>
+		<ee:transform doc:name="building the product Listn" doc:id="f5406c13-b298-4f5d-9cf3-547ef5b2ac2b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.products map ($)]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+			</ee:variables>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="30081075-d897-4b98-ac55-788da89b1dc9" collection="#[payload]">
+			<ee:transform doc:name="builder URL and product amount vars" doc:id="8f2ac492-287a-4969-a69b-a14dc92aa778" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"/catalog/products/" ++ (payload.id as String)]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="productAmount" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.amount as Number]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<http:request method="GET" doc:name="Retrieve ProductData" doc:id="2aa1108a-5a35-488f-96f7-a735546b2109" config-ref="Catalog_API" path="#[payload]" />
+			<ee:transform doc:name="building a product with amount" doc:id="902501fe-d5bf-4899-a947-5927d8e3cded" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	amount: vars.productAmount,
+	product: {
+		id: payload.id,
+		price: payload.price,
+		description: payload.description,
+		copy: payload.copy,
+		image: payload.image,
+		company: payload.company,
+		category: payload.category
+	}
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<scripting:execute engine="groovy" doc:name="adding the product to productList" doc:id="f58f7986-8c9f-4934-a196-900e83c9b0bd" >
+				<scripting:code >vars.fullProductList.add(payload)</scripting:code>
+			</scripting:execute>
+		</foreach>
+		<ee:transform doc:name="Prepare the product label" doc:id="aa0cd380-bd87-41f7-a802-789726b48054" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="productsLabel" ><![CDATA[%dw 2.0
+output application/json
+---
+(
+	vars.fullProductList map (
+		($.amount as String)
+		++ " "
+		++ ($.product.copy as String)
+		++ " "
+		++  ($.product.price.value as Number)
+		++ " "
+		++  ($.product.price.currency as String)
+	) map ($ ++ ", ")
+) 
+reduce ($$ ++ $) as String]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="Setting the payload whith the labels" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
+var label = vars.productsLabel replace /..$/ with ""
 ---
 {
-  "speech": "Thanks, Renan. Here is order #2:<br>
-	3 sleeping bags<BR>
+  "speech": "Thanks, Renan. Here is order " ++ vars.orderID ++ ":<br>
+	" ++ label ++ "<BR>
  	<b>What do you want to change?",
-  "displayText": "Thanks, Renan. Here is order #2:<br>
-	3 sleeping bags<BR>
+  "displayText": "Thanks, Renan. Here is order " ++ vars.orderID ++ ":<br>
+	" ++ label ++ "<BR>
  	<b>What do you want to change?"
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="e941dda3-7053-47dd-a75a-383ab3c22683" message="#[payload]"/>
 	</sub-flow>
 </mule>

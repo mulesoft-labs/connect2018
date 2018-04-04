@@ -1,0 +1,28 @@
+{
+    "amount": 12345,
+    "product": {
+        "id": 123,
+        "price": {
+            "value": 123.45,
+            "currency": "Dollar"
+        },
+        "description": "Super Exciting Tent",
+        "copy": "This tent is the best tent ever! You can do amazing things with it!",
+        "image": {
+            "id": 1234,
+            "url": "https://s7d2.scene7.com/is/image/dkscdn/16FNSUFS7X6X463PRCAT_Orange_is/"
+        },
+        "company": {
+            "id": 123,
+            "name": "Sports Basement",
+            "address": {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "1 Market",
+                "zip": 94029
+            }
+        },
+        "category": "Outdoor Sports"
+    }
+}
