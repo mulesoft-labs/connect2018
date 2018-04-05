@@ -14,10 +14,10 @@ http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/jav
 	<http:request-config name="DialogFlowAPI" doc:name="HTTP Request configuration" doc:id="d7d35565-feda-463b-afa0-0363bdea65b7" basePath="/api">
 		<http:request-connection protocol="HTTPS" host="api.dialogflow.com" port="443"/>
 	</http:request-config>
-	<http:request-config name="OrderAPI" doc:name="HTTP Request configuration" doc:id="de89657a-b36a-4350-a852-dd9246798d29" basePath="/mocks/0e1717f4-1fda-4c8c-bd21-a7b7dc1dc200">
+	<http:request-config name="OrderAPI" doc:name="HTTP Request configuration" doc:id="de89657a-b36a-4350-a852-dd9246798d29" basePath="/mocks/449556cb-6c67-4cc2-bd92-18b335ac4e01">
 		<http:request-connection protocol="HTTPS" host="mocksvc.mulesoft.com" port="443"/>
 	</http:request-config>
-	<http:request-config name="Catalog_API" doc:name="HTTP Request configuration" doc:id="e992ca9d-8c0d-434e-883f-4ae4c9795d05" basePath="/mocks/765c0c12-c331-4eed-b463-3160a572eae3" >
+	<http:request-config name="Catalog_API" doc:name="HTTP Request configuration" doc:id="e992ca9d-8c0d-434e-883f-4ae4c9795d05" basePath="/mocks/dfe96a2b-b982-484d-8c72-00cfc8f4fddc" >
 		<http:request-connection host="mocksvc.mulesoft.com" port="443" protocol="HTTPS"/>
 	</http:request-config>
 	<flow name="order-change-fullfilmentFlow" doc:id="c659e6a9-f568-4ac4-a07a-3b06ce163cba" >
@@ -88,7 +88,6 @@ output application/json
 		</choice>
 	</flow>
 	<sub-flow name="change-order-items" doc:id="2dd7b9c9-96e0-400a-89cb-ec92f709c7e3" >
-		<logger level="INFO" doc:name="Logger" doc:id="d2886cff-1d07-4dfe-b002-9b75b025e070" message="CHANGE ORDER ITEMS"/>
 		<ee:transform doc:name="Transform Message" doc:id="43467a82-7f84-4955-892a-5b4ce6a5becc" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -210,9 +209,7 @@ var label = vars.preLabel replace /..$/ with ""
 		<logger level="INFO" doc:name="Logger" doc:id="93c9470c-44cb-44b8-b0ce-170bb6a261ba" message="#[payload]" />
 	</sub-flow>
 	<sub-flow name="listOrdersFlow" doc:id="ec6a625c-d90f-44d8-bca8-44e210259c50" >
-		<logger level="INFO" doc:name="Logger" doc:id="15bc2c43-b537-4d98-afa9-9fffce34bb46" message="LIST ORDERS FLOW"/>
-		<http:request method="GET" doc:name="Request" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" url="https://mocksvc.mulesoft.com/mocks/9f4328d0-20e7-4fc2-bf30-b02b61c749cd/ordering/orders"/>
-		<logger level="INFO" doc:name="Logger" doc:id="b802b3ff-38d4-42b3-a4e2-3a20462d1fbf" message="#[payload[0].id]"/>
+		<http:request method="GET" doc:name="Request (OrderAPI)" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" url="https://mocksvc.mulesoft.com/mocks/449556cb-6c67-4cc2-bd92-18b335ac4e01/ordering/orders"/>
 		<ee:transform doc:name="Set the payload and read the order list as an orderLabel" doc:id="e4d4b9aa-014c-4c62-80f5-f9f35d97d2d6">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -232,18 +229,82 @@ output application/json
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
-var label = vars.ordersLabel replace /..$/ with ""
 ---
 {
-  "speech": "Sure, this are your last " ++ sizeOf(payload) ++" orders: " ++ label ++ ". <BR>Which one would you like to look at?",
-  "displayText": "Sure, this are your last " ++ sizeOf(payload) ++" orders: " ++ label ++ ". <BR>Which one would you like to look at?"
+  "data": {
+			"type": "order-list",
+			"text": "Sure, this are your last orders, which one you would like to look at?",
+			"orders": [
+				{
+				"id": 3345001,
+				"products": [
+	  				{
+					  "id": 7890001,
+					  "price": {
+					    "value": 47.95,
+					    "currency": "USD"
+					   },
+  					   "name": "Eureka Cypress Sleeping Bag",
+				       "image": {
+				         "id": 8540001,
+				         "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
+				       }
+				    }
+				],
+				"totalAmountPrice": 35,
+				"totalAmountPriceCurrency": "USD",
+				"shippingStatus": "shipped",
+				"customerID": 5640099
+			    },
+			    {
+			    "id": 3345002,
+			    "products": [
+	  				{
+					  "id": 7890001,
+					  "price": {
+					    "value": 47.95,
+					    "currency": "USD"
+					   },
+  					   "name": "Eureka Cypress Sleeping Bag",
+				       "image": {
+				         "id": 8540001,
+				         "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
+				       }
+				    }
+				],
+			    "totalAmountPrice": 143.85,
+			    "totalAmountPriceCurrency": "USD",
+			    "shippingStatus": "non-shipped",
+			    "customerID": 5640099
+			  },
+			  {
+			    "id": 3345003,
+			    "products": [
+	  				{
+					  "id": 7890001,
+					  "price": {
+					    "value": 47.95,
+					    "currency": "USD"
+					   },
+  					   "name": "Eureka Cypress Sleeping Bag",
+				       "image": {
+				         "id": 8540001,
+				         "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
+				       }
+				    }
+				],
+			    "totalAmountPrice": 9.99,
+			    "totalAmountPriceCurrency": "USD",
+			    "shippingStatus": "shipped",
+			    "customerID": 5640099
+			  }
+			  ]
+		   }   
 }]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="3bb0ddc2-4e9e-49ff-9684-b77c3e35da7c" message="#[payload.displayText]"/>
 	</sub-flow>
 	<sub-flow name="showOrderDetails" doc:id="c4362728-860f-4cf1-bc26-14777a4c6d52" >
-		<logger level="INFO" doc:name="Logger" doc:id="0ee54046-f3c5-4560-80b0-9241f472c2a6" message="SHOW ORDER DETAILS"/>
 		<ee:transform doc:name="building URL and orderID vars" doc:id="c0b3d5bd-1e6b-476a-833e-3727154d11be" >
 			<ee:message >
 			</ee:message>
@@ -260,7 +321,7 @@ payload.result.contexts[0].parameters.number as Number]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<java:new doc:name="New fullProductList {as an ArrayList}" doc:id="d7419e5e-600f-448e-b511-cb9eeec8957e" target="fullProductList" class="java.util.ArrayList" constructor="ArrayList()" />
-		<http:request method="GET" doc:name="Get Order" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" path='#[vars.pathWithOrderID]'/>
+		<http:request method="GET" doc:name="Get Order (OrderAPI)" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" path='#[vars.pathWithOrderID]'/>
 		<ee:transform doc:name="building the product Listn" doc:id="f5406c13-b298-4f5d-9cf3-547ef5b2ac2b" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -286,7 +347,7 @@ output application/java
 payload.amount as Number]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<http:request method="GET" doc:name="Retrieve ProductData" doc:id="2aa1108a-5a35-488f-96f7-a735546b2109" config-ref="Catalog_API" path="#[payload]" />
+			<http:request method="GET" doc:name="Get ProductData (CatalogAPI)" doc:id="2aa1108a-5a35-488f-96f7-a735546b2109" config-ref="Catalog_API" path="#[payload]" />
 			<ee:transform doc:name="building a product with amount" doc:id="902501fe-d5bf-4899-a947-5927d8e3cded" >
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
@@ -340,15 +401,33 @@ output application/json
 var label = vars.productsLabel replace /..$/ with ""
 ---
 {
-  "speech": "Thanks, Renan. Here is order " ++ vars.orderID ++ ":<br>
-	" ++ label ++ "<BR>
- 	<b>What do you want to change?",
-  "displayText": "Thanks, Renan. Here is order " ++ vars.orderID ++ ":<br>
-	" ++ label ++ "<BR>
- 	<b>What do you want to change?"
+ "data": {
+			"type": "order-detail",
+			"text": "Thanks! Here is order " ++ vars.orderID ++ ". What do you want to change? ",
+			"order": {
+				"id": vars.orderID,
+				"products": [
+	  				{
+					  "id": 7890001,
+					  "price": {
+					    "value": 47.95,
+					    "currency": "USD"
+					   },
+  					   "name": "Eureka Cypress Sleeping Bag",
+				       "image": {
+				         "id": 8540001,
+				         "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
+				       }
+				    }
+				],
+				"totalAmountPrice": 35,
+				"totalAmountPriceCurrency": "USD",
+				"shippingStatus": "shipped",
+				"customerID": 5640099
+			    }
+		   } 
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="e941dda3-7053-47dd-a75a-383ab3c22683" message="#[payload]"/>
 	</sub-flow>
 </mule>

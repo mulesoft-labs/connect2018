@@ -44,7 +44,7 @@ var settings = {
         		  },
               "data": "{\"query\": \""  + query + "\",\"lang\": \"en\",\"sessionId\": \"123\"}",
         		  success: function(data){
-        			  var answer = "<BR><BR>Agent: " + data.result.fulfillment.speech
+        			  var answer = "<BR><BR>Agent: " + JSON.stringify(data.result.fulfillment)
         			  $("#chatbody").append(answer);
         			  $("#chatbody").scrollTop(5000);
         		}});
