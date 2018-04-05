@@ -18,8 +18,7 @@
 		  "new_products": [
 		  	{
 		  		"id": 17890001,
-		  		"currentAmount": 3,
-		  		"newAmount": 2
+		  		"amount": 2
 		  	}
 		  ],
 		  "user_name": "Renan",

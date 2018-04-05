@@ -108,13 +108,18 @@
       {
         "name": "changeordersintent-followup",
         "parameters": {
-		  "new_quantity": "2",
-		  "product": "sleeping bag ",
+		  "new_products": [
+		  	{
+		  		"id": 17890001,
+		  		"currentAmount": 3,
+		  		"newAmount": 2
+		  	}
+		  ],
 		  "user_name": "Renan",
 		  "order_id": "3345002",
 		  "new_product": "lantern"
-      },
-        "lifespan": 1
+		},
+		"lifespan": 1
       },
       {
         "name": "listordersintent-followup",

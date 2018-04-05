@@ -91,50 +91,123 @@ output application/json
 		<logger level="INFO" doc:name="Logger" doc:id="d2886cff-1d07-4dfe-b002-9b75b025e070" message="CHANGE ORDER ITEMS"/>
 		<ee:transform doc:name="Transform Message" doc:id="43467a82-7f84-4955-892a-5b4ce6a5becc" >
 			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.result.contexts[0].parameters.new_products map ($)]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
 				<ee:set-variable variableName="urlWithOrderID" ><![CDATA[%dw 2.0
 output application/java
 ---
 "/ordering/orders/" ++ (payload.result.contexts[0].parameters.order_id as String)]]></ee:set-variable>
-				<ee:set-variable variableName="product_new_quantity" ><![CDATA[%dw 2.0
-output application/java
----
-payload.result.contexts[0].parameters.new_quantity as Number]]></ee:set-variable>
 				<ee:set-variable variableName="orderID" ><![CDATA[%dw 2.0
 output application/java
 ---
 payload.result.contexts[0].parameters.order_id as Number]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<ee:transform doc:name="Transform Message" doc:id="b5d95473-2404-4ff2-8e78-d8f4252bdeb4" >
+		<java:new doc:name="New products as an ArrayList" doc:id="62458363-cfb7-4008-9fe1-c9d3bf18da8e" class="java.util.ArrayList" constructor="ArrayList()" target="products"/>
+		<foreach doc:name="For Each" doc:id="fe25ed68-9801-4df2-a3e4-b95a18fb55ac" collection="#[payload]">
+			<ee:transform doc:name="Transform Message" doc:id="b5d95473-2404-4ff2-8e78-d8f4252bdeb4">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"/catalog/products/" ++ (payload.id as String)]]></ee:set-payload>
+			</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="productNewAmount" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.newAmount as Number]]></ee:set-variable>
+					<ee:set-variable variableName="productCurrentAmount" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.currentAmount as Number]]></ee:set-variable>
+				</ee:variables>
+		</ee:transform>
+			<http:request method="GET" doc:name="Retrieve the productData" doc:id="b5d8485b-3ff7-47f8-bb9c-8ef7306cce73" config-ref="Catalog_API" path="#[payload]"/>
+			<ee:transform doc:name="Transform Message" doc:id="04a43577-05d8-41cf-94b7-6ea166f63312" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"/ordering/orders/" ++ (vars.orderID as String)]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="product" ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<http:request method="PATCH" doc:name="Updated Order Product quantity" doc:id="6d705c92-eab7-4e57-958a-7198e40a806b" config-ref="OrderAPI" path="#[payload]" />
+			<ee:transform doc:name="Transform Message" doc:id="ffcad589-68e3-4281-8f23-95f3db3cea5f" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+  product: vars.product,
+  newAmount: vars.productNewAmount,
+  currentAmount: vars.productCurrentAmount,
+  newOrderTotalAmountPrice: (payload.totalAmountPrice as String) ++ " " ++ (payload.totalAmountPriceCurrency as String)
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<scripting:execute engine="groovy" doc:name="Execute" doc:id="4b7b2de5-a9d4-4ef7-bd32-272b7fb8dfb4" >
+				<scripting:code >vars.products.add(payload)</scripting:code>
+			</scripting:execute>
+		</foreach>
+		<ee:transform doc:name="Transform Message" doc:id="57b602d1-4241-4fe9-8b1f-e123839be6c6" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  "orderID": vars.orderID,
-  "products": [
-  {
-    "id": 7890001,
-    "amount": vars.product_new_quantity
-  }]
+	orderID: vars.orderID,
+	products: vars.products
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<http:request method="PATCH" doc:name="Updated Order Product quantity" doc:id="6d705c92-eab7-4e57-958a-7198e40a806b" config-ref="OrderAPI" path="#[vars.urlWithOrderID]"/>
-		<logger level="INFO" doc:name="Logger" doc:id="93c9470c-44cb-44b8-b0ce-170bb6a261ba" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="8a1072f0-b5ff-4db5-b570-d2eeebd7134d" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="preLabel" ><![CDATA[%dw 2.0
+output application/json
+---
+(
+	payload.products map (
+		"[orderID=" ++ (payload.orderID as String)
+		++ "][productID=" ++ ($.product.id as String)
+		++ "] Qty."
+		++ ($.newAmount as String)
+		++ " \""
+		++ ($.product.copy as String)
+		++ "\" ” from "
+		++ ($.currentAmount as String) ++ " to "
+		++ ($.newAmount as String) ++ ". <BR> Your new order now comes out to "
+		++  ($.newOrderTotalAmountPrice as String)
+	) map ($ ++ ", ")
+) 
+reduce ($$ ++ $) as String]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<ee:transform doc:name="Copy_of_Transform Message" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
+var label = vars.preLabel replace /..$/ with ""
 ---
 {
-  "speech": "No problem, that has not shipped yet, so I can just change the quantity for “Eureka Cypress 15 Degree Junior Sleeping Bag” from 3 to 2. <BR> Your new order now comes out to \$86.93. <BR>Is that OK?",
-  "displayText": "No problem, that has not shipped yet, so I can just change the quantity for “Eureka Cypress 15 Degree Junior Sleeping Bag” from 3 to 2. <BR> Your new order now comes out to \$86.93. <BR>Is that OK?"
+  "speech": "No problem, that has not shipped yet, so I can just change the quantity for " ++ label ++ ". <BR>Is that OK?",
+  "displayText": "No problem, that has not shipped yet, so I can just change the quantity for " ++ label ++ ". <BR>Is that OK?"
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="93c9470c-44cb-44b8-b0ce-170bb6a261ba" message="#[payload]" />
 	</sub-flow>
 	<sub-flow name="listOrdersFlow" doc:id="ec6a625c-d90f-44d8-bca8-44e210259c50" >
 		<logger level="INFO" doc:name="Logger" doc:id="15bc2c43-b537-4d98-afa9-9fffce34bb46" message="LIST ORDERS FLOW"/>
@@ -246,7 +319,9 @@ output application/json
 ---
 (
 	vars.fullProductList map (
-		($.amount as String)
+		"[" ++ ($.product.id as String)
+		++ "] Qty."
+		++ ($.amount as String)
 		++ " "
 		++ ($.product.copy as String)
 		++ " "

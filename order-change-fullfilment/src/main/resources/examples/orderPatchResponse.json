@@ -1,0 +1,17 @@
+{
+    "id": 3345002,
+    "products": [
+        {
+            "id": 17890001,
+            "amount": 2
+        },
+        {
+            "id": 7890002,
+            "amount": 1
+        }
+    ],
+    "totalAmountPrice": 165.85,
+    "totalAmountPriceCurrency": "USD",
+    "shippingStatus": "non-shipped",
+    "customerID": 5640099
+}
