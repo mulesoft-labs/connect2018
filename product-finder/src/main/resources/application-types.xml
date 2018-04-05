@@ -14,4 +14,14 @@
       </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
+  <types:enrichment select="#a88c1b93-4dba-42b0-9a9e-029047d3f279">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:variables>
+          <types:variable name="product" type="inventoryJson"/>
+          <types:variable name="inventory" type="inventoryJson"/>
+        </types:variables>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
 </types:mule>
