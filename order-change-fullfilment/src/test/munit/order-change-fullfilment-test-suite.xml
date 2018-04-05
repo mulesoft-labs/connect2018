@@ -178,7 +178,7 @@
   },
   "sessionId": "123"
 }' doc:name="Set Payload" doc:id="ef2d362a-52b2-4b53-aeaa-d78119924149" mimeType="application/json"/>
-			<flow-ref doc:name="change-order-items" doc:id="aa5009ec-2889-4faf-9904-9bf0f2ab3069" name="change-order-items"/>
+			<flow-ref doc:name="change-item-quantity" doc:id="aa5009ec-2889-4faf-9904-9bf0f2ab3069" name="change-item-quantity"/>
 		</munit:execution>
 	</munit:test>
 

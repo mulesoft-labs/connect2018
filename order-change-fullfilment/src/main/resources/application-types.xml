@@ -38,6 +38,12 @@ type: string]]></types:shape>
     <types:type name="orderProductCollection" format="json">
       <types:example format="json" location="examples/orderProductCollection.json"/>
     </types:type>
+    <types:type name="modifiedOrderProductExample" format="json">
+      <types:example format="json" location="examples/modifiedOrderProductExample.json"/>
+    </types:type>
+    <types:type name="modifiedOrderProductCollectionExample" format="json">
+      <types:example format="json" location="examples/modifiedOrderProductCollectionExample.json"/>
+    </types:type>
   </types:catalog>
   <types:enrichment select="#dc11db77-2739-4a05-b3dd-3d266e0427fb">
     <types:processor-declaration>
@@ -73,15 +79,6 @@ type: string]]></types:shape>
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
-  <types:enrichment select="#2019d878-9ebf-4ce5-a057-01efdd4e7c39">
-    <types:processor-declaration>
-      <types:input-event>
-        <types:message>
-          <types:payload type="orderExample"/>
-        </types:message>
-      </types:input-event>
-    </types:processor-declaration>
-  </types:enrichment>
   <types:enrichment select="#c0b3d5bd-1e6b-476a-833e-3727154d11be">
     <types:processor-declaration>
       <types:input-event>
@@ -103,10 +100,20 @@ type: string]]></types:shape>
           <types:payload type="productExampleJson"/>
         </types:message>
       </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="modifiedOrderProductExample"/>
+        </types:message>
+      </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
   <types:enrichment select="#aa0cd380-bd87-41f7-a802-789726b48054">
     <types:processor-declaration>
+      <types:input-event>
+        <types:variables>
+          <types:variable name="fullProductList" type="modifiedOrderProductCollectionExample"/>
+        </types:variables>
+      </types:input-event>
       <types:output-event>
         <types:variables>
           <types:variable name="productsLabel" type="string"/>
@@ -141,7 +148,7 @@ type: string]]></types:shape>
       </types:input-event>
       <types:output-event>
         <types:message>
-          <types:payload type="orderProductExample"/>
+          <types:payload type="modifiedOrderProductExample"/>
         </types:message>
       </types:output-event>
     </types:processor-declaration>
@@ -160,6 +167,20 @@ type: string]]></types:shape>
       <types:output-event>
         <types:variables>
           <types:variable name="preLabel" type="string"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#f5406c13-b298-4f5d-9cf3-547ef5b2ac2b">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="orderExample"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:variables>
+          <types:variable name="orderDetails" type="orderExample"/>
         </types:variables>
       </types:output-event>
     </types:processor-declaration>

@@ -96,9 +96,15 @@ output application/json
 			</otherwise>
 		</choice>
 	</flow>
-	<sub-flow name="add-suggested-product" doc:id="8268e97c-f4b4-4d7a-b8a9-826b1339476e" />
-	<sub-flow name="add-new-product" doc:id="4b1cc876-0bdc-4b94-aa6c-9d9f53104fa3" />
-	<sub-flow name="change-order-quantity-confirmation" doc:id="a39e8416-3103-4681-afa6-88eb7a617ec0" />
+	<sub-flow name="add-suggested-product" doc:id="8268e97c-f4b4-4d7a-b8a9-826b1339476e" >
+		<logger message="" />
+	</sub-flow>
+	<sub-flow name="add-new-product" doc:id="4b1cc876-0bdc-4b94-aa6c-9d9f53104fa3" >
+		<logger message="" />
+	</sub-flow>
+	<sub-flow name="change-order-quantity-confirmation" doc:id="a39e8416-3103-4681-afa6-88eb7a617ec0" >
+		<logger message="" />
+	</sub-flow>
 	<sub-flow name="change-item-quantity" doc:id="2dd7b9c9-96e0-400a-89cb-ec92f709c7e3" >
 		<ee:transform doc:name="Transform Message" doc:id="43467a82-7f84-4955-892a-5b4ce6a5becc" >
 			<ee:message >
@@ -342,6 +348,10 @@ output application/json
 payload.products map ($)]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
+				<ee:set-variable variableName="orderDetails" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<foreach doc:name="For Each" doc:id="30081075-d897-4b98-ac55-788da89b1dc9" collection="#[payload]">
@@ -374,7 +384,13 @@ output application/java
 		copy: payload.copy,
 		image: payload.image,
 		company: payload.company,
-		category: payload.category
+		category: payload.category,
+		object: {
+	        "id": payload.id,
+	        "price": payload.price,
+	         "name": payload.copy,
+	         "image": payload.image
+        }       
 	}
 }]]></ee:set-payload>
 				</ee:message>
@@ -383,63 +399,36 @@ output application/java
 				<scripting:code >vars.fullProductList.add(payload)</scripting:code>
 			</scripting:execute>
 		</foreach>
-		<ee:transform doc:name="Prepare the product label" doc:id="aa0cd380-bd87-41f7-a802-789726b48054" >
+		<ee:transform doc:name="Setting the payload whith the labels" doc:id="aa0cd380-bd87-41f7-a802-789726b48054" >
 			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"data": {
+		"type": "order-detail",
+		"text": "Thanks! Here is order " ++ vars.orderID ++ ". What do you want to change? ",
+		"order": {
+			id: vars.orderID,
+			totalAmountPrice: vars.orderDetails.totalAmountPrice,
+			totalAmountPriceCurrency: vars.orderDetails.totalAmountPriceCurrency,
+			shippingStatus: vars.orderDetails.shippingStatus,
+			customerID: vars.orderDetails.customerID,
+			products: 
+				vars.fullProductList.product.object map (
+					$
+				)
+	   }
+	}
+}]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
 				<ee:set-variable variableName="productsLabel" ><![CDATA[%dw 2.0
 output application/json
 ---
-(
-	vars.fullProductList map (
-		"[" ++ ($.product.id as String)
-		++ "] Qty."
-		++ ($.amount as String)
-		++ " "
-		++ ($.product.copy as String)
-		++ " "
-		++  ($.product.price.value as Number)
-		++ " "
-		++  ($.product.price.currency as String)
-	) map ($ ++ ", ")
-) 
-reduce ($$ ++ $) as String]]></ee:set-variable>
+{}]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<ee:transform doc:name="Setting the payload whith the labels" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/json
-var label = vars.productsLabel replace /..$/ with ""
----
-{
- "data": {
-			"type": "order-detail",
-			"text": "Thanks! Here is order " ++ vars.orderID ++ ". What do you want to change? ",
-			"order": {
-				"id": vars.orderID,
-				"products": [
-	  				{
-					  "id": 7890001,
-					  "price": {
-					    "value": 47.95,
-					    "currency": "USD"
-					   },
-  					   "name": "Eureka Cypress Sleeping Bag",
-				       "image": {
-				         "id": 8540001,
-				         "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
-				       }
-				    }
-				],
-				"totalAmountPrice": 35,
-				"totalAmountPriceCurrency": "USD",
-				"shippingStatus": "shipped",
-				"customerID": 5640099
-			    }
-		   } 
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="a8a9e85e-62d9-48b2-9559-c9219f055f5b" message="#[payload]"/>
 	</sub-flow>
 </mule>
