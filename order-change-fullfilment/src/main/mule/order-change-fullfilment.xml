@@ -66,11 +66,20 @@ payload.result.action]]></ee:set-variable>
 			<when expression='#[vars.action == "list-orders"]'>
 				<flow-ref doc:name="List Orders" doc:id="7313524c-e14c-43cc-921a-4ce6f5878b1d" name="listOrdersFlow"/>
 			</when>
-			<when expression='#[vars.action == "select-order-number"]' >
+			<when expression='#[vars.action == "get-order-details"]' >
 				<flow-ref doc:name="showOrderDetails" doc:id="ab09da6f-59f5-4e02-a228-a7efc604ddbe" name="showOrderDetails"/>
 			</when>
-			<when expression='#[vars.action == "change-order-items"]' >
-				<flow-ref doc:name="change-order-items" doc:id="0fa7c6b9-9981-4ffb-8aaa-c37bf1df8388" name="change-order-items"/>
+			<when expression='#[vars.action == "change-item-quantity"]' >
+				<flow-ref doc:name="change-item-quantity" doc:id="0fa7c6b9-9981-4ffb-8aaa-c37bf1df8388" name="change-item-quantity"/>
+			</when>
+			<when expression='#[vars.action == "change-order-quantity-confirmation"]' >
+				<flow-ref doc:name="change-order-quantity-confirmation" doc:id="fc9cfcf4-d7a0-4132-a57e-7c936f7822e0" name="change-order-quantity-confirmation"/>
+			</when>
+			<when expression='#[vars.action == "add-new-product"]' >
+				<flow-ref doc:name="add-new-product" doc:id="111045fc-28c1-4243-ad6b-0ba2335920d2" name="add-new-product" />
+			</when>
+			<when expression='#[vars.action == "add-suggested-product"]' >
+				<flow-ref doc:name="add-suggested-product" doc:id="6a89b322-dcc3-4ec5-8c62-fc7094c54ecb" name="add-suggested-product"/>
 			</when>
 			<otherwise >
 				<ee:transform doc:name="Transform Message" doc:id="f69deeb9-6690-484f-afbd-9722bb880573" >
@@ -87,7 +96,10 @@ output application/json
 			</otherwise>
 		</choice>
 	</flow>
-	<sub-flow name="change-order-items" doc:id="2dd7b9c9-96e0-400a-89cb-ec92f709c7e3" >
+	<sub-flow name="add-suggested-product" doc:id="8268e97c-f4b4-4d7a-b8a9-826b1339476e" />
+	<sub-flow name="add-new-product" doc:id="4b1cc876-0bdc-4b94-aa6c-9d9f53104fa3" />
+	<sub-flow name="change-order-quantity-confirmation" doc:id="a39e8416-3103-4681-afa6-88eb7a617ec0" />
+	<sub-flow name="change-item-quantity" doc:id="2dd7b9c9-96e0-400a-89cb-ec92f709c7e3" >
 		<ee:transform doc:name="Transform Message" doc:id="43467a82-7f84-4955-892a-5b4ce6a5becc" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
