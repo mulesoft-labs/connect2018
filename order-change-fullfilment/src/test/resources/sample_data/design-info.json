@@ -1,5 +1,12 @@
 {
   "sampleData": {
+    "902501fe-d5bf-4899-a947-5927d8e3cded": {
+      "vars-productAmount": "sample_data/defaultnumbertype.dwl"
+    },
+    "55cc34ee-fc7e-4468-a6a3-d6e978c47d48": {
+      "vars-orderID": "sample_data/defaultstringtype_1.dwl",
+      "vars-fullProductList": "sample_data/Object_1.dwl"
+    },
     "aa0cd380-bd87-41f7-a802-789726b48054": {
       "vars-orderID": "sample_data/defaultstringtype.dwl",
       "vars-fullProductList": "sample_data/Object.dwl"
