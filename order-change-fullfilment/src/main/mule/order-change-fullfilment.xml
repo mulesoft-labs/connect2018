@@ -458,7 +458,7 @@ payload.amount as Number]]></ee:set-variable>
 output application/java
 ---
 {
-	amount: vars.productAmount,
+	quantity: vars.productAmount,
 	product: {
 		id: payload.id,
 		price: payload.price,
@@ -472,7 +472,7 @@ output application/java
 	        "price": payload.price,
 	        "name": payload.copy,
 	        "image": payload.image,
-	        "amount": vars.productAmount
+	        "quantity": vars.productAmount
         }       
 	}
 }]]></ee:set-payload>
