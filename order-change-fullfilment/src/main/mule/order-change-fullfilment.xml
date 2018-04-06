@@ -99,13 +99,13 @@ output application/json
 		</choice>
 	</flow>
 	<sub-flow name="add-suggested-product" doc:id="8268e97c-f4b4-4d7a-b8a9-826b1339476e" >
-		<logger message="" />
+		<logger message="" doc:name="Logger" level="INFO"/>
 	</sub-flow>
 	<sub-flow name="add-new-product" doc:id="4b1cc876-0bdc-4b94-aa6c-9d9f53104fa3" >
-		<logger message="" />
+		<logger message="" doc:name="Logger"/>
 	</sub-flow>
 	<sub-flow name="change-order-quantity-confirmation" doc:id="a39e8416-3103-4681-afa6-88eb7a617ec0" >
-		<logger message="" />
+		<logger message="" doc:name="Logger"/>
 	</sub-flow>
 	<sub-flow name="change-item-quantity" doc:id="2dd7b9c9-96e0-400a-89cb-ec92f709c7e3" >
 		<ee:transform doc:name="Transform Message" doc:id="43467a82-7f84-4955-892a-5b4ce6a5becc" >
@@ -124,6 +124,11 @@ output application/java
 output application/java
 ---
 payload.result.contexts[0].parameters.order_id as Number]]></ee:set-variable>
+				<ee:set-variable variableName="customerID" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<java:new doc:name="New products as an ArrayList" doc:id="62458363-cfb7-4008-9fe1-c9d3bf18da8e" class="java.util.ArrayList" constructor="ArrayList()" target="products"/>
@@ -158,7 +163,13 @@ output application/java
 					<ee:set-variable variableName="product" ><![CDATA[%dw 2.0
 output application/json
 ---
-payload]]></ee:set-variable>
+{
+    "id": payload.id,
+    "price": payload.price,
+    "name": payload.copy,
+    "image": payload.image,
+    "quantity": vars.productNewAmount
+}   ]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 			<http:request method="PATCH" doc:name="Updated Order Product quantity" doc:id="6d705c92-eab7-4e57-958a-7198e40a806b" config-ref="OrderAPI" path="#[payload]" />
@@ -168,76 +179,37 @@ payload]]></ee:set-variable>
 output application/java
 ---
 {
-  product: vars.product,
-  newAmount: vars.productNewAmount,
-  currentAmount: vars.productCurrentAmount,
-  newOrderTotalAmountPrice: (payload.totalAmountPrice as String) ++ " " ++ (payload.totalAmountPriceCurrency as String)
+  product: vars.product
 }]]></ee:set-payload>
 				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="customerID" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.customerID as Number]]></ee:set-variable>
+				</ee:variables>
 			</ee:transform>
 			<scripting:execute engine="groovy" doc:name="Execute" doc:id="4b7b2de5-a9d4-4ef7-bd32-272b7fb8dfb4" >
 				<scripting:code >vars.products.add(payload)</scripting:code>
 			</scripting:execute>
 		</foreach>
-		<ee:transform doc:name="Transform Message" doc:id="57b602d1-4241-4fe9-8b1f-e123839be6c6" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-{
-	orderID: vars.orderID,
-	products: vars.products
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-		<ee:transform doc:name="Transform Message" doc:id="8a1072f0-b5ff-4db5-b570-d2eeebd7134d" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="preLabel" ><![CDATA[%dw 2.0
-output application/json
----
-(
-	payload.products map (
-		"[orderID=" ++ (payload.orderID as String)
-		++ "][productID=" ++ ($.product.id as String)
-		++ "] Qty."
-		++ ($.newAmount as String)
-		++ " \""
-		++ ($.product.copy as String)
-		++ "\" ” from "
-		++ ($.currentAmount as String) ++ " to "
-		++ ($.newAmount as String) ++ ". <BR> Your new order now comes out to "
-		++  ($.newOrderTotalAmountPrice as String)
-	) map ($ ++ ", ")
-) 
-reduce ($$ ++ $) as String]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<ee:transform doc:name="Copy_of_Transform Message" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
+		<ee:transform doc:name="Transform Message" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
-var label = vars.preLabel replace /..$/ with ""
 ---
 {
   "data": {
   	"type": "new-order",
   	"text": "No problem, that has not shipped yet, so I can just change the quantity for you. Is that OK?",
   	"order" : {
-  	   "id":23,
-  	   "totalAmountPrice":143.85,
-  	   "totalAmountPriceCurrency":"USD",
-  	   "customerID":5640099,
-  	   "products":[{
-  	   	  "id":7890001,
-  	   	  "price":{"value":47.95,"currency":"USD"},
-  	   	  "name":"Eureka 15°F Cypress Junior Sleeping Bag - Mummy (for Boys) - Grey/Green ( )",
-  	   	  "image":{"id":8540001,"url":"https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"},
-  	   	  "quantity": 3
-  	   	  }]
-  	   	}
+  	   "id": vars.orderID,
+  	   "totalAmountPrice": sum(vars.products.*product.price.value) * (sum(vars.products.*product.quantity) as Number),
+  	   "totalAmountPriceCurrency": vars.products[0].product.price.currency,
+  	   "customerID": vars.customerID,
+  	   "products": vars.products
   	}
+  }
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
@@ -263,7 +235,14 @@ payload.id map ($)]]></ee:set-payload>
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/java
 ---
-payload]]></ee:set-payload>
+{
+	id: payload.order.id as Number,
+	totalAmountPrice: payload.order.totalAmountPrice as Number,
+	totalAmountPriceCurrency: payload.order.totalAmountPriceCurrency as String,
+	shippingStatus: payload.order.shippingStatus as String,
+	customerID: payload.order.customerID as Number,
+	products: payload.order.products
+}]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
 			<scripting:execute engine="groovy" doc:name="Execute add to orderList" doc:id="13ac49cf-2ef6-4059-a81e-8a91cc3c9220" >
@@ -279,7 +258,7 @@ output application/json
  	"data": {
 		"type": "order-list",
 		"text": "Sure, this are your last orders, which one you would like to look at?",
-		"orders": vars.orderList.order map
+		"orders": vars.orderList map
 		(
 			$
 		)
@@ -318,7 +297,7 @@ output application/json
 			id: payload.order.id,
 			totalAmountPrice: payload.order.totalAmountPrice,
 			totalAmountPriceCurrency: payload.order.totalAmountPriceCurrency,
-			shippingStatus: payload.order.orderDetails.shippingStatus,
+			shippingStatus: payload.order.shippingStatus,
 			customerID: payload.order.customerID,
 			products: payload.order.products
 	   }
@@ -399,8 +378,9 @@ output application/java
 		object: {
 	        "id": payload.id,
 	        "price": payload.price,
-	         "name": payload.copy,
-	         "image": payload.image
+	        "name": payload.copy,
+	        "image": payload.image,
+	        "amount": vars.productAmount
         }       
 	}
 }]]></ee:set-payload>
