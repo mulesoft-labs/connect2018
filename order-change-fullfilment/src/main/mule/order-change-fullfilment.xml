@@ -206,6 +206,39 @@ output application/java
 		</ee:transform>
 	</sub-flow>
 	<sub-flow name="add-new-product" doc:id="4b1cc876-0bdc-4b94-aa6c-9d9f53104fa3" >
+		<ee:transform doc:name="Setting Vars" doc:id="8241628b-bbd6-429c-89b3-aeeab7858017" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "id": 3345002,
+  "products": [
+  {
+    "id": 17890001,
+    "amount": 2
+  },{
+    "id": 7890002,
+    "amount": 1
+  }],
+  "totalAmountPrice": 165.85,
+  "totalAmountPriceCurrency": "USD",
+  "shippingStatus": "non-shipped",
+  "customerID": 5640099
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="orderID" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.result.contexts[0].parameters.order_id as Number]]></ee:set-variable>
+				<ee:set-variable variableName="urlWithOrderID" ><![CDATA[%dw 2.0
+output application/java
+---
+"/ordering/orders/" ++ (payload.result.contexts[0].parameters.order_id as String)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<http:request method="POST" doc:name="Post to add a new producto to this order" doc:id="4ee3cbe1-5a40-453e-877c-77866ce661ad" config-ref="OrderAPI" path="#[vars.urlWithOrderID]"/>
 		<ee:transform doc:name="LISTA CHARGERS" doc:id="ed2365a2-4116-4ceb-875b-17d1427e15cf" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -246,40 +279,74 @@ output application/java
 		</ee:transform>
 	</sub-flow>
 	<sub-flow name="change-order-quantity-confirmation" doc:id="a39e8416-3103-4681-afa6-88eb7a617ec0" >
-		<ee:transform doc:name="LISTA LANTERNS" doc:id="16addbf1-f0f3-4c7e-b839-3b84b2193c53" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<http:request method="GET" doc:name="Request Catalog-API to retrieve Laterns" doc:id="bae30fd8-3090-4bb0-bdd4-5f8e537b7ed2" config-ref="Catalog_API" path="/catalog/products"/>
+		<ee:transform doc:name="5 Lanterns response payload" doc:id="16addbf1-f0f3-4c7e-b839-3b84b2193c53">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 {
 "data": {
         "type": "product-list",
         "text": "You have a credit of \$55 . Here are some lanterns you might be interested in",
-        "products": [{
-      			"id": 7890002,
-      			"price": {
-       			   "value": 69.95,
-        			   "currency": "USD"
-      			},
-      			"name": "Goal Zero Lighthouse 400",
+        "products": [
+		    {
+		      "id": 7890002,
+		      "price": {
+		        "value": 69.95,
+		        "currency": "USD"
+		      },
+		      "name": "Goal Zero Lighthouse 400 - Camping light - LED - 3 W - warm white light - 3500 K - lantern",
+		      "image": {
+		        "id": 8540002,
+		        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
+		      }
+		    },{
+		        "id": 7890006,
+		        "price": {
+		        "value": 74.99,
+		        "currency": "USD"
+		        },
+		        "name": "Coleman CPX 6 Triago Lantern 61450663",
 		        "image": {
-                    "id": 8540002,
-                    "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
-                }
-			},
-			{
-      			"id": 7890002,
-      			"price": {
-       			   "value": 69.95,
-        			   "currency": "USD"
-      			},
-      			"name": "Goal Zero Lighthouse 400",
+		        "id": 8540006,
+		        "url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQyMPBCmFkdvvSdN1AiCJCQ9-B7kIVriJd-Ich_bszorXEUUIaWtCN88Yb0kmLFCLw05gLylZ4&usqp=CAY"
+		        }
+		    },{
+		        "id": 7890007,
+		        "price": {
+		        "value": 71.99,
+		        "currency": "USD"
+		        },
+		        "name": "Coleman Quad LED Lantern",
 		        "image": {
-                    "id": 8540002,
-                    "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
-                }
-			} 
-				]
+		        "id": 8540007,
+		        "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRNTfRuy1Ds8s7yJD_8PLCB2gIbPHF9H-rTBka9-Dkd0_uTD-6ZguxiB2A39wnFOHLOLWzsu_U&usqp=CAY"
+		        }
+		        },{
+		        "id": 7890008,
+		        "price": {
+		        "value": 85.99,
+		        "currency": "USD"
+                },
+                "name": "Sintechno 2-in-1 Solar Bright LED Emergency Camping Portable Lantern",
+		        "image": {
+		        "id": 8540008,
+		        "url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcREYcHVgrBWpAew2bVIrZB4mu7rvhKm-ijxtkSmBvizfVW2NGC--h6jlCX-Gbc7S9rwihlJ7C9D&usqp=CAY"
+		        }
+		        },{
+		        "id": 7890009,
+		        "price": {
+		        "value": 89.79,
+		        "currency": "USD"
+		        },
+		        "name": "Coleman Dual Fuel 2-Mantle Powerhouse Lantern 64566500",
+		        "image": {
+		        "id": 8540009,
+		        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRrT8bmktPPrwX1z974P8DriLGtyegoXAX90JRrStaYCnIwC_g6Nng2gyucVrk8WNAN3TkkfBb2&usqp=CAY"
+		        }
+		    }
+		  ]
       }
 }]]></ee:set-payload>
 			</ee:message>
