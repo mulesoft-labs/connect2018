@@ -44,6 +44,12 @@ type: string]]></types:shape>
     <types:type name="modifiedOrderProductCollectionExample" format="json">
       <types:example format="json" location="examples/modifiedOrderProductCollectionExample.json"/>
     </types:type>
+    <types:type name="customOrderListExample" format="json">
+      <types:example format="json" location="examples/customOrderListExample.json"/>
+    </types:type>
+    <types:type name="customOrderExample" format="json">
+      <types:example format="json" location="examples/customOrderExample.json"/>
+    </types:type>
   </types:catalog>
   <types:enrichment select="#dc11db77-2739-4a05-b3dd-3d266e0427fb">
     <types:processor-declaration>
@@ -70,9 +76,6 @@ type: string]]></types:shape>
         </types:message>
       </types:input-event>
       <types:output-event>
-        <types:message>
-          <types:payload type="orderCollectionExample"/>
-        </types:message>
         <types:variables>
           <types:variable name="ordersLabel" type="string"/>
         </types:variables>
@@ -182,6 +185,24 @@ type: string]]></types:shape>
         <types:variables>
           <types:variable name="orderDetails" type="orderExample"/>
         </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#2019d878-9ebf-4ce5-a057-01efdd4e7c39">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:variables>
+          <types:variable name="orderList" type="customOrderListExample"/>
+        </types:variables>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#74488fd2-95c8-4766-abcb-6f80fd600951">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="customOrderExample"/>
+        </types:message>
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>

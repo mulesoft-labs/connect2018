@@ -231,148 +231,142 @@ var label = vars.preLabel replace /..$/ with ""
 		<ee:transform doc:name="Set the payload and read the order list as an orderLabel" doc:id="e4d4b9aa-014c-4c62-80f5-f9f35d97d2d6">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload.id map ($)]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+			</ee:variables>
+		</ee:transform>
+		<java:new doc:name="New OrdersList" doc:id="c5c3eda0-1399-4bcb-b056-3590bb76176e" class="java.util.ArrayList" constructor="ArrayList()" target="orderList"/>
+		<foreach doc:name="For Each" doc:id="f8b4ccd7-d9ef-4d41-b1f6-52f6d5f04937" collection="#[payload]">
+			<flow-ref doc:name="filOrderDetail" doc:id="8ec157de-f821-4413-960b-b381c9444ef5" name="filOrderDetail"/>
+			<ee:transform doc:name="Transform Message" doc:id="74488fd2-95c8-4766-abcb-6f80fd600951" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
 output application/java
 ---
 payload]]></ee:set-payload>
-			</ee:message>
-			<ee:variables>
-				<ee:set-variable variableName="ordersLabel"><![CDATA[%dw 2.0
-output application/json
----
-(payload.id map ($ ++ ", ")) reduce ($$ ++ $) as String
-]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
+				</ee:message>
+			</ee:transform>
+			<scripting:execute engine="groovy" doc:name="Execute add to orderList" doc:id="13ac49cf-2ef6-4059-a81e-8a91cc3c9220" >
+				<scripting:code >vars.orderList.add(payload)</scripting:code>
+			</scripting:execute>
+		</foreach>
 		<ee:transform doc:name="Appending the orderList size and orderLabel to the payload.displayText field" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  "data": {
-			"type": "order-list",
-			"text": "Sure, this are your last orders, which one you would like to look at?",
-			"orders": [
-				{
-				"id": 3345001,
-				"products": [
-	  				{
-					  "id": 7890001,
-					  "price": {
-					    "value": 47.95,
-					    "currency": "USD"
-					   },
-  					   "name": "Eureka Cypress Sleeping Bag",
-				       "image": {
-				         "id": 8540001,
-				         "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
-				       }
-				    }
-				],
-				"totalAmountPrice": 35,
-				"totalAmountPriceCurrency": "USD",
-				"shippingStatus": "shipped",
-				"customerID": 5640099
-			    },
-			    {
-			    "id": 3345002,
-			    "products": [
-	  				{
-					  "id": 7890001,
-					  "price": {
-					    "value": 47.95,
-					    "currency": "USD"
-					   },
-  					   "name": "Eureka Cypress Sleeping Bag",
-				       "image": {
-				         "id": 8540001,
-				         "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
-				       }
-				    }
-				],
-			    "totalAmountPrice": 143.85,
-			    "totalAmountPriceCurrency": "USD",
-			    "shippingStatus": "non-shipped",
-			    "customerID": 5640099
-			  },
-			  {
-			    "id": 3345003,
-			    "products": [
-	  				{
-					  "id": 7890001,
-					  "price": {
-					    "value": 47.95,
-					    "currency": "USD"
-					   },
-  					   "name": "Eureka Cypress Sleeping Bag",
-				       "image": {
-				         "id": 8540001,
-				         "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
-				       }
-				    }
-				],
-			    "totalAmountPrice": 9.99,
-			    "totalAmountPriceCurrency": "USD",
-			    "shippingStatus": "shipped",
-			    "customerID": 5640099
-			  }
-			  ]
-		   }   
+ 	"data": {
+		"type": "order-list",
+		"text": "Sure, this are your last orders, which one you would like to look at?",
+		"orders": vars.orderList.order map
+		(
+			$
+		)
+	}   
 }]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="a15b196d-faac-4ce6-9637-55a1bf50b45b" message="#[payload]"/>
 	</sub-flow>
 	<sub-flow name="showOrderDetails" doc:id="c4362728-860f-4cf1-bc26-14777a4c6d52" >
-		<ee:transform doc:name="building URL and orderID vars" doc:id="c0b3d5bd-1e6b-476a-833e-3727154d11be" >
+		<ee:transform doc:name="Transform Message" doc:id="edd862de-7907-49fe-9cd6-2afeadb5cc4f" >
 			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload.result.contexts[0].parameters.number as Number]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="pathWithOrderID" ><![CDATA[%dw 2.0
-output application/json
-var orderID = payload.result.contexts[0].parameters.number as Number
----
-("/ordering/orders/" ++ orderID) as String]]></ee:set-variable>
 				<ee:set-variable variableName="orderID" ><![CDATA[%dw 2.0
 output application/java
 ---
 payload.result.contexts[0].parameters.number as Number]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<java:new doc:name="New fullProductList {as an ArrayList}" doc:id="d7419e5e-600f-448e-b511-cb9eeec8957e" target="fullProductList" class="java.util.ArrayList" constructor="ArrayList()" />
-		<http:request method="GET" doc:name="Get Order (OrderAPI)" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" path='#[vars.pathWithOrderID]'/>
-		<ee:transform doc:name="building the product Listn" doc:id="f5406c13-b298-4f5d-9cf3-547ef5b2ac2b" >
+		<flow-ref doc:name="filOrderDetail" doc:id="fa35943b-eb50-4685-9d58-f3e21fc19b4a" name="filOrderDetail"/>
+		<ee:transform doc:name="Setting the payload whith the labels" doc:id="aa0cd380-bd87-41f7-a802-789726b48054" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-payload.products map ($)]]></ee:set-payload>
+{
+	"data": {
+		"type": "order-detail",
+		"text": "Thanks! Here is order " ++ vars.orderID ++ ". What do you want to change? ",
+		"order": {
+			id: payload.order.id,
+			totalAmountPrice: payload.order.totalAmountPrice,
+			totalAmountPriceCurrency: payload.order.totalAmountPriceCurrency,
+			shippingStatus: payload.order.orderDetails.shippingStatus,
+			customerID: payload.order.customerID,
+			products: payload.order.products
+	   }
+	}
+}]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="orderDetails" ><![CDATA[%dw 2.0
+				<ee:set-variable variableName="productsLabel" ><![CDATA[%dw 2.0
+output application/json
+---
+{}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="a8a9e85e-62d9-48b2-9559-c9219f055f5b" message="#[payload]"/>
+	</sub-flow>
+	<sub-flow name="filOrderDetail" doc:id="27da3670-7def-4a61-9d7c-f83974b17aa0" >
+		<ee:transform doc:name="building URL and orderID vars" doc:id="c0b3d5bd-1e6b-476a-833e-3727154d11be">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="pathWithOrderID"><![CDATA[%dw 2.0
+output application/json
+---
+("/ordering/orders/" ++ (payload as String)) as String]]></ee:set-variable>
+				<ee:set-variable variableName="orderID"><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<java:new doc:name="New fullProductList {as an ArrayList}" doc:id="d7419e5e-600f-448e-b511-cb9eeec8957e" target="fullProductList" class="java.util.ArrayList" constructor="ArrayList()" />
+		<http:request method="GET" doc:name="Get Order (OrderAPI)" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" path="#[vars.pathWithOrderID]" />
+		<ee:transform doc:name="building the product Listn" doc:id="f5406c13-b298-4f5d-9cf3-547ef5b2ac2b">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload.products map ($)]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="orderDetails"><![CDATA[%dw 2.0
 output application/java
 ---
 payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<foreach doc:name="For Each" doc:id="30081075-d897-4b98-ac55-788da89b1dc9" collection="#[payload]">
-			<ee:transform doc:name="builder URL and product amount vars" doc:id="8f2ac492-287a-4969-a69b-a14dc92aa778" >
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
+			<ee:transform doc:name="builder URL and product amount vars" doc:id="8f2ac492-287a-4969-a69b-a14dc92aa778">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 "/catalog/products/" ++ (payload.id as String)]]></ee:set-payload>
 				</ee:message>
-				<ee:variables >
-					<ee:set-variable variableName="productAmount" ><![CDATA[%dw 2.0
+				<ee:variables>
+					<ee:set-variable variableName="productAmount"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.amount as Number]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 			<http:request method="GET" doc:name="Get ProductData (CatalogAPI)" doc:id="2aa1108a-5a35-488f-96f7-a735546b2109" config-ref="Catalog_API" path="#[payload]" />
-			<ee:transform doc:name="building a product with amount" doc:id="902501fe-d5bf-4899-a947-5927d8e3cded" >
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
+			<ee:transform doc:name="building a product with amount" doc:id="902501fe-d5bf-4899-a947-5927d8e3cded">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 {
@@ -395,40 +389,29 @@ output application/java
 }]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
-			<scripting:execute engine="groovy" doc:name="adding the product to productList" doc:id="f58f7986-8c9f-4934-a196-900e83c9b0bd" >
-				<scripting:code >vars.fullProductList.add(payload)</scripting:code>
+			<scripting:execute engine="groovy" doc:name="adding the product to productList" doc:id="f58f7986-8c9f-4934-a196-900e83c9b0bd">
+				<scripting:code>vars.fullProductList.add(payload)</scripting:code>
 			</scripting:execute>
 		</foreach>
-		<ee:transform doc:name="Setting the payload whith the labels" doc:id="aa0cd380-bd87-41f7-a802-789726b48054" >
+		<ee:transform doc:name="Transform Message" doc:id="55cc34ee-fc7e-4468-a6a3-d6e978c47d48" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
 {
-	"data": {
-		"type": "order-detail",
-		"text": "Thanks! Here is order " ++ vars.orderID ++ ". What do you want to change? ",
-		"order": {
-			id: vars.orderID,
-			totalAmountPrice: vars.orderDetails.totalAmountPrice,
-			totalAmountPriceCurrency: vars.orderDetails.totalAmountPriceCurrency,
-			shippingStatus: vars.orderDetails.shippingStatus,
-			customerID: vars.orderDetails.customerID,
-			products: 
-				vars.fullProductList.product.object map (
-					$
-				)
-	   }
+	"order": {
+		id: vars.orderID,
+		totalAmountPrice: vars.orderDetails.totalAmountPrice,
+		totalAmountPriceCurrency: vars.orderDetails.totalAmountPriceCurrency,
+		shippingStatus: vars.orderDetails.shippingStatus,
+		customerID: vars.orderDetails.customerID,
+		products: 
+			vars.fullProductList.product.object map (
+				$
+			)
 	}
 }]]></ee:set-payload>
 			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="productsLabel" ><![CDATA[%dw 2.0
-output application/json
----
-{}]]></ee:set-variable>
-			</ee:variables>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="a8a9e85e-62d9-48b2-9559-c9219f055f5b" message="#[payload]"/>
 	</sub-flow>
 </mule>
