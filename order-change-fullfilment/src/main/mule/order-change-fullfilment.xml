@@ -46,9 +46,10 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		</http:request>
 		<logger level="INFO" doc:name="Logger" doc:id="d99ee9f2-ddf4-46a3-bf58-fa8a715721c9" message="#[payload]"/>
 	</flow>
-	<flow name="order-change-fullfilmentFlow1" doc:id="9b0e0c03-a2fa-49e5-8f13-65cf587ce84a" >
-		<http:listener doc:name="Listener" doc:id="9e153406-b378-4dbf-921f-2cc3609dcc40" config-ref="HTTP_Listener_config" path="/"/>
-		<logger level="INFO" doc:name="Logger" doc:id="8ef3ec55-0060-4deb-94f1-118f7281249a" message="order-change-fullfilmentFlow"/>
+	
+	<flow name="order-change-fullfilmentFlow1" doc:id="9b0e0c03-a2fa-49e5-8f13-65cf587ce84a">
+		<http:listener doc:name="Listener" doc:id="9e153406-b378-4dbf-921f-2cc3609dcc40" config-ref="HTTP_Listener_config" path="/" />
+		<logger level="INFO" doc:name="Logger" doc:id="8ef3ec55-0060-4deb-94f1-118f7281249a" message="order-change-fullfilmentFlow" />
 		<ee:transform doc:name="Transform Message" doc:id="dc11db77-2739-4a05-b3dd-3d266e0427fb">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
@@ -56,37 +57,37 @@ output application/json
 ---
 payload]]></ee:set-payload>
 					</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="action" ><![CDATA[%dw 2.0
+			<ee:variables>
+				<ee:set-variable variableName="action"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.result.action]]></ee:set-variable>
 			</ee:variables>
 				</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="91688f5c-6910-45a3-bb34-cca01797fb84" message='"Action: " #[vars.action]'/>
-		<choice doc:name="Choice" doc:id="e40a9d16-9329-43cc-8367-a4980ec0acd5" >
+		<logger level="INFO" doc:name="Logger" doc:id="91688f5c-6910-45a3-bb34-cca01797fb84" message='"Action: " #[vars.action]' />
+		<choice doc:name="Choice" doc:id="e40a9d16-9329-43cc-8367-a4980ec0acd5">
 			<when expression='#[vars.action == "list-orders"]'>
-				<flow-ref doc:name="List Orders" doc:id="7313524c-e14c-43cc-921a-4ce6f5878b1d" name="listOrdersFlow"/>
+				<flow-ref doc:name="List Orders" doc:id="7313524c-e14c-43cc-921a-4ce6f5878b1d" name="listOrdersFlow" />
 			</when>
-			<when expression='#[vars.action == "get-order-details"]' >
-				<flow-ref doc:name="showOrderDetails" doc:id="ab09da6f-59f5-4e02-a228-a7efc604ddbe" name="showOrderDetails"/>
+			<when expression='#[vars.action == "get-order-details"]'>
+				<flow-ref doc:name="showOrderDetails" doc:id="ab09da6f-59f5-4e02-a228-a7efc604ddbe" name="showOrderDetails" />
 			</when>
-			<when expression='#[vars.action == "change-item-quantity"]' >
-				<flow-ref doc:name="change-item-quantity" doc:id="0fa7c6b9-9981-4ffb-8aaa-c37bf1df8388" name="change-item-quantity"/>
+			<when expression='#[vars.action == "change-item-quantity"]'>
+				<flow-ref doc:name="pre-change-item-quantity" name="pre-change-item-quantity" />
 			</when>
-			<when expression='#[vars.action == "change-order-quantity-confirmation"]' >
-				<flow-ref doc:name="change-order-quantity-confirmation" doc:id="fc9cfcf4-d7a0-4132-a57e-7c936f7822e0" name="change-order-quantity-confirmation"/>
+			<when expression='#[vars.action == "change-order-quantity-confirmation"]'>
+				<flow-ref doc:name="change-order-quantity-confirmation" doc:id="fc9cfcf4-d7a0-4132-a57e-7c936f7822e0" name="change-order-quantity-confirmation" />
 			</when>
-			<when expression='#[vars.action == "add-new-product"]' >
+			<when expression='#[vars.action == "add-new-product"]'>
 				<flow-ref doc:name="add-new-product" doc:id="111045fc-28c1-4243-ad6b-0ba2335920d2" name="add-new-product" />
 			</when>
-			<when expression='#[vars.action == "add-suggested-product"]' >
-				<flow-ref doc:name="add-suggested-product" doc:id="6a89b322-dcc3-4ec5-8c62-fc7094c54ecb" name="add-suggested-product"/>
+			<when expression='#[vars.action == "add-suggested-product"]'>
+				<flow-ref doc:name="add-suggested-product" doc:id="6a89b322-dcc3-4ec5-8c62-fc7094c54ecb" name="add-suggested-product" />
 			</when>
-			<otherwise >
-				<ee:transform doc:name="Transform Message" doc:id="f69deeb9-6690-484f-afbd-9722bb880573" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+			<otherwise>
+				<ee:transform doc:name="Transform Message" doc:id="f69deeb9-6690-484f-afbd-9722bb880573">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -97,6 +98,96 @@ output application/json
 				</ee:transform>
 			</otherwise>
 		</choice>
+	</flow>
+	<flow name="pre-change-item-quantity">
+					<set-payload value='{
+  "id": "4e98058a-73a8-4d2e-a3b8-e5efe003064c",
+  "timestamp": "2018-04-03T16:19:45.771Z",
+  "lang": "en",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "3345002",
+    "action": "select-order-number",
+    "actionIncomplete": false,
+    "parameters": {
+      "number": "3345002",
+      "user_name": "Renan"
+    },
+    "contexts": [
+      {
+        "name": "changeordersintent-followup",
+        "parameters": {
+		  "new_products": [
+		  	{
+		  		"id": 17890001,
+		  		"currentAmount": 3,
+		  		"newAmount": 2
+		  	}
+		  ],
+		  "user_name": "Renan",
+		  "order_id": "3345002",
+		  "new_product": "lantern"
+		},
+		"lifespan": 1
+      },
+      {
+        "name": "listordersintent-followup",
+        "parameters": {
+          "number": "3345002",
+          "user_name": "Renan",
+          "number.original": "3345002",
+          "user_name.original": ""
+        },
+        "lifespan": 1
+      },
+      {
+        "name": "customwelcomeintent-followup",
+        "parameters": {
+          "number": "3345002",
+          "user_name": "Renan",
+          "number.original": "3345002",
+          "user_name.original": ""
+        },
+        "lifespan": 5
+      },
+      {
+        "name": "listordersintent-selectnumber-followup",
+        "parameters": {
+          "number": "3345002",
+          "user_name": "Renan",
+          "number.original": "3345002",
+          "user_name.original": ""
+        },
+        "lifespan": 2
+      }
+    ],
+    "metadata": {
+      "intentId": "7716dd51-7ae6-43ab-b78e-4dc695936378",
+      "webhookUsed": "true",
+      "webhookForSlotFillingUsed": "false",
+      "webhookResponseTime": 149,
+      "intentName": "List Orders Intent - select.number"
+    },
+    "fulfillment": {
+      "speech": "Thanks, Renan. Here is order #2:&lt;br&gt;\n\t3 sleeping bags&lt;BR&gt;\n \t&lt;b&gt;What do you want to change?",
+      "displayText": "Thanks, Renan. Here is order #2:&lt;br&gt;\n\t3 sleeping bags&lt;BR&gt;\n \t&lt;b&gt;What do you want to change?",
+      "messages": [
+        {
+          "type": 0,
+          "speech": "Thanks, Renan. Here is order #2:&lt;br&gt;\n\t3 sleeping bags&lt;BR&gt;\n \t&lt;b&gt;What do you want to change?"
+        }
+      ]
+    },
+    "score": 0.8799999952316284
+  },
+  "status": {
+    "code": 200,
+    "errorType": "success",
+    "webhookTimedOut": false
+  },
+  "sessionId": "123"
+}' doc:name="Set Payload" mimeType="application/json"/>
+		<flow-ref doc:name="change-item-quantity" doc:id="0fa7c6b9-9981-4ffb-8aaa-c37bf1df8388" name="change-item-quantity"/>
 	</flow>
 	<sub-flow name="add-suggested-product" doc:id="8268e97c-f4b4-4d7a-b8a9-826b1339476e" >
 		<logger message="" doc:name="Logger" level="INFO"/>
