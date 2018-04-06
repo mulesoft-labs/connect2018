@@ -191,13 +191,99 @@ output application/json
 		<flow-ref doc:name="change-item-quantity" doc:id="0fa7c6b9-9981-4ffb-8aaa-c37bf1df8388" name="change-item-quantity"/>
 	</flow>
 	<sub-flow name="add-suggested-product" doc:id="8268e97c-f4b4-4d7a-b8a9-826b1339476e" >
-		<logger message="" doc:name="Logger" level="INFO"/>
+		<ee:transform doc:name="Text response" doc:id="daf793e7-73ad-4be2-80f3-d288fb0f83d0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+"data": {
+        "type": "text",
+        "text": "Great, should I charge the same credit card as the original order for the extra \$10?"  
+        }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</sub-flow>
 	<sub-flow name="add-new-product" doc:id="4b1cc876-0bdc-4b94-aa6c-9d9f53104fa3" >
-		<logger message="" doc:name="Logger"/>
+		<ee:transform doc:name="LISTA CHARGERS" doc:id="ed2365a2-4116-4ceb-875b-17d1427e15cf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+"data": {
+        "type": "product-list",
+        "text": "I’ve found that people who buy this lantern often choose to take along an extra charging pack. Would you be interested in any of these? I can offer you 20% off for shopping with me today ;-).",
+        "products": [{
+      			"id": 7890002,
+      			"price": {
+       			   "value": 69.95,
+        			   "currency": "USD"
+      			},
+      			"name": "Goal Zero Lighthouse 400",
+		        "image": {
+                    "id": 8540002,
+                    "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
+                }
+			},
+			{
+      			"id": 7890002,
+      			"price": {
+       			   "value": 69.95,
+        			   "currency": "USD"
+      			},
+      			"name": "Goal Zero Lighthouse 400",
+		        "image": {
+                    "id": 8540002,
+                    "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
+                }
+			} 
+				]
+      }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</sub-flow>
 	<sub-flow name="change-order-quantity-confirmation" doc:id="a39e8416-3103-4681-afa6-88eb7a617ec0" >
-		<logger message="" doc:name="Logger"/>
+		<ee:transform doc:name="LISTA LANTERNS" doc:id="16addbf1-f0f3-4c7e-b839-3b84b2193c53" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+"data": {
+        "type": "product-list",
+        "text": "You have a credit of \$55 . Here are some lanterns you might be interested in",
+        "products": [{
+      			"id": 7890002,
+      			"price": {
+       			   "value": 69.95,
+        			   "currency": "USD"
+      			},
+      			"name": "Goal Zero Lighthouse 400",
+		        "image": {
+                    "id": 8540002,
+                    "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
+                }
+			},
+			{
+      			"id": 7890002,
+      			"price": {
+       			   "value": 69.95,
+        			   "currency": "USD"
+      			},
+      			"name": "Goal Zero Lighthouse 400",
+		        "image": {
+                    "id": 8540002,
+                    "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
+                }
+			} 
+				]
+      }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</sub-flow>
 	<sub-flow name="change-item-quantity" doc:id="2dd7b9c9-96e0-400a-89cb-ec92f709c7e3" >
 		<ee:transform doc:name="Transform Message" doc:id="43467a82-7f84-4955-892a-5b4ce6a5becc" >
