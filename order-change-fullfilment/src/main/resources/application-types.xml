@@ -155,29 +155,6 @@ type: string]]></types:shape>
           <types:payload type="orderPatchResponse"/>
         </types:message>
       </types:input-event>
-      <types:output-event>
-        <types:message>
-          <types:payload type="modifiedOrderProductExample"/>
-        </types:message>
-      </types:output-event>
-    </types:processor-declaration>
-  </types:enrichment>
-  <types:enrichment select="#57b602d1-4241-4fe9-8b1f-e123839be6c6">
-    <types:processor-declaration>
-      <types:input-event>
-        <types:variables>
-          <types:variable name="products" type="orderProductCollection"/>
-        </types:variables>
-      </types:input-event>
-    </types:processor-declaration>
-  </types:enrichment>
-  <types:enrichment select="#8a1072f0-b5ff-4db5-b570-d2eeebd7134d">
-    <types:processor-declaration>
-      <types:output-event>
-        <types:variables>
-          <types:variable name="preLabel" type="string"/>
-        </types:variables>
-      </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
   <types:enrichment select="#f5406c13-b298-4f5d-9cf3-547ef5b2ac2b">
