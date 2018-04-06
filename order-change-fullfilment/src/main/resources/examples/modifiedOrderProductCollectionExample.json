@@ -1,6 +1,6 @@
 [
 	{
-		"amount": 3,
+		"quantity": 3,
 		"product": {
 			"object": {
 			  "id": 7890001,
@@ -38,7 +38,7 @@
 		}
 	},
 	{
-		"amount": 4,
+		"quantity": 4,
 		"product": {
 			"object": {
 			  "id": 7890001,
