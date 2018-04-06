@@ -219,8 +219,23 @@ output application/json
 var label = vars.preLabel replace /..$/ with ""
 ---
 {
-  "speech": "No problem, that has not shipped yet, so I can just change the quantity for " ++ label ++ ". <BR>Is that OK?",
-  "displayText": "No problem, that has not shipped yet, so I can just change the quantity for " ++ label ++ ". <BR>Is that OK?"
+  "data": {
+  	"type": "new-order",
+  	"text": "No problem, that has not shipped yet, so I can just change the quantity for you. Is that OK?",
+  	"order" : {
+  	   "id":23,
+  	   "totalAmountPrice":143.85,
+  	   "totalAmountPriceCurrency":"USD",
+  	   "customerID":5640099,
+  	   "products":[{
+  	   	  "id":7890001,
+  	   	  "price":{"value":47.95,"currency":"USD"},
+  	   	  "name":"Eureka 15°F Cypress Junior Sleeping Bag - Mummy (for Boys) - Grey/Green ( )",
+  	   	  "image":{"id":8540001,"url":"https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"},
+  	   	  "quantity": 3
+  	   	  }]
+  	   	}
+  	}
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
