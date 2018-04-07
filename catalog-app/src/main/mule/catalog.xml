@@ -1,0 +1,1174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <http:listener-config name="catalog-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="catalog-config" raml="catalog.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="catalog-main">
+        <http:listener config-ref="catalog-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="catalog-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="catalog-console">
+        <http:listener config-ref="catalog-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="catalog-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="patch:\catalog\products\(product_id):catalog-config">
+        <logger level="INFO" message="patch:\catalog\products\(product_id):catalog-config" doc:name="Logger"/>
+    </flow>
+    <flow name="get:\catalog\products\price\(price):catalog-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    id: 7890001,
+    price: {
+      value: 47.95,
+      currency: "USD"
+    },
+    name: "Eureka Cypress Sleeping Bag",
+    description: "Made from the same warm material as the adult size for backpacking and family camping, Eureka's Cyprus Junior is a three-season sleeping bag with toasty ThermaShield insulation that's temperature rated at 15°F. The boy-specific junior size and fit reduces unnecessary weight and bulk while on the trail.",
+    keywords: [
+      "Eureka!", 
+      "Children's", 
+      "Mummy", 
+      "15° F", 
+      "With Pocket", 
+      "With Stuff Sack"
+    ],
+    copy: "Eureka 15°F Cypress Junior Sleeping Bag - Mummy (for Boys) - Grey/Green ( )",
+    image: {
+      id: 8540001,
+      url: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
+    },
+    company: {
+      id: 4907999,
+      name: "The-House.com",
+      address: {
+        country: "USA",
+        state: "MINNESOTA",
+        city: "Minneapolis",
+        street_address: "200 S Owasso Blvd E St Paul",
+        zip: 55117
+      }
+    },
+    category: "Sleeping Bags",
+    review: {
+      reviews: [
+        {
+          reviewer_name: "Backcountry.com",
+          review: "Just got this in yesterday for our little guy, but he won't get a chance to try it. It's just not packable. Compressed it measures 1'' in diameter and 13'' long. It won't fit in our packs so it's going back. Bummer because the price is really great. I'm sure it would work great for car camping or slumber parties, but if you need to pack look elsewhere.",
+          date: "2015-06-10",
+          rate: 2
+        }, 
+        {
+          reviewer_name: "sunnysports.com",
+          review: "I am 5'2'' and about 100 lbs so I ordered the children's bag. There's still room to grow!! I haven't tested it out yet but I can't wait to try it in my hammock on Mt. Washington!",
+          date: "2015-06-10",
+          rate: 4
+        }
+      ],
+      averageRate: 3
+    }
+  }, 
+  {
+    id: 7890002,
+    price: {
+      value: 69.95,
+      currency: "USD"
+    },
+    name: "Goal Zero Lighthouse 400",
+    description: "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
+    keywords: [
+      "Goal Zero", 
+      "Lighthouse", 
+      "Camping light", 
+      "lantern"
+    ],
+    copy: "Goal Zero Lighthouse 400 - Camping light - LED - 3 W - warm white light - 3500 K - lantern",
+    image: {
+      id: 8540002,
+      url: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
+    },
+    company: {
+      id: 4907998,
+      name: "REI",
+      address: {
+        country: "USA",
+        state: "CALIFORNIA",
+        city: "San Francisco",
+        street_address: "840 Brannan St",
+        zip: 94103
+      }
+    },
+    category: "Lantern",
+    review: {
+      reviews: [
+        {
+          reviewer_name: "goalzero.com",
+          review: "These lanterns are choked full of features. I would recommend these. The lantern features themselves are excellent then add on the USB hub and charging by sun, USB and a hand crank you have a lantern that is second to none. Cons: it seems the internal bettieries are not user replaceable or at least it is not document as user replaceable. The on board hanging hook/handle has slid out on me seems like there should be more tension to keep it in place. None of these Cons are crictal to me so I would buy this lantern again.",
+          date: "2016-10-02",
+          rate: 4
+        }, 
+        {
+          reviewer_name: "mec.ca",
+          review: "I bought this lantern about 2 yeara ago and have not regretted it. The battery has plenty power, it will easily last 2-3 nights without recharging. The light Britney's is exceptional. On the camp table it will easily give nice light to the campsite. The light source is adjustable from 180 to 360 degrees. I have not used the USB port but just having it is a comfort, knowing I can charge my phone etc. The lantern is of really high quality. There other features I didn't not comment on, all are good. I would recommend this lantern",
+          date: "2017-05-15",
+          rate: 5
+        }
+      ],
+      averageRate: 4.6
+    }
+  }, 
+  {
+    id: 7890003,
+    price: {
+      value: 199.95,
+      currency: "USD"
+    },
+    name: "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter",
+    description: "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
+    keywords: [
+      "GOAL ZERO", 
+      "Solar", 
+      "160 watt", 
+      "With Inverter", 
+      "Portable"
+    ],
+    copy: "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter - 14 Ah - 14-29V",
+    image: {
+      id: 8540003,
+      url: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTqPH1wK0UGXcI55H1rSwKukYH4_AfAU40OH_noVqt4M_E95UTOyZvkdAvMYE_tNfeV-c3Cao8&usqp=CAE"
+    },
+    company: {
+      id: 4907998,
+      name: "REI",
+      address: {
+        country: "USA",
+        state: "CALIFORNIA",
+        city: "San Francisco",
+        street_address: "840 Brannan St",
+        zip: 94103
+      }
+    },
+    category: "Battery",
+    review: {
+      reviews: [
+        {
+          reviewer_name: "goalzero.com",
+          review: "I bought this on sale for the camping event around I think Memorial day. I have used it 3 different times now camping out on the island in Casco Bay in Maine. I was worried about it after the 2nd day because it did not seem to charge the same as it did the 1st. We did use it heavier on this last 4 day event, Charging 2 smart phones, 1 iPad2, 1 lighthouse 250, and we ran 3 of the new Light-a-Life 350's on it for probably 1 hour making and eating dinner each night. It recharged to full the 1st night with my Nomad 20 and Nomad 7 in tandem. The 2nd day it recharged to 100% again, the third day it was better than 80% and the last day I did not bother as we had to pack up. It never dropped below 60% until the last day and we used it to beat the band. Admittedly I do want to step up to the Yeti 400 for something with more power on hand. But that's cause I am too Boy scout I want to bring something out there for 4 days and be able to not have to worry about solar if the weather is not good for solar. But I can't complain this power pack delivered and held up great.",
+          date: "2015-11-18",
+          rate: 5
+        }, 
+        {
+          reviewer_name: "Home Depot",
+          review: "I wanted this generator but was nervous about purchasing it. If it didn't work or something went wrong, how would I return it. Viewed this item on many other sites and decided to purchase with HD because I could easily return it if needed. I've had the generator for almost a month. This generator is SO QUIET! So far I charged a lamp, I Pad and phone. There is nothing to do, it comes right out of the box ready to go. You may need to charge a little but mine arrived charged. It's compact, easy to move around and has many ports. At this point I am considering upgrading to the larger one but wanted to test this out before investing more money. I gave it four stars only because I've had it such a short time and I'm still testing it, but so far so good. Hurricane Sandy was a wake up call us. Please take a moment to look around, we have hurricanes, earthquakes, power outages etc. The times are changing make sure your family is prepared, spiritually, mentally, physically. If the grid goes down it will be nice to have power and the ability to keep in touch with your family.",
+          date: "2015-04-07",
+          rate: 4
+        }
+      ],
+      averageRate: 4.3
+    }
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\catalog\products:catalog-config">
+		<logger level="INFO" doc:name="Logger" doc:id="8a831bb5-6689-4cc5-b4e7-a083c5fd7cb4" message="#[attributes.headers]"/>
+		<choice doc:name="Choice" doc:id="43dcd014-9a68-4c5a-8b6b-e4adc2decbc6" >
+			<when expression="#[attributes.headers.category == 'lantern']" >
+				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="1bc3c31f-1772-47f4-92b9-0003c24313e5" doc:name="Lartern List">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+        "id": 7890006,
+        "price": {
+        "value": 74.99,
+        "currency": "USD"
+        },
+        "name": "Coleman Lantern",
+        "description": "Take the convenience of Three lights in one with you with the Coleman Trifecta LED Lantern. During an emergency, pop one of the three lights off the base for a personal flashlight. They recharge once theyre back on the base for hands-free light. The lantern runs cool so its always safe to touch, even when its been on for hours. Model # 2000013867 Features: Even distribution of light Choose your power, 4D batteries, or CPX 6 rechargeable Hi/Low for optimal light output 3 removable panels",
+        "keywords": [],
+        "copy": "Coleman CPX 6 Triago Lantern 61450663",
+        "image": {
+        "id": 8540006,
+        "url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQyMPBCmFkdvvSdN1AiCJCQ9-B7kIVriJd-Ich_bszorXEUUIaWtCN88Yb0kmLFCLw05gLylZ4&usqp=CAY"
+        },
+        "company": {
+        "id": 4907995,
+        "name": "CampSaver.com",
+        "address" : {
+            "country": "USA",
+            "state": "UTAH",
+            "city": "Nibley",
+            "street_address": "2280 Heritage Dr",
+            "zip": 84321
+            }
+        },
+        "category": "Lantern",
+        "review": {
+        "reviews": [
+            {
+            "reviewer_name": "cabelas.com",
+            "review": "I bought this lantern for camping, a fantastic idea that you can essentially break the lantern apart and everyone grab a piece. No more having the kids fight over the light. Long battery life, and I purchased the rechargeable battery pack as well. This is the second re-chargeable Coleman lantern I have purchased this year, and I have been VERY pleased with each purchase.",
+            "date": "2014-10-04",
+            "rate": 5
+            },{
+            "reviewer_name": "thesportsauthority.com",
+            "review": "Gave as gift. Recipient very pleased",
+            "date": "2016-02-05",
+            "rate": 4
+            }
+        ],
+        "averageRate": 4.2
+        }
+    },
+    {
+        "id": 7890007,
+        "price": {
+        "value": 71.99,
+        "currency": "USD"
+        },
+        "name": "Coleman Lantern",
+        "description": "Uses 8 D batteries, not included. Imported.",
+        "keywords": [],
+        "copy": "Coleman Quad LED Lantern",
+        "image": {
+        "id": 8540007,
+        "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRNTfRuy1Ds8s7yJD_8PLCB2gIbPHF9H-rTBka9-Dkd0_uTD-6ZguxiB2A39wnFOHLOLWzsu_U&usqp=CAY"
+        },
+        "company": {
+            "id": 4907995,
+            "name": "CampSaver.com",
+            "address" : {
+                "country": "USA",
+                "state": "UTAH",
+                "city": "Nibley",
+                "street_address": "2280 Heritage Dr",
+                "zip": 84321
+            }
+        },
+        "category": "Lantern",
+        "review": {
+        "reviews": [
+            {
+            "reviewer_name": "walmart.com",
+            "review": "This Lantern is very good at handling power outages and other low lighting issues. Since it has 4 separate removable light units that can be carried or placed in different locations as needed. When you put them back onto the base nit, the lights recharge so they are ready for the next time you need them. OR you can simply use the entire lantern as a single unit. Lightweight and easy to handle, it is a very good light.",
+            "date": "2016-04-02",
+            "rate": 4
+            },{
+            "reviewer_name": "MidwayUSA",
+            "review": "outstanding lantern, started using this lantern when my son was a cub scout! The first set of batteries lasted for a year, the 8 d batteries in the base charge the NICADS in the four removable lanterns. When they no longer hold a charge it is telling you it is time to change the main batteries, but the lantern will continue to work for days after this! We were able to send one lantern with the boys in each tent, and recharge them the next day because you know they left the light on all night! he is now a boy scout and the lantern convinced out troop to go to LED lanterns from propane! make sure to push the grey release button removing and placing the lanterns in the main base. we now have two! Hatteras Kid",
+            "date": "2014-08-21",
+            "rate": 5
+            }
+        ],
+        "averageRate": 4.7
+        }
+        },
+        {
+        "id": 7890008,
+        "price": {
+        "value": 85.99,
+        "currency": "USD"
+        },
+        "name": "Sintechno Camping Portable Lantern",
+        "description": "Sintechno Inc This portable emergency / camp lantern uses 36 white SMD Super Bright LED's which can be recharged by both included solar panel and AC power adapter.",
+        "keywords": [],
+        "copy": "Sintechno 2-in-1 Solar Bright LED Emergency Camping Portable Lantern",
+        "image": {
+        "id": 8540008,
+        "url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcREYcHVgrBWpAew2bVIrZB4mu7rvhKm-ijxtkSmBvizfVW2NGC--h6jlCX-Gbc7S9rwihlJ7C9D&usqp=CAY"
+        },
+        "company": {
+            "id": 4907996,
+            "name": "Overstock.com",
+            "address" : {
+                "country": "USA",
+                "state": "UTAH",
+                "city": "Midvale",
+                "street_address": "799 Coliseum Way",
+                "zip": 84047
+            }
+        },
+        "category": "Lantern",
+        "review": {
+        "reviews": [],
+        "averageRate": 0.0
+        }
+        },
+        
+  {
+        "id": 7890009,
+        "price": {
+        "value": 89.79,
+        "currency": "USD"
+        },	
+        "name": "Coleman Lantern",
+        "description": "Light up your next outdoor gathering with a super-bright lantern! The versatile Premium Powerhouse runs on either Coleman Liquid fuel or unleaded gasoline and uses less fuel than lanterns powered by propane. Delivering an extra-bright 1107 lumens on high, the Coleman Premium Powerhouse Dual Fuel Lantern features an adjustable dimmer knob to allow the perfect amount of light for your campsite, barbecue and more!",
+        "keywords": [],
+        "copy": "Coleman Dual Fuel 2-Mantle Powerhouse Lantern 64566500",
+        "image": {
+        "id": 8540009,
+        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRrT8bmktPPrwX1z974P8DriLGtyegoXAX90JRrStaYCnIwC_g6Nng2gyucVrk8WNAN3TkkfBb2&usqp=CAY"
+        },
+        "company": {
+            "id": 4907995,
+            "name": "CampSaver.com",
+            "address" : {
+                "country": "USA",
+                "state": "UTAH",
+                "city": "Nibley",
+                "street_address": "2280 Heritage Dr",
+                "zip": 84321
+            }
+        },
+        "category": "Lantern",
+        "review": {
+            "reviews": [
+                {
+                "reviewer_name": "ebay.com",
+                "review": "There's a reason why Coleman has been making these 'boring' products for SIXTY YEARS. They are the MOST economical lanterns (and stoves), and the BRIGHTEST lanterns and HOTTEST stoves. When I want to light up a campsite with 6 tents full of YMCA adventure guides, I pump up this lantern, light it, and hoist it 8 feet in the air. Then I can put away my 12v 8xD 2-bulb flourescent lamp. A gallon of Coleman white-gas (naptha) fuel has lasted us for 3 years of camping (about 12 campouts or 24 days/nights total - cooking and using this lantern.) This lamp gives enough light to throw a football or frisbee a decent distance (30 ft) at night. Best of all : EVERYONE ELSE WILL BE JEALOUS !!!",
+                "date": "2016-04-23",
+                "rate": 5
+                },{
+                "reviewer_name": "walmart.com",
+                "review": "This lantern is almost twice as bright as any I have owned. And the fact that it can run on unleaded gas from the corner gas station, makes it an awesome lantern. The convenience of using gas is a great plus. It makes it quick and easy. The lantern is sturdy and well built. The Coleman design has not changed a lot over time but if it aint broke, don't fix it. It comes with a small filtered funnel to aid in filling as well as two mantles to get you started. I got this powerhouse on sale and is has been well worth it.",
+                "date": "2015-08-09",
+                "rate": 4.9
+                }
+            ],
+            "averageRate": 4.9
+        }      
+     }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="All products" doc:id="c028a564-e0e4-464c-ae86-2b4fe31ed166" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    id: 7890001,
+    price: {
+      value: 47.95,
+      currency: "USD"
+    },
+    name: "Eureka Cypress Sleeping Bag",
+    description: "Made from the same warm material as the adult size for backpacking and family camping, Eureka's Cyprus Junior is a three-season sleeping bag with toasty ThermaShield insulation that's temperature rated at 15°F. The boy-specific junior size and fit reduces unnecessary weight and bulk while on the trail.",
+    keywords: [
+      "Eureka!", 
+      "Children's", 
+      "Mummy", 
+      "15° F", 
+      "With Pocket", 
+      "With Stuff Sack"
+    ],
+    copy: "Eureka 15°F Cypress Junior Sleeping Bag - Mummy (for Boys) - Grey/Green ( )",
+    image: {
+      id: 8540001,
+      url: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
+    },
+    company: {
+      id: 4907999,
+      name: "The-House.com",
+      address: {
+        country: "USA",
+        state: "MINNESOTA",
+        city: "Minneapolis",
+        street_address: "200 S Owasso Blvd E St Paul",
+        zip: 55117
+      }
+    },
+    category: "Sleeping Bags",
+    review: {
+      reviews: [
+        {
+          reviewer_name: "Backcountry.com",
+          review: "Just got this in yesterday for our little guy, but he won't get a chance to try it. It's just not packable. Compressed it measures 1'' in diameter and 13'' long. It won't fit in our packs so it's going back. Bummer because the price is really great. I'm sure it would work great for car camping or slumber parties, but if you need to pack look elsewhere.",
+          date: "2015-06-10",
+          rate: 2
+        }, 
+        {
+          reviewer_name: "sunnysports.com",
+          review: "I am 5'2'' and about 100 lbs so I ordered the children's bag. There's still room to grow!! I haven't tested it out yet but I can't wait to try it in my hammock on Mt. Washington!",
+          date: "2015-06-10",
+          rate: 4
+        }
+      ],
+      averageRate: 3
+    }
+  }, 
+  {
+    id: 7890002,
+    price: {
+      value: 69.95,
+      currency: "USD"
+    },
+    name: "Goal Zero Lighthouse 400",
+    description: "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
+    keywords: [
+      "Goal Zero", 
+      "Lighthouse", 
+      "Camping light", 
+      "lantern"
+    ],
+    copy: "Goal Zero Lighthouse 400 - Camping light - LED - 3 W - warm white light - 3500 K - lantern",
+    image: {
+      id: 8540002,
+      url: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
+    },
+    company: {
+      id: 4907998,
+      name: "REI",
+      address: {
+        country: "USA",
+        state: "CALIFORNIA",
+        city: "San Francisco",
+        street_address: "840 Brannan St",
+        zip: 94103
+      }
+    },
+    category: "Lantern",
+    review: {
+      reviews: [
+        {
+          reviewer_name: "goalzero.com",
+          review: "These lanterns are choked full of features. I would recommend these. The lantern features themselves are excellent then add on the USB hub and charging by sun, USB and a hand crank you have a lantern that is second to none. Cons: it seems the internal bettieries are not user replaceable or at least it is not document as user replaceable. The on board hanging hook/handle has slid out on me seems like there should be more tension to keep it in place. None of these Cons are crictal to me so I would buy this lantern again.",
+          date: "2016-10-02",
+          rate: 4
+        }, 
+        {
+          reviewer_name: "mec.ca",
+          review: "I bought this lantern about 2 yeara ago and have not regretted it. The battery has plenty power, it will easily last 2-3 nights without recharging. The light Britney's is exceptional. On the camp table it will easily give nice light to the campsite. The light source is adjustable from 180 to 360 degrees. I have not used the USB port but just having it is a comfort, knowing I can charge my phone etc. The lantern is of really high quality. There other features I didn't not comment on, all are good. I would recommend this lantern",
+          date: "2017-05-15",
+          rate: 5
+        }
+      ],
+      averageRate: 4.6
+    }
+  }, 
+  {
+    id: 7890003,
+    price: {
+      value: 199.95,
+      currency: "USD"
+    },
+    name: "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter",
+    description: "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
+    keywords: [
+      "GOAL ZERO", 
+      "Solar", 
+      "160 watt", 
+      "With Inverter", 
+      "Portable"
+    ],
+    copy: "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter - 14 Ah - 14-29V",
+    image: {
+      id: 8540003,
+      url: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTqPH1wK0UGXcI55H1rSwKukYH4_AfAU40OH_noVqt4M_E95UTOyZvkdAvMYE_tNfeV-c3Cao8&usqp=CAE"
+    },
+    company: {
+      id: 4907998,
+      name: "REI",
+      address: {
+        country: "USA",
+        state: "CALIFORNIA",
+        city: "San Francisco",
+        street_address: "840 Brannan St",
+        zip: 94103
+      }
+    },
+    category: "Battery",
+    review: {
+      reviews: [
+        {
+          reviewer_name: "goalzero.com",
+          review: "I bought this on sale for the camping event around I think Memorial day. I have used it 3 different times now camping out on the island in Casco Bay in Maine. I was worried about it after the 2nd day because it did not seem to charge the same as it did the 1st. We did use it heavier on this last 4 day event, Charging 2 smart phones, 1 iPad2, 1 lighthouse 250, and we ran 3 of the new Light-a-Life 350's on it for probably 1 hour making and eating dinner each night. It recharged to full the 1st night with my Nomad 20 and Nomad 7 in tandem. The 2nd day it recharged to 100% again, the third day it was better than 80% and the last day I did not bother as we had to pack up. It never dropped below 60% until the last day and we used it to beat the band. Admittedly I do want to step up to the Yeti 400 for something with more power on hand. But that's cause I am too Boy scout I want to bring something out there for 4 days and be able to not have to worry about solar if the weather is not good for solar. But I can't complain this power pack delivered and held up great.",
+          date: "2015-11-18",
+          rate: 5
+        }, 
+        {
+          reviewer_name: "Home Depot",
+          review: "I wanted this generator but was nervous about purchasing it. If it didn't work or something went wrong, how would I return it. Viewed this item on many other sites and decided to purchase with HD because I could easily return it if needed. I've had the generator for almost a month. This generator is SO QUIET! So far I charged a lamp, I Pad and phone. There is nothing to do, it comes right out of the box ready to go. You may need to charge a little but mine arrived charged. It's compact, easy to move around and has many ports. At this point I am considering upgrading to the larger one but wanted to test this out before investing more money. I gave it four stars only because I've had it such a short time and I'm still testing it, but so far so good. Hurricane Sandy was a wake up call us. Please take a moment to look around, we have hurricanes, earthquakes, power outages etc. The times are changing make sure your family is prepared, spiritually, mentally, physically. If the grid goes down it will be nice to have power and the ability to keep in touch with your family.",
+          date: "2015-04-07",
+          rate: 4
+        }
+      ],
+      averageRate: 4.3
+    }
+  },
+  {
+        "id": 7890006,
+        "price": {
+        "value": 74.99,
+        "currency": "USD"
+        },
+        "name": "Coleman Lantern",
+        "description": "Take the convenience of Three lights in one with you with the Coleman Trifecta LED Lantern. During an emergency, pop one of the three lights off the base for a personal flashlight. They recharge once theyre back on the base for hands-free light. The lantern runs cool so its always safe to touch, even when its been on for hours. Model # 2000013867 Features: Even distribution of light Choose your power, 4D batteries, or CPX 6 rechargeable Hi/Low for optimal light output 3 removable panels",
+        "keywords": [],
+        "copy": "Coleman CPX 6 Triago Lantern 61450663",
+        "image": {
+        "id": 8540006,
+        "url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQyMPBCmFkdvvSdN1AiCJCQ9-B7kIVriJd-Ich_bszorXEUUIaWtCN88Yb0kmLFCLw05gLylZ4&usqp=CAY"
+        },
+        "company": {
+        "id": 4907995,
+        "name": "CampSaver.com",
+        "address" : {
+            "country": "USA",
+            "state": "UTAH",
+            "city": "Nibley",
+            "street_address": "2280 Heritage Dr",
+            "zip": 84321
+            }
+        },
+        "category": "Lantern",
+        "review": {
+        "reviews": [
+            {
+            "reviewer_name": "cabelas.com",
+            "review": "I bought this lantern for camping, a fantastic idea that you can essentially break the lantern apart and everyone grab a piece. No more having the kids fight over the light. Long battery life, and I purchased the rechargeable battery pack as well. This is the second re-chargeable Coleman lantern I have purchased this year, and I have been VERY pleased with each purchase.",
+            "date": "2014-10-04",
+            "rate": 5
+            },{
+            "reviewer_name": "thesportsauthority.com",
+            "review": "Gave as gift. Recipient very pleased",
+            "date": "2016-02-05",
+            "rate": 4
+            }
+        ],
+        "averageRate": 4.2
+        }
+    },
+    {
+        "id": 7890007,
+        "price": {
+        "value": 71.99,
+        "currency": "USD"
+        },
+        "name": "Coleman Lantern",
+        "description": "Uses 8 D batteries, not included. Imported.",
+        "keywords": [],
+        "copy": "Coleman Quad LED Lantern",
+        "image": {
+        "id": 8540007,
+        "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRNTfRuy1Ds8s7yJD_8PLCB2gIbPHF9H-rTBka9-Dkd0_uTD-6ZguxiB2A39wnFOHLOLWzsu_U&usqp=CAY"
+        },
+        "company": {
+            "id": 4907995,
+            "name": "CampSaver.com",
+            "address" : {
+                "country": "USA",
+                "state": "UTAH",
+                "city": "Nibley",
+                "street_address": "2280 Heritage Dr",
+                "zip": 84321
+            }
+        },
+        "category": "Lantern",
+        "review": {
+        "reviews": [
+            {
+            "reviewer_name": "walmart.com",
+            "review": "This Lantern is very good at handling power outages and other low lighting issues. Since it has 4 separate removable light units that can be carried or placed in different locations as needed. When you put them back onto the base nit, the lights recharge so they are ready for the next time you need them. OR you can simply use the entire lantern as a single unit. Lightweight and easy to handle, it is a very good light.",
+            "date": "2016-04-02",
+            "rate": 4
+            },{
+            "reviewer_name": "MidwayUSA",
+            "review": "outstanding lantern, started using this lantern when my son was a cub scout! The first set of batteries lasted for a year, the 8 d batteries in the base charge the NICADS in the four removable lanterns. When they no longer hold a charge it is telling you it is time to change the main batteries, but the lantern will continue to work for days after this! We were able to send one lantern with the boys in each tent, and recharge them the next day because you know they left the light on all night! he is now a boy scout and the lantern convinced out troop to go to LED lanterns from propane! make sure to push the grey release button removing and placing the lanterns in the main base. we now have two! Hatteras Kid",
+            "date": "2014-08-21",
+            "rate": 5
+            }
+        ],
+        "averageRate": 4.7
+        }
+        },
+        {
+        "id": 7890008,
+        "price": {
+        "value": 85.99,
+        "currency": "USD"
+        },
+        "name": "Sintechno Camping Portable Lantern",
+        "description": "Sintechno Inc This portable emergency / camp lantern uses 36 white SMD Super Bright LED's which can be recharged by both included solar panel and AC power adapter.",
+        "keywords": [],
+        "copy": "Sintechno 2-in-1 Solar Bright LED Emergency Camping Portable Lantern",
+        "image": {
+        "id": 8540008,
+        "url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcREYcHVgrBWpAew2bVIrZB4mu7rvhKm-ijxtkSmBvizfVW2NGC--h6jlCX-Gbc7S9rwihlJ7C9D&usqp=CAY"
+        },
+        "company": {
+            "id": 4907996,
+            "name": "Overstock.com",
+            "address" : {
+                "country": "USA",
+                "state": "UTAH",
+                "city": "Midvale",
+                "street_address": "799 Coliseum Way",
+                "zip": 84047
+            }
+        },
+        "category": "Lantern",
+        "review": {
+        "reviews": [],
+        "averageRate": 0.0
+        }
+        },
+        
+  {
+        "id": 7890009,
+        "price": {
+        "value": 89.79,
+        "currency": "USD"
+        },	
+        "name": "Coleman Lantern",
+        "description": "Light up your next outdoor gathering with a super-bright lantern! The versatile Premium Powerhouse runs on either Coleman Liquid fuel or unleaded gasoline and uses less fuel than lanterns powered by propane. Delivering an extra-bright 1107 lumens on high, the Coleman Premium Powerhouse Dual Fuel Lantern features an adjustable dimmer knob to allow the perfect amount of light for your campsite, barbecue and more!",
+        "keywords": [],
+        "copy": "Coleman Dual Fuel 2-Mantle Powerhouse Lantern 64566500",
+        "image": {
+        "id": 8540009,
+        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRrT8bmktPPrwX1z974P8DriLGtyegoXAX90JRrStaYCnIwC_g6Nng2gyucVrk8WNAN3TkkfBb2&usqp=CAY"
+        },
+        "company": {
+            "id": 4907995,
+            "name": "CampSaver.com",
+            "address" : {
+                "country": "USA",
+                "state": "UTAH",
+                "city": "Nibley",
+                "street_address": "2280 Heritage Dr",
+                "zip": 84321
+            }
+        },
+        "category": "Lantern",
+        "review": {
+            "reviews": [
+                {
+                "reviewer_name": "ebay.com",
+                "review": "There's a reason why Coleman has been making these 'boring' products for SIXTY YEARS. They are the MOST economical lanterns (and stoves), and the BRIGHTEST lanterns and HOTTEST stoves. When I want to light up a campsite with 6 tents full of YMCA adventure guides, I pump up this lantern, light it, and hoist it 8 feet in the air. Then I can put away my 12v 8xD 2-bulb flourescent lamp. A gallon of Coleman white-gas (naptha) fuel has lasted us for 3 years of camping (about 12 campouts or 24 days/nights total - cooking and using this lantern.) This lamp gives enough light to throw a football or frisbee a decent distance (30 ft) at night. Best of all : EVERYONE ELSE WILL BE JEALOUS !!!",
+                "date": "2016-04-23",
+                "rate": 5
+                },{
+                "reviewer_name": "walmart.com",
+                "review": "This lantern is almost twice as bright as any I have owned. And the fact that it can run on unleaded gas from the corner gas station, makes it an awesome lantern. The convenience of using gas is a great plus. It makes it quick and easy. The lantern is sturdy and well built. The Coleman design has not changed a lot over time but if it aint broke, don't fix it. It comes with a small filtered funnel to aid in filling as well as two mantles to get you started. I got this powerhouse on sale and is has been well worth it.",
+                "date": "2015-08-09",
+                "rate": 4.9
+                }
+            ],
+            "averageRate": 4.9
+        }      
+     }   
+        
+]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="44dfa699-45cf-4113-b3c5-63ab0e662829" message="#[payload]"/>
+    </flow>
+    <flow name="get:\catalog\products\(product_id):catalog-config">
+        <logger level="INFO" doc:name="Logger" doc:id="11a6baff-bc36-46bf-8c82-7018e57b4680" message="#[attributes.uriParams]"/>
+		<choice doc:name="Choice" doc:id="b42f2a6c-12af-4677-a3e9-eb5c42a43310" >
+			<when expression="#[attributes.uriParams.product_id == '7890001']" >
+				<ee:transform doc:name="Product 7890001" doc:id="ac26e6d3-4a3f-4451-94cb-02113fc4853d">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+  id: 7890001,
+  price: {
+    value: 47.95,
+    currency: "USD"
+  },
+  name: "Eureka Cypress Sleeping Bag",
+  description: "Made from the same warm material as the adult size for backpacking and family camping, Eureka's Cyprus Junior is a three-season sleeping bag with toasty ThermaShield insulation that's temperature rated at 15°F. The boy-specific junior size and fit reduces unnecessary weight and bulk while on the trail.",
+  keywords: [
+    "Eureka!", 
+    "Children's", 
+    "Mummy", 
+    "15° F", 
+    "With Pocket", 
+    "With Stuff Sack"
+  ],
+  copy: "Eureka 15°F Cypress Junior Sleeping Bag - Mummy (for Boys) - Grey/Green ( )",
+  image: {
+    id: 8540001,
+    url: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
+  },
+  company: {
+    id: 4907999,
+    name: "The-House.com",
+    address: {
+      country: "USA",
+      state: "MINNESOTA",
+      city: "Minneapolis",
+      street_address: "200 S Owasso Blvd E St Paul",
+      zip: 55117
+    }
+  },
+  category: "Sleeping Bags",
+  review: {
+    reviews: [
+      {
+        reviewer_name: "Backcountry.com",
+        review: "Just got this in yesterday for our little guy, but he won't get a chance to try it. It's just not packable. Compressed it measures 1'' in diameter and 13'' long. It won't fit in our packs so it's going back. Bummer because the price is really great. I'm sure it would work great for car camping or slumber parties, but if you need to pack look elsewhere.",
+        date: "2015-06-10",
+        rate: 2
+      }, 
+      {
+        reviewer_name: "sunnysports.com",
+        review: "I am 5'2'' and about 100 lbs so I ordered the children's bag. There's still room to grow!! I haven't tested it out yet but I can't wait to try it in my hammock on Mt. Washington!",
+        date: "2015-06-10",
+        rate: 4
+      }
+    ],
+    averageRate: 3
+  }
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id == '7890002']" >
+				<ee:transform doc:name="Product 7890002" doc:id="a82b6f23-308e-4241-b810-90517a459b41">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+      "id": 7890002,
+      "price": {
+        "value": 69.95,
+        "currency": "USD"
+      },
+      "name": "Goal Zero Lighthouse 400",
+      "description": "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
+      "keywords": ["Goal Zero","Lighthouse", "Camping light", "lantern"],
+      "copy": "Goal Zero Lighthouse 400 - Camping light - LED - 3 W - warm white light - 3500 K - lantern",
+      "image": {
+        "id": 8540002,
+        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
+      },
+      "company": {
+        "id": 4907998,
+        "name": "REI",
+        "address" : {
+          "country": "USA",
+          "state": "CALIFORNIA",
+          "city": "San Francisco",
+          "street_address": "840 Brannan St",
+          "zip": 94103
+        }
+      },
+      "category": "Lantern",
+      "review": {
+        "reviews": [
+          {
+            "reviewer_name": "goalzero.com",
+            "review": "These lanterns are choked full of features. I would recommend these. The lantern features themselves are excellent then add on the USB hub and charging by sun, USB and a hand crank you have a lantern that is second to none. Cons: it seems the internal bettieries are not user replaceable or at least it is not document as user replaceable. The on board hanging hook/handle has slid out on me seems like there should be more tension to keep it in place. None of these Cons are crictal to me so I would buy this lantern again.",
+            "date": "2016-10-02",
+            "rate": 4
+          },{
+            "reviewer_name": "mec.ca",
+            "review": "I bought this lantern about 2 yeara ago and have not regretted it. The battery has plenty power, it will easily last 2-3 nights without recharging. The light Britney's is exceptional. On the camp table it will easily give nice light to the campsite. The light source is adjustable from 180 to 360 degrees. I have not used the USB port but just having it is a comfort, knowing I can charge my phone etc. The lantern is of really high quality. There other features I didn't not comment on, all are good. I would recommend this lantern",
+            "date": "2017-05-15",
+            "rate": 5
+          }
+        ],
+        "averageRate": 4.6
+      }
+    }]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id == '7890003']" >
+				<ee:transform doc:name="Product 7890003" doc:id="eceff330-f14c-4f8f-80c6-8d4c1462e4a6">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+      "id": 7890003,
+      "price": {
+        "value": 199.95,
+        "currency": "USD"
+      },
+      "name": "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter",
+      "description": "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
+      "keywords": ["GOAL ZERO", "Solar", "160 watt", "With Inverter", "Portable"],
+      "copy": "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter - 14 Ah - 14-29V",
+      "image": {
+        "id": 8540003,
+        "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTqPH1wK0UGXcI55H1rSwKukYH4_AfAU40OH_noVqt4M_E95UTOyZvkdAvMYE_tNfeV-c3Cao8&usqp=CAE"
+      },
+      "company": {
+        "id": 4907998,
+        "name": "REI",
+        "address" : {
+          "country": "USA",
+          "state": "CALIFORNIA",
+          "city": "San Francisco",
+          "street_address": "840 Brannan St",
+          "zip": 94103
+        }
+      },
+      "category": "Battery",
+      "review": {
+        "reviews": [
+          {
+            "reviewer_name": "goalzero.com",
+            "review": "I bought this on sale for the camping event around I think Memorial day. I have used it 3 different times now camping out on the island in Casco Bay in Maine. I was worried about it after the 2nd day because it did not seem to charge the same as it did the 1st. We did use it heavier on this last 4 day event, Charging 2 smart phones, 1 iPad2, 1 lighthouse 250, and we ran 3 of the new Light-a-Life 350's on it for probably 1 hour making and eating dinner each night. It recharged to full the 1st night with my Nomad 20 and Nomad 7 in tandem. The 2nd day it recharged to 100% again, the third day it was better than 80% and the last day I did not bother as we had to pack up. It never dropped below 60% until the last day and we used it to beat the band. Admittedly I do want to step up to the Yeti 400 for something with more power on hand. But that's cause I am too Boy scout I want to bring something out there for 4 days and be able to not have to worry about solar if the weather is not good for solar. But I can't complain this power pack delivered and held up great.",
+            "date": "2015-11-18",
+            "rate": 5
+          },{
+            "reviewer_name": "Home Depot",
+            "review": "I wanted this generator but was nervous about purchasing it. If it didn't work or something went wrong, how would I return it. Viewed this item on many other sites and decided to purchase with HD because I could easily return it if needed. I've had the generator for almost a month. This generator is SO QUIET! So far I charged a lamp, I Pad and phone. There is nothing to do, it comes right out of the box ready to go. You may need to charge a little but mine arrived charged. It's compact, easy to move around and has many ports. At this point I am considering upgrading to the larger one but wanted to test this out before investing more money. I gave it four stars only because I've had it such a short time and I'm still testing it, but so far so good. Hurricane Sandy was a wake up call us. Please take a moment to look around, we have hurricanes, earthquakes, power outages etc. The times are changing make sure your family is prepared, spiritually, mentally, physically. If the grid goes down it will be nice to have power and the ability to keep in touch with your family.",
+            "date": "2015-04-07",
+            "rate": 4
+          }
+        ],
+        "averageRate": 4.3
+      }
+    }]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id == '7890006']" >
+				<ee:transform doc:name="Product 7890006" doc:id="90ef0b8f-11c4-4f13-bb92-157338b0c595" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+        "id": 7890006,
+        "price": {
+        "value": 74.99,
+        "currency": "USD"
+        },
+        "name": "Coleman Lantern",
+        "description": "Take the convenience of Three lights in one with you with the Coleman Trifecta LED Lantern. During an emergency, pop one of the three lights off the base for a personal flashlight. They recharge once theyre back on the base for hands-free light. The lantern runs cool so its always safe to touch, even when its been on for hours. Model # 2000013867 Features: Even distribution of light Choose your power, 4D batteries, or CPX 6 rechargeable Hi/Low for optimal light output 3 removable panels",
+        "keywords": [],
+        "copy": "Coleman CPX 6 Triago Lantern 61450663",
+        "image": {
+        "id": 8540006,
+        "url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQyMPBCmFkdvvSdN1AiCJCQ9-B7kIVriJd-Ich_bszorXEUUIaWtCN88Yb0kmLFCLw05gLylZ4&usqp=CAY"
+        },
+        "company": {
+        "id": 4907995,
+        "name": "CampSaver.com",
+        "address" : {
+            "country": "USA",
+            "state": "UTAH",
+            "city": "Nibley",
+            "street_address": "2280 Heritage Dr",
+            "zip": 84321
+            }
+        },
+        "category": "Lantern",
+        "review": {
+        "reviews": [
+            {
+            "reviewer_name": "cabelas.com",
+            "review": "I bought this lantern for camping, a fantastic idea that you can essentially break the lantern apart and everyone grab a piece. No more having the kids fight over the light. Long battery life, and I purchased the rechargeable battery pack as well. This is the second re-chargeable Coleman lantern I have purchased this year, and I have been VERY pleased with each purchase.",
+            "date": "2014-10-04",
+            "rate": 5
+            },{
+            "reviewer_name": "thesportsauthority.com",
+            "review": "Gave as gift. Recipient very pleased",
+            "date": "2016-02-05",
+            "rate": 4
+            }
+        ],
+        "averageRate": 4.2
+        }
+    }]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id == '7890007']" >
+				<ee:transform doc:name="Product 7890007" doc:id="9c4cb769-6b1c-4ec8-a620-ca099f40cafc" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+        "id": 7890007,
+        "price": {
+        "value": 71.99,
+        "currency": "USD"
+        },
+        "name": "Coleman Lantern",
+        "description": "Uses 8 D batteries, not included. Imported.",
+        "keywords": [],
+        "copy": "Coleman Quad LED Lantern",
+        "image": {
+        "id": 8540007,
+        "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRNTfRuy1Ds8s7yJD_8PLCB2gIbPHF9H-rTBka9-Dkd0_uTD-6ZguxiB2A39wnFOHLOLWzsu_U&usqp=CAY"
+        },
+        "company": {
+            "id": 4907995,
+            "name": "CampSaver.com",
+            "address" : {
+                "country": "USA",
+                "state": "UTAH",
+                "city": "Nibley",
+                "street_address": "2280 Heritage Dr",
+                "zip": 84321
+            }
+        },
+        "category": "Lantern",
+        "review": {
+        "reviews": [
+            {
+            "reviewer_name": "walmart.com",
+            "review": "This Lantern is very good at handling power outages and other low lighting issues. Since it has 4 separate removable light units that can be carried or placed in different locations as needed. When you put them back onto the base nit, the lights recharge so they are ready for the next time you need them. OR you can simply use the entire lantern as a single unit. Lightweight and easy to handle, it is a very good light.",
+            "date": "2016-04-02",
+            "rate": 4
+            },{
+            "reviewer_name": "MidwayUSA",
+            "review": "outstanding lantern, started using this lantern when my son was a cub scout! The first set of batteries lasted for a year, the 8 d batteries in the base charge the NICADS in the four removable lanterns. When they no longer hold a charge it is telling you it is time to change the main batteries, but the lantern will continue to work for days after this! We were able to send one lantern with the boys in each tent, and recharge them the next day because you know they left the light on all night! he is now a boy scout and the lantern convinced out troop to go to LED lanterns from propane! make sure to push the grey release button removing and placing the lanterns in the main base. we now have two! Hatteras Kid",
+            "date": "2014-08-21",
+            "rate": 5
+            }
+        ],
+        "averageRate": 4.7
+        }
+        }]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id == '7890008']" >
+				<ee:transform doc:name="Product 7890008" doc:id="50e653de-d4ba-4ce4-9e0f-b268c712c17f" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+        "id": 7890008,
+        "price": {
+        "value": 85.99,
+        "currency": "USD"
+        },
+        "name": "Sintechno Camping Portable Lantern",
+        "description": "Sintechno Inc This portable emergency / camp lantern uses 36 white SMD Super Bright LED's which can be recharged by both included solar panel and AC power adapter.",
+        "keywords": [],
+        "copy": "Sintechno 2-in-1 Solar Bright LED Emergency Camping Portable Lantern",
+        "image": {
+        "id": 8540008,
+        "url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcREYcHVgrBWpAew2bVIrZB4mu7rvhKm-ijxtkSmBvizfVW2NGC--h6jlCX-Gbc7S9rwihlJ7C9D&usqp=CAY"
+        },
+        "company": {
+            "id": 4907996,
+            "name": "Overstock.com",
+            "address" : {
+                "country": "USA",
+                "state": "UTAH",
+                "city": "Midvale",
+                "street_address": "799 Coliseum Way",
+                "zip": 84047
+            }
+        },
+        "category": "Lantern",
+        "review": {
+        "reviews": [],
+        "averageRate": 0.0
+        }
+        }]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id == '7890009']" >
+				<ee:transform doc:name="Product 7890009" doc:id="b018f5f1-6972-42da-b706-5b17ebca921a">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+        "id": 7890009,
+        "price": {
+        "value": 89.79,
+        "currency": "USD"
+        },
+			
+        "name": "Coleman Lantern",
+        "description": "Light up your next outdoor gathering with a super-bright lantern! The versatile Premium Powerhouse runs on either Coleman Liquid fuel or unleaded gasoline and uses less fuel than lanterns powered by propane. Delivering an extra-bright 1107 lumens on high, the Coleman Premium Powerhouse Dual Fuel Lantern features an adjustable dimmer knob to allow the perfect amount of light for your campsite, barbecue and more!",
+        "keywords": [],
+        "copy": "Coleman Dual Fuel 2-Mantle Powerhouse Lantern 64566500",
+        "image": {
+        "id": 8540009,
+        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRrT8bmktPPrwX1z974P8DriLGtyegoXAX90JRrStaYCnIwC_g6Nng2gyucVrk8WNAN3TkkfBb2&usqp=CAY"
+        },
+        "company": {
+            "id": 4907995,
+            "name": "CampSaver.com",
+            "address" : {
+                "country": "USA",
+                "state": "UTAH",
+                "city": "Nibley",
+                "street_address": "2280 Heritage Dr",
+                "zip": 84321
+            }
+        },
+        "category": "Lantern",
+        "review": {
+            "reviews": [
+                {
+                "reviewer_name": "ebay.com",
+                "review": "There's a reason why Coleman has been making these 'boring' products for SIXTY YEARS. They are the MOST economical lanterns (and stoves), and the BRIGHTEST lanterns and HOTTEST stoves. When I want to light up a campsite with 6 tents full of YMCA adventure guides, I pump up this lantern, light it, and hoist it 8 feet in the air. Then I can put away my 12v 8xD 2-bulb flourescent lamp. A gallon of Coleman white-gas (naptha) fuel has lasted us for 3 years of camping (about 12 campouts or 24 days/nights total - cooking and using this lantern.) This lamp gives enough light to throw a football or frisbee a decent distance (30 ft) at night. Best of all : EVERYONE ELSE WILL BE JEALOUS !!!",
+                "date": "2016-04-23",
+                "rate": 5
+                },{
+                "reviewer_name": "walmart.com",
+                "review": "This lantern is almost twice as bright as any I have owned. And the fact that it can run on unleaded gas from the corner gas station, makes it an awesome lantern. The convenience of using gas is a great plus. It makes it quick and easy. The lantern is sturdy and well built. The Coleman design has not changed a lot over time but if it aint broke, don't fix it. It comes with a small filtered funnel to aid in filling as well as two mantles to get you started. I got this powerhouse on sale and is has been well worth it.",
+                "date": "2015-08-09",
+                "rate": 4.9
+                }
+            ],
+            "averageRate": 4.9
+        }
+    }]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Product not found">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+			</otherwise>
+		</choice>
+    </flow>
+    <flow name="post:\catalog\products\price\(price):application\json:catalog-config">
+        <logger level="INFO" message="post:\catalog\products\price\(price):application\json:catalog-config" />
+    </flow>
+    <flow name="post:\catalog\products:application\json:catalog-config">
+        <logger level="INFO" message="post:\catalog\products:application\json:catalog-config" />
+    </flow>
+</mule>
