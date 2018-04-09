@@ -15,7 +15,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	<http:request-config name="DialogFlowAPI" doc:name="HTTP Request configuration" doc:id="d7d35565-feda-463b-afa0-0363bdea65b7" basePath="/api">
 		<http:request-connection protocol="HTTPS" host="api.dialogflow.com" port="443"/>
 	</http:request-config>
-	<http:request-config name="OrderAPI" doc:name="HTTP Request configuration" doc:id="de89657a-b36a-4350-a852-dd9246798d29" basePath="/mocks/449556cb-6c67-4cc2-bd92-18b335ac4e01">
+	<http:request-config name="OrderAPI" doc:name="HTTP Request configuration" doc:id="de89657a-b36a-4350-a852-dd9246798d29" basePath="/mocks/0e1717f4-1fda-4c8c-bd21-a7b7dc1dc200">
 		<http:request-connection protocol="HTTPS" host="mocksvc.mulesoft.com" port="443"/>
 	</http:request-config>
 	<http:request-config name="Catalog_API" doc:name="HTTP Request configuration" doc:id="e992ca9d-8c0d-434e-883f-4ae4c9795d05" basePath="/mocks/dfe96a2b-b982-484d-8c72-00cfc8f4fddc" >
@@ -23,13 +23,6 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	</http:request-config>
 	<api-gateway:autodiscovery apiId="11063377" doc:name="API Autodiscovery" doc:id="b8980674-37fc-412d-b906-7a0256b3fe3a" flowRef="send-UI-request-to-DialogFlow" />
 	
-	<flow name="order-change-fullfilmentFlow" doc:id="c659e6a9-f568-4ac4-a07a-3b06ce163cba" >
-		<http:listener doc:name="Listener" doc:id="589b4cfa-39e0-4ba7-9dc9-21cc45a51025" config-ref="HTTP_Listener_config" path="/chat"/>
-		<scripting:execute engine="groovy" doc:name="Execute read index.html file from resource classpath" doc:id="40cafedc-8f29-49d8-9c49-5da60829e60f">
-			<scripting:code>return Thread.currentThread().getContextClassLoader().getResourceAsStream('index.html').text</scripting:code>
-		</scripting:execute>
-		<set-payload value="#[payload]" doc:name="Set Payload mimeType to text/html" doc:id="897645ab-d3b7-40bb-8392-76be680e7521" mimeType="text/html"/>
-	</flow>
 	<flow name="send-UI-request-to-DialogFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
 		<http:listener doc:name="Listener" doc:id="31da4c63-7064-4eea-ab24-c43e4a3fba5e" config-ref="HTTP_Listener_config" path="/request" outputMimeType="application/json"/>
 		<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json">
@@ -194,7 +187,7 @@ output application/json
 		<ee:transform doc:name="Text response" doc:id="daf793e7-73ad-4be2-80f3-d288fb0f83d0" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
 "data": {
@@ -212,19 +205,17 @@ output application/java
 output application/json
 ---
 {
-  "id": 3345002,
-  "products": [
+"id": 3345001,
+"products": [
   {
-    "id": 17890001,
-    "amount": 2
-  },{
-    "id": 7890002,
+    "id": 4907996,
     "amount": 1
-  }],
-  "totalAmountPrice": 165.85,
-  "totalAmountPriceCurrency": "USD",
-  "shippingStatus": "non-shipped",
-  "customerID": 5640099
+  }
+],
+"totalAmountPrice": 35,
+"totalAmountPriceCurrency": "USD",
+"shippingStatus": "shipped",
+"customerID": 5640099
 }]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
@@ -235,14 +226,14 @@ payload.result.contexts[0].parameters.order_id as Number]]></ee:set-variable>
 				<ee:set-variable variableName="urlWithOrderID" ><![CDATA[%dw 2.0
 output application/java
 ---
-"/ordering/orders/" ++ (payload.result.contexts[0].parameters.order_id as String)]]></ee:set-variable>
+"/ordering/orders/"]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<http:request method="POST" doc:name="Post to add a new producto to this order" doc:id="4ee3cbe1-5a40-453e-877c-77866ce661ad" config-ref="OrderAPI" path="#[vars.urlWithOrderID]"/>
-		<ee:transform doc:name="LISTA CHARGERS" doc:id="ed2365a2-4116-4ceb-875b-17d1427e15cf" >
+		<ee:transform doc:name="Charger list" doc:id="ed2365a2-4116-4ceb-875b-17d1427e15cf" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
 "data": {
@@ -283,7 +274,7 @@ output application/java
 		<ee:transform doc:name="5 Lanterns response payload" doc:id="16addbf1-f0f3-4c7e-b839-3b84b2193c53">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
 "data": {
