@@ -23,6 +23,9 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	</http:request-config>
 	<api-gateway:autodiscovery apiId="11063377" doc:name="API Autodiscovery" doc:id="b8980674-37fc-412d-b906-7a0256b3fe3a" flowRef="send-UI-request-to-DialogFlow" />
 	
+	<http:request-config name="CatalogAPP" doc:name="HTTP Request configuration" doc:id="287b8e3e-be85-4799-9670-1f3902f7f9c3" basePath="/api">
+		<http:request-connection host="catalog-app.cloudhub.io" port="80" />
+	</http:request-config>
 	<flow name="send-UI-request-to-DialogFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
 		<http:listener doc:name="Listener" doc:id="31da4c63-7064-4eea-ab24-c43e4a3fba5e" config-ref="HTTP_Listener_config" path="/request" outputMimeType="application/json"/>
 		<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json">
@@ -387,7 +390,7 @@ output application/java
 payload.currentAmount as Number]]></ee:set-variable>
 				</ee:variables>
 		</ee:transform>
-			<http:request method="GET" doc:name="Retrieve the productData" doc:id="b5d8485b-3ff7-47f8-bb9c-8ef7306cce73" config-ref="Catalog_API" path="#[payload]"/>
+			<http:request method="GET" doc:name="Retrieve the productData" doc:id="b5d8485b-3ff7-47f8-bb9c-8ef7306cce73" config-ref="CatalogAPP" path="#[payload]"/>
 			<ee:transform doc:name="Transform Message" doc:id="04a43577-05d8-41cf-94b7-6ea166f63312" >
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
