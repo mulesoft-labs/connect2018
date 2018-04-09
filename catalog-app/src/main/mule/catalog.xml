@@ -796,7 +796,7 @@ output application/json
 				<ee:transform doc:name="Product 7890001" doc:id="ac26e6d3-4a3f-4451-94cb-02113fc4853d">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
   id: 7890001,
@@ -908,7 +908,7 @@ output application/json
 				<ee:transform doc:name="Product 7890003" doc:id="eceff330-f14c-4f8f-80c6-8d4c1462e4a6">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
       "id": 7890003,
@@ -960,7 +960,7 @@ output application/java
 				<ee:transform doc:name="Product 7890006" doc:id="90ef0b8f-11c4-4f13-bb92-157338b0c595" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
         "id": 7890006,
@@ -1012,7 +1012,7 @@ output application/java
 				<ee:transform doc:name="Product 7890007" doc:id="9c4cb769-6b1c-4ec8-a620-ca099f40cafc" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
         "id": 7890007,
@@ -1064,7 +1064,7 @@ output application/java
 				<ee:transform doc:name="Product 7890008" doc:id="50e653de-d4ba-4ce4-9e0f-b268c712c17f" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
         "id": 7890008,
@@ -1104,7 +1104,7 @@ output application/java
 				<ee:transform doc:name="Product 7890009" doc:id="b018f5f1-6972-42da-b706-5b17ebca921a">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
         "id": 7890009,

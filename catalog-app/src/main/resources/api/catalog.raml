@@ -19,11 +19,11 @@ resourceTypes:
       collection:
         response-type: product.ProductData
         request-type: product.NewProductData
-        response-example:  !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.12/MoreProductCollectionExample.raml
+        response-example:  !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.15/ProductCollectionExample.raml
     /{product_id}:
       type:
         member:
-          get-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.12/MoreProductExample.raml
+          get-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.15/ProductExample.raml
           get-response-type: product.ProductData
           patch-response-type: product.ProductData
     /price/{price}:
@@ -31,4 +31,4 @@ resourceTypes:
         collection:
           response-type: product.ProductData
           request-type: product.NewProductData
-          response-example:  !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.12/MoreProductCollectionExample.raml
+          response-example:  !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.15/ProductCollectionExample.raml
