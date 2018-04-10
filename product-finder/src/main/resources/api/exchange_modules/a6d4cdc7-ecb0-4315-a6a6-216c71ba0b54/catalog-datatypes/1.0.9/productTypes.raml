@@ -6,15 +6,22 @@ uses:
   company: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-datatypes/1.0.0/companyTypes.raml
   
 types:
+  NewReviewData:
+    properties: 
+      reviews: util.ReviewData[]
+      averageRate: number
+
   NewProductData:
     properties:
       price: util.MonetaryAmountData
+      name?: string
       description: string
       copy: string
+      keywords?: string[]
       image: util.ImageData
-      company: company.Company
+      company?: company.Company
       category: string
-      review?: util.ReviewData[]
+      review?: NewReviewData
 
   ProductData:
     type: NewProductData

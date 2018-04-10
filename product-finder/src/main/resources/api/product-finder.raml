@@ -1,9 +1,10 @@
 #%RAML 1.0
+
 version: v1
 title: product-finder
 
 uses:
-  productData: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-datatypes/1.0.1/productTypes.raml
+  productData: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-datatypes/1.0.9/productTypes.raml
   traits: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/traits.raml
 
 resourceTypes: 
@@ -12,27 +13,15 @@ resourceTypes:
   member: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.1/member.raml
 
 /products:
-  type: 
+  type:
     collection:
-      response-type: productData.NewProductData
-      request-type: productData.ProductData
-      response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.0/ProductCollectionExample.raml
-  get:
-    queryParameters: 
-      category:
-        description: "The category the product belongs to (case insensitie and doesn't need to match the whole name)"
-        type: string
-        example: outdoor sports
-        required: false
-      company:
-        description: "The name of the company the product belongs to (case insensitie and doesn't need to match the whole name)"
-        type: string
-        example: Sports Basement
-        required: false
+      response-type: productData.ProductData
+      request-type: productData.NewProductData
+      response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductCollectionExample.raml
   /{product_id}:
     type:
-      collection-item:
-        get-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.0/ProductExample.raml
+      member:
+        get-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductExample.raml
         get-response-type: productData.ProductData
         patch-response-type: productData.ProductData
   /price/{price}:
@@ -40,4 +29,4 @@ resourceTypes:
       collection:
         response-type: productData.ProductData
         request-type: productData.NewProductData
-        response-example:  !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.0/ProductCollectionExample.raml
+        response-example: !include exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductCollectionExample.raml

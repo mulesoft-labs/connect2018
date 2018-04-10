@@ -1,0 +1,24 @@
+{
+  "id": 7890001,
+  "price": {
+    "value": 47.95,
+    "currency": "USD"
+  },
+  "description": "Made from the same warm material as the adult size for backpacking and family camping, Eureka's Cyprus Junior is a three-season sleeping bag with toasty ThermaShield insulation that's temperature rated at 15°F. The boy-specific junior size and fit reduces unnecessary weight and bulk while on the trail.",
+  "copy": "Eureka 15°F Cypress Junior Sleeping Bag - Mummy (for Boys) - Grey/Green ( )",
+  "image": {
+    "id": 8540001,
+    "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
+  },
+  "category": "Sleeping Bags",
+  "quantity": 1010,
+  "location": {
+    "id": 8624,
+    "addressType": "STORE",
+    "country": "USA",
+    "state": "CA",
+    "city": "San Francisco",
+    "street_address": "610 Old Mason Street",
+    "zip": 94129
+  }
+}

@@ -1,26 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
   <types:catalog>
-    <types:type name="inventoryJson" format="json">
-      <types:example format="json" location="examples/inventory.json"/>
+    <types:type name="newProductExample" format="json">
+      <types:example format="json" location="examples/newProductExample.json"/>
+    </types:type>
+    <types:type name="catalogProductExample" format="json">
+      <types:example format="json" location="examples/catalogProductExample.json"/>
     </types:type>
   </types:catalog>
-  <types:enrichment select="#e1976893-0663-41e8-bb31-7158d26c175d">
+  <types:enrichment select="#acc10087-b383-4e03-be9d-c487c3932866">
     <types:processor-declaration>
       <types:input-event>
         <types:message>
-          <types:payload type="inventoryJson"/>
+          <types:payload type="newProductExample"/>
         </types:message>
-      </types:input-event>
-    </types:processor-declaration>
-  </types:enrichment>
-  <types:enrichment select="#a88c1b93-4dba-42b0-9a9e-029047d3f279">
-    <types:processor-declaration>
-      <types:input-event>
-        <types:variables>
-          <types:variable name="product" type="inventoryJson"/>
-          <types:variable name="inventory" type="inventoryJson"/>
-        </types:variables>
       </types:input-event>
     </types:processor-declaration>
   </types:enrichment>

@@ -1166,9 +1166,48 @@ output application/json
 		</choice>
     </flow>
     <flow name="post:\catalog\products\price\(price):application\json:catalog-config">
-        <logger level="INFO" message="post:\catalog\products\price\(price):application\json:catalog-config" />
+		<logger level="INFO" message="post:\catalog\products\price\(price):application\json:catalog-config" doc:name="Logger" />
     </flow>
     <flow name="post:\catalog\products:application\json:catalog-config">
-        <logger level="INFO" message="post:\catalog\products:application\json:catalog-config" />
+        <ee:transform doc:name="Transform Message" doc:id="c2b724ac-b2f0-4acb-a1db-67f841fa5a91">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "id": 7890001,
+    "price": {
+      "value": 47.95,
+      "currency": "USD"
+    },
+    "name": "Eureka Cypress Sleeping Bag",
+    "description": "Made from the same warm material as the adult size for backpacking and family camping, Eureka's Cyprus Junior is a three-season sleeping bag with toasty ThermaShield insulation that's temperature rated at 15°F. The boy-specific junior size and fit reduces unnecessary weight and bulk while on the trail.",
+    "keywords": [
+      "Eureka!",
+      "Children's",
+      "Mummy",
+      "15° F",
+      "With Pocket",
+      "With Stuff Sack"
+    ],
+    "copy": "Eureka 15°F Cypress Junior Sleeping Bag - Mummy (for Boys) - Grey/Green ( )",
+    "image": {
+      "id": 8540001,
+      "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
+    },
+    "company": {
+      "id": 4907999,
+      "name": "The-House.com",
+      "address": {
+        "country": "USA",
+        "state": "MINNESOTA",
+        "city": "Minneapolis",
+        "street_address": "200 S Owasso Blvd E St Paul",
+        "zip": 55117
+      }
+    }
+ }]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
     </flow>
 </mule>
