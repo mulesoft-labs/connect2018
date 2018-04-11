@@ -1,4 +1,5 @@
 #%RAML 1.0 
+baseUri: https://mocksvc.mulesoft.com/mocks/dfe96a2b-b982-484d-8c72-00cfc8f4fddc # 
 
 title: Catalog API
 
@@ -20,6 +21,15 @@ resourceTypes:
         response-type: product.ProductData
         request-type: product.NewProductData
         response-example:  !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductCollectionExample.raml
+    /{product_type}:
+      description: Retrieves all the products from a particular type
+      get:
+        responses:
+          200:
+           body:
+            application/json:
+              type: product.ProductData[]
+              example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductCollectionExample.raml
     /{product_id}:
       type:
         member:
@@ -27,9 +37,3 @@ resourceTypes:
           get-response-type: product.ProductData
           patch-response-type: product.ProductData
           patch-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductExample.raml
-    /price/{price}:
-      type:
-        collection:
-          response-type: product.ProductData
-          request-type: product.NewProductData
-          response-example:  !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductCollectionExample.raml
