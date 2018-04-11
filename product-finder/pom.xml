@@ -82,7 +82,7 @@
     	<dependency>
             <groupId>a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54</groupId>
             <artifactId>inventory-api</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.3</version>
             <classifier>mule-plugin</classifier>
         </dependency>
     	<dependency>
@@ -100,7 +100,7 @@
     	<dependency>
             <groupId>a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54</groupId>
             <artifactId>locations-api</artifactId>
-            <version>1.0.4</version>
+            <version>1.0.7</version>
             <classifier>mule-plugin</classifier>
         </dependency>
     	<dependency>
