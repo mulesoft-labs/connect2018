@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:java="http://www.mulesoft.org/schema/mule/java"
-	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
-	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:ordering-api="http://www.mulesoft.org/schema/mule/ordering-api" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:java="http://www.mulesoft.org/schema/mule/java"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
 http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/ordering-api http://www.mulesoft.org/schema/mule/ordering-api/current/mule-ordering-api.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0fb42499-27d6-4b80-820b-111294c44e78" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
@@ -26,6 +27,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	<http:request-config name="CatalogAPP" doc:name="HTTP Request configuration" doc:id="287b8e3e-be85-4799-9670-1f3902f7f9c3" basePath="/api">
 		<http:request-connection host="catalog-app.cloudhub.io" port="80" />
 	</http:request-config>
+	<ordering-api:config name="Ordering_API_Config" doc:name="Ordering API Config" doc:id="125b4712-daa4-480f-affd-2639de5afc2c" property_host="mocksvc.mulesoft.com" property_port="433" property_basePath="/mocks/976b040b-97fb-4d0e-b98b-0ab2154f7f97" property_protocol="HTTPS" />
 	<flow name="send-UI-request-to-DialogFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
 		<http:listener doc:name="Listener" doc:id="31da4c63-7064-4eea-ab24-c43e4a3fba5e" config-ref="HTTP_Listener_config" path="/request" outputMimeType="application/json"/>
 		<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json">
@@ -208,31 +210,79 @@ output application/json
 output application/json
 ---
 {
-"id": 3345001,
-"products": [
-  {
-    "id": 4907996,
-    "amount": 1
-  }
-],
-"totalAmountPrice": 35,
-"totalAmountPriceCurrency": "USD",
-"shippingStatus": "shipped",
-"customerID": 5640099
+	"id": 3345001,
+	"products": [
+	  {
+	    "id": 4907996,
+	    "amount": 1
+	  }
+	]
 }]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="orderID" ><![CDATA[%dw 2.0
-output application/java
----
-payload.result.contexts[0].parameters.order_id as Number]]></ee:set-variable>
-				<ee:set-variable variableName="urlWithOrderID" ><![CDATA[%dw 2.0
-output application/java
----
-"/ordering/orders/"]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<http:request method="POST" doc:name="Post to add a new producto to this order" doc:id="4ee3cbe1-5a40-453e-877c-77866ce661ad" config-ref="OrderAPI" path="#[vars.urlWithOrderID]"/>
+		<ordering-api:update-products-by-order-id doc:name="Update products by order id" doc:id="b54f29bd-2e78-4ccf-ac45-1128cd2c4398" config-ref="Ordering_API_Config" order-id="#[payload.id]"/>
+		<ee:transform doc:name="prepare products to be enriched" doc:id="03d1830f-b259-4dcd-bf88-28c7583c4cda" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload.products map (product, index) -> {
+	id: product.id,
+	amount: product.amount
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<java:new doc:name="New fullProductList {as an ArrayList}" doc:id="ddf1b6c1-4274-4d18-bb39-3ba272c49cfb" class="java.util.ArrayList" constructor="ArrayList()" target="fullProductList" />
+        <foreach doc:name="For Each" doc:id="528aebdf-cc7e-4572-a91e-ab85e3e361e7" collection="payload">
+            
+            <ee:transform doc:name="build productID and quantity vars" doc:id="e8d458c4-2495-4e35-9a40-020b74e2ece5" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="productID" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.id as Number]]></ee:set-variable>
+					<ee:set-variable variableName="quantity" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.amount as Number]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="build_full_product_Flow" doc:id="15d0812c-2135-4c70-9d33-e8bfcebdb12a" name="build_full_product_Flow"/>
+			<ee:transform doc:name="Transform Message" doc:id="d51c1679-bfb2-4b3a-9282-ec73eb772605" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	id: payload.productData.id,
+	price: payload.productData.price,
+	description: payload.productData.description,
+	copy: payload.productData.copy,
+	image: payload.productData.image,
+	category: payload.productData.category,
+	quantity: payload.inventoryData.quantity,
+	location: payload.locationData,
+	quantity: vars.quantity
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<scripting:execute engine="groovy" doc:name="Execute" doc:id="0aa320fa-4386-46b0-88b3-3c7de94b5993">
+                <scripting:code>vars.fullProductList.add(payload)</scripting:code>
+            </scripting:execute>
+        </foreach>
+        <ee:transform doc:name="Transform Message" doc:id="41ea6efd-5dbe-43b0-96eb-865aecb65ef7">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.fullProductList]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="7efe3cb5-46e6-41bb-a0fb-b5309fd298b7" message="#[payload]"/>
 		<ee:transform doc:name="Charger list" doc:id="ed2365a2-4116-4ceb-875b-17d1427e15cf" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -266,11 +316,35 @@ output application/json
                     "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
                 }
 			} 
-				]
+		]
       }
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+	</sub-flow>
+	    <sub-flow name="build_full_product_Flow" doc:id="97aaf00e-c810-40fe-928e-545bb21c31f1" >
+		<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="c48f9187-6d05-4164-a84f-e60f9f47602c" product-id="#[vars.productID]" config-ref="Catalog_API_Config" target="productData" targetValue="#[payload as Object]" />
+		<inventory-api:get-inventory-by-product-id doc:name="Get inventory by product id" doc:id="30edf8ad-7c79-4607-ad42-fa842aa8309e" config-ref="Inventory_API_Config" product-id="#[vars.productData.id]" target="inventoryData" targetValue="#[payload as Object]" />
+		<location-api:get-location-by-location-id doc:name="Get location by location id" doc:id="3eb44293-ceb9-4a8c-9d61-873f04809646" config-ref="Location_API_Config" location-id="#[vars.inventoryData.location_id]" target="locationData" targetValue="#[payload as Object]" />
+		<ee:transform doc:name="Build complete product data" doc:id="e1976893-0663-41e8-bb31-7158d26c175d">
+                <ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	id: vars.productData.id,
+	price: vars.productData.price,
+	description: vars.productData.description,
+	copy: vars.productData.copy,
+	image: vars.productData.image,
+	category: vars.productData.category,
+	quantity: vars.inventoryData.quantity,
+	location: vars.locationData
+}]]></ee:set-payload>
+			</ee:message>
+                <ee:variables>
+                </ee:variables>
+            </ee:transform>
 	</sub-flow>
 	<sub-flow name="change-order-quantity-confirmation" doc:id="a39e8416-3103-4681-afa6-88eb7a617ec0" >
 		<http:request method="GET" doc:name="Request Catalog-API to retrieve Laterns" doc:id="bae30fd8-3090-4bb0-bdd4-5f8e537b7ed2" config-ref="Catalog_API" path="/catalog/products"/>
