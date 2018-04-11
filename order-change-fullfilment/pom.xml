@@ -95,18 +95,6 @@
         </dependency>
     	<dependency>
             <groupId>a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54</groupId>
-            <artifactId>catalog-api</artifactId>
-            <version>1.0.14</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
-            <groupId>org.mule.connectors</groupId>
-            <artifactId>mule-http-connector</artifactId>
-            <version>1.1.0</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
-            <groupId>a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54</groupId>
             <artifactId>inventory-api</artifactId>
             <version>1.0.3</version>
             <classifier>mule-plugin</classifier>
@@ -115,6 +103,18 @@
             <groupId>a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54</groupId>
             <artifactId>locations-api</artifactId>
             <version>1.0.7</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>org.mule.connectors</groupId>
+            <artifactId>mule-sockets-connector</artifactId>
+            <version>1.1.0</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54</groupId>
+            <artifactId>catalog-api</artifactId>
+            <version>1.0.16</version>
             <classifier>mule-plugin</classifier>
         </dependency>
     </dependencies>

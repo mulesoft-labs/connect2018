@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ordering-api="http://www.mulesoft.org/schema/mule/ordering-api" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
-	xmlns:java="http://www.mulesoft.org/schema/mule/java"
-	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:location-api="http://www.mulesoft.org/schema/mule/location-api" xmlns:inventory-api="http://www.mulesoft.org/schema/mule/inventory-api"
+	xmlns:catalog-api="http://www.mulesoft.org/schema/mule/catalog-api"
+	xmlns:ordering-api="http://www.mulesoft.org/schema/mule/ordering-api" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
 http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
-http://www.mulesoft.org/schema/mule/ordering-api http://www.mulesoft.org/schema/mule/ordering-api/current/mule-ordering-api.xsd">
+http://www.mulesoft.org/schema/mule/ordering-api http://www.mulesoft.org/schema/mule/ordering-api/current/mule-ordering-api.xsd
+http://www.mulesoft.org/schema/mule/catalog-api http://www.mulesoft.org/schema/mule/catalog-api/current/mule-catalog-api.xsd
+http://www.mulesoft.org/schema/mule/inventory-api http://www.mulesoft.org/schema/mule/inventory-api/current/mule-inventory-api.xsd
+http://www.mulesoft.org/schema/mule/location-api http://www.mulesoft.org/schema/mule/location-api/current/mule-location-api.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0fb42499-27d6-4b80-820b-111294c44e78" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
 	<http:request-config name="DialogFlowAPI" doc:name="HTTP Request configuration" doc:id="d7d35565-feda-463b-afa0-0363bdea65b7" basePath="/api">
 		<http:request-connection protocol="HTTPS" host="api.dialogflow.com" port="443"/>
 	</http:request-config>
-	<http:request-config name="OrderAPI" doc:name="HTTP Request configuration" doc:id="de89657a-b36a-4350-a852-dd9246798d29" basePath="/mocks/0e1717f4-1fda-4c8c-bd21-a7b7dc1dc200">
-		<http:request-connection protocol="HTTPS" host="mocksvc.mulesoft.com" port="443"/>
-	</http:request-config>
-	<http:request-config name="Catalog_API" doc:name="HTTP Request configuration" doc:id="e992ca9d-8c0d-434e-883f-4ae4c9795d05" basePath="/mocks/dfe96a2b-b982-484d-8c72-00cfc8f4fddc" >
-		<http:request-connection host="mocksvc.mulesoft.com" port="443" protocol="HTTPS"/>
-	</http:request-config>
 	<api-gateway:autodiscovery apiId="11063377" doc:name="API Autodiscovery" doc:id="b8980674-37fc-412d-b906-7a0256b3fe3a" flowRef="send-UI-request-to-DialogFlow" />
-	
-	<http:request-config name="CatalogAPP" doc:name="HTTP Request configuration" doc:id="287b8e3e-be85-4799-9670-1f3902f7f9c3" basePath="/api">
-		<http:request-connection host="catalog-app.cloudhub.io" port="80" />
-	</http:request-config>
 	<ordering-api:config name="Ordering_API_Config" doc:name="Ordering API Config" doc:id="125b4712-daa4-480f-affd-2639de5afc2c" property_host="mocksvc.mulesoft.com" property_port="433" property_basePath="/mocks/976b040b-97fb-4d0e-b98b-0ab2154f7f97" property_protocol="HTTPS" />
+	<catalog-api:config name="Catalog_API_Config" doc:name="Catalog API Config" doc:id="1e3271b5-dd5e-4f0b-8166-cd88c7f87ece" property_host="catalog-app.cloudhub.io" property_port="80" property_basePath="/api" property_protocol="HTTP" />
+	<inventory-api:config name="Inventory_API_Config" doc:name="Inventory API Config" doc:id="3725dd54-2437-44dc-9f23-01981a84adc3" />
+	<location-api:config name="Location_API_Config" doc:name="Location API Config" doc:id="2cbe3040-250c-4dd6-aa19-64c270b36a07" />
 	<flow name="send-UI-request-to-DialogFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
 		<http:listener doc:name="Listener" doc:id="31da4c63-7064-4eea-ab24-c43e4a3fba5e" config-ref="HTTP_Listener_config" path="/request" outputMimeType="application/json"/>
 		<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json">
@@ -323,9 +319,9 @@ output application/json
 		</ee:transform>
 	</sub-flow>
 	    <sub-flow name="build_full_product_Flow" doc:id="97aaf00e-c810-40fe-928e-545bb21c31f1" >
-		<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="c48f9187-6d05-4164-a84f-e60f9f47602c" product-id="#[vars.productID]" config-ref="Catalog_API_Config" target="productData" targetValue="#[payload as Object]" />
-		<inventory-api:get-inventory-by-product-id doc:name="Get inventory by product id" doc:id="30edf8ad-7c79-4607-ad42-fa842aa8309e" config-ref="Inventory_API_Config" product-id="#[vars.productData.id]" target="inventoryData" targetValue="#[payload as Object]" />
-		<location-api:get-location-by-location-id doc:name="Get location by location id" doc:id="3eb44293-ceb9-4a8c-9d61-873f04809646" config-ref="Location_API_Config" location-id="#[vars.inventoryData.location_id]" target="locationData" targetValue="#[payload as Object]" />
+		<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="4338f825-2146-4559-89f4-1ee61c46db49" config-ref="Catalog_API_Config" product-id="#[vars.productID]"/>
+		<inventory-api:get-inventory-by-product-id doc:name="Get inventory by product id" doc:id="8b465eee-7d65-4180-a314-08da6432276a" config-ref="Inventory_API_Config" product-id="#[vars.productData.id]"/>
+		<location-api:get-location-by-location-id doc:name="Get location by location id" doc:id="15f19482-6c82-4307-bc15-95875a97f044" config-ref="Location_API_Config" location-id="#[vars.inventoryData.location_id]"/>
 		<ee:transform doc:name="Build complete product data" doc:id="e1976893-0663-41e8-bb31-7158d26c175d">
                 <ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -347,7 +343,7 @@ output application/java
             </ee:transform>
 	</sub-flow>
 	<sub-flow name="change-order-quantity-confirmation" doc:id="a39e8416-3103-4681-afa6-88eb7a617ec0" >
-		<http:request method="GET" doc:name="Request Catalog-API to retrieve Laterns" doc:id="bae30fd8-3090-4bb0-bdd4-5f8e537b7ed2" config-ref="Catalog_API" path="/catalog/products"/>
+		<catalog-api:get-product-by-product-type doc:name="Get product by product type" doc:id="fb6135f0-39fd-489f-aa02-c5c64594c5e6" config-ref="Catalog_API_Config" product-type="lantern"/>
 		<ee:transform doc:name="5 Lanterns response payload" doc:id="16addbf1-f0f3-4c7e-b839-3b84b2193c53">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -357,64 +353,12 @@ output application/json
 "data": {
         "type": "product-list",
         "text": "You have a credit of \$55 . Here are some lanterns you might be interested in",
-        "products": [
-		    {
-		      "id": 7890002,
-		      "price": {
-		        "value": 69.95,
-		        "currency": "USD"
-		      },
-		      "name": "Goal Zero Lighthouse 400 - Camping light - LED - 3 W - warm white light - 3500 K - lantern",
-		      "image": {
-		        "id": 8540002,
-		        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
-		      }
-		    },{
-		        "id": 7890006,
-		        "price": {
-		        "value": 74.99,
-		        "currency": "USD"
-		        },
-		        "name": "Coleman CPX 6 Triago Lantern 61450663",
-		        "image": {
-		        "id": 8540006,
-		        "url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQyMPBCmFkdvvSdN1AiCJCQ9-B7kIVriJd-Ich_bszorXEUUIaWtCN88Yb0kmLFCLw05gLylZ4&usqp=CAY"
-		        }
-		    },{
-		        "id": 7890007,
-		        "price": {
-		        "value": 71.99,
-		        "currency": "USD"
-		        },
-		        "name": "Coleman Quad LED Lantern",
-		        "image": {
-		        "id": 8540007,
-		        "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRNTfRuy1Ds8s7yJD_8PLCB2gIbPHF9H-rTBka9-Dkd0_uTD-6ZguxiB2A39wnFOHLOLWzsu_U&usqp=CAY"
-		        }
-		        },{
-		        "id": 7890008,
-		        "price": {
-		        "value": 85.99,
-		        "currency": "USD"
-                },
-                "name": "Sintechno 2-in-1 Solar Bright LED Emergency Camping Portable Lantern",
-		        "image": {
-		        "id": 8540008,
-		        "url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcREYcHVgrBWpAew2bVIrZB4mu7rvhKm-ijxtkSmBvizfVW2NGC--h6jlCX-Gbc7S9rwihlJ7C9D&usqp=CAY"
-		        }
-		        },{
-		        "id": 7890009,
-		        "price": {
-		        "value": 89.79,
-		        "currency": "USD"
-		        },
-		        "name": "Coleman Dual Fuel 2-Mantle Powerhouse Lantern 64566500",
-		        "image": {
-		        "id": 8540009,
-		        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRrT8bmktPPrwX1z974P8DriLGtyegoXAX90JRrStaYCnIwC_g6Nng2gyucVrk8WNAN3TkkfBb2&usqp=CAY"
-		        }
-		    }
-		  ]
+        "products": payload map (product, index) -> {
+			"id": product.id,
+			"price": product.price,
+			"name": product.name,
+			"image": product.image
+        }
       }
 }]]></ee:set-payload>
 			</ee:message>
@@ -448,10 +392,6 @@ output application/java
 		<foreach doc:name="For Each" doc:id="fe25ed68-9801-4df2-a3e4-b95a18fb55ac" collection="#[payload]">
 			<ee:transform doc:name="Transform Message" doc:id="b5d95473-2404-4ff2-8e78-d8f4252bdeb4">
 			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/java
----
-"/catalog/products/" ++ (payload.id as String)]]></ee:set-payload>
 			</ee:message>
 				<ee:variables >
 					<ee:set-variable variableName="productNewAmount" ><![CDATA[%dw 2.0
@@ -464,28 +404,26 @@ output application/java
 payload.currentAmount as Number]]></ee:set-variable>
 				</ee:variables>
 		</ee:transform>
-			<http:request method="GET" doc:name="Retrieve the productData" doc:id="b5d8485b-3ff7-47f8-bb9c-8ef7306cce73" config-ref="CatalogAPP" path="#[payload]"/>
-			<ee:transform doc:name="Transform Message" doc:id="04a43577-05d8-41cf-94b7-6ea166f63312" >
+			<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="8b70fb1e-3c7e-4e41-9a51-cf94dbda3972" config-ref="Catalog_API_Config" product-id="#[payload.id]"/>
+			<ee:transform doc:name="Prepare payload with the product" doc:id="04a43577-05d8-41cf-94b7-6ea166f63312" >
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/java
 ---
-"/ordering/orders/" ++ (vars.orderID as String)]]></ee:set-payload>
+{
+	"id": vars.orderID,
+	"products": [
+	  {
+	    "id": payload.id,
+	    "amount": vars.productNewAmount
+	  }
+	]
+}   ]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
-					<ee:set-variable variableName="product" ><![CDATA[%dw 2.0
-output application/json
----
-{
-    "id": payload.id,
-    "price": payload.price,
-    "name": payload.copy,
-    "image": payload.image,
-    "quantity": vars.productNewAmount
-}   ]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<http:request method="PATCH" doc:name="Updated Order Product quantity" doc:id="6d705c92-eab7-4e57-958a-7198e40a806b" config-ref="OrderAPI" path="#[payload]" />
+			<ordering-api:update-products-by-order-id doc:name="Update products by order id" doc:id="4ef177fc-01a8-4045-801c-3e3b0e9aef01" config-ref="Ordering_API_Config" order-id="#[payload.id]"/>
 			<ee:transform doc:name="Transform Message" doc:id="ffcad589-68e3-4281-8f23-95f3db3cea5f" >
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
@@ -529,7 +467,7 @@ output application/json
 		<logger level="INFO" doc:name="Logger" doc:id="93c9470c-44cb-44b8-b0ce-170bb6a261ba" message="#[payload]" />
 	</sub-flow>
 	<sub-flow name="listOrdersFlow" doc:id="ec6a625c-d90f-44d8-bca8-44e210259c50" >
-		<http:request method="GET" doc:name="Request (OrderAPI)" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" url="https://mocksvc.mulesoft.com/mocks/449556cb-6c67-4cc2-bd92-18b335ac4e01/ordering/orders"/>
+		<ordering-api:get-orders doc:name="Get orders" doc:id="c6e016dc-26d7-4017-8679-bedafe917130" config-ref="Ordering_API_Config"/>
 		<ee:transform doc:name="Set the payload and read the order list as an orderLabel" doc:id="e4d4b9aa-014c-4c62-80f5-f9f35d97d2d6">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -581,25 +519,25 @@ output application/json
 				</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="a15b196d-faac-4ce6-9637-55a1bf50b45b" message="#[payload]"/>
 	</sub-flow>
-	<sub-flow name="showOrderDetails" doc:id="c4362728-860f-4cf1-bc26-14777a4c6d52" >
-		<ee:transform doc:name="Transform Message" doc:id="edd862de-7907-49fe-9cd6-2afeadb5cc4f" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+	<sub-flow name="showOrderDetails" doc:id="c4362728-860f-4cf1-bc26-14777a4c6d52">
+		<ee:transform doc:name="Transform Message" doc:id="edd862de-7907-49fe-9cd6-2afeadb5cc4f">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 payload.result.contexts[0].parameters.number as Number]]></ee:set-payload>
 			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="orderID" ><![CDATA[%dw 2.0
+			<ee:variables>
+				<ee:set-variable variableName="orderID"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.result.contexts[0].parameters.number as Number]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="filOrderDetail" doc:id="fa35943b-eb50-4685-9d58-f3e21fc19b4a" name="filOrderDetail"/>
-		<ee:transform doc:name="Setting the payload whith the labels" doc:id="aa0cd380-bd87-41f7-a802-789726b48054" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<flow-ref doc:name="filOrderDetail" doc:id="fa35943b-eb50-4685-9d58-f3e21fc19b4a" name="filOrderDetail" />
+		<ee:transform doc:name="Setting the payload whith the labels" doc:id="aa0cd380-bd87-41f7-a802-789726b48054">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -617,24 +555,20 @@ output application/json
 	}
 }]]></ee:set-payload>
 			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="productsLabel" ><![CDATA[%dw 2.0
+			<ee:variables>
+				<ee:set-variable variableName="productsLabel"><![CDATA[%dw 2.0
 output application/json
 ---
 {}]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="a8a9e85e-62d9-48b2-9559-c9219f055f5b" message="#[payload]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="a8a9e85e-62d9-48b2-9559-c9219f055f5b" message="#[payload]" />
 	</sub-flow>
 	<sub-flow name="filOrderDetail" doc:id="27da3670-7def-4a61-9d7c-f83974b17aa0" >
 		<ee:transform doc:name="building URL and orderID vars" doc:id="c0b3d5bd-1e6b-476a-833e-3727154d11be">
 			<ee:message>
 			</ee:message>
 			<ee:variables>
-				<ee:set-variable variableName="pathWithOrderID"><![CDATA[%dw 2.0
-output application/json
----
-("/ordering/orders/" ++ (payload as String)) as String]]></ee:set-variable>
 				<ee:set-variable variableName="orderID"><![CDATA[%dw 2.0
 output application/java
 ---
@@ -642,7 +576,7 @@ payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<java:new doc:name="New fullProductList {as an ArrayList}" doc:id="d7419e5e-600f-448e-b511-cb9eeec8957e" target="fullProductList" class="java.util.ArrayList" constructor="ArrayList()" />
-		<http:request method="GET" doc:name="Get Order (OrderAPI)" doc:id="c39244f4-4f86-44f9-bb7f-b44537d8406d" config-ref="OrderAPI" path="#[vars.pathWithOrderID]" />
+		<ordering-api:get-order-by-order-id doc:name="Get order by order id" doc:id="e4447682-e3e6-4352-a364-e8d6ed421b9e" config-ref="Ordering_API_Config" order-id="#[vars.orderID]"/>
 		<ee:transform doc:name="building the product Listn" doc:id="f5406c13-b298-4f5d-9cf3-547ef5b2ac2b">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -660,10 +594,6 @@ payload]]></ee:set-variable>
 		<foreach doc:name="For Each" doc:id="30081075-d897-4b98-ac55-788da89b1dc9" collection="#[payload]">
 			<ee:transform doc:name="builder URL and product amount vars" doc:id="8f2ac492-287a-4969-a69b-a14dc92aa778">
 				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
-output application/java
----
-"/catalog/products/" ++ (payload.id as String)]]></ee:set-payload>
 				</ee:message>
 				<ee:variables>
 					<ee:set-variable variableName="productAmount"><![CDATA[%dw 2.0
@@ -672,7 +602,7 @@ output application/java
 payload.amount as Number]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<http:request method="GET" doc:name="Get ProductData (CatalogAPI)" doc:id="2aa1108a-5a35-488f-96f7-a735546b2109" config-ref="Catalog_API" path="#[payload]" />
+			<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="dd27fcc9-53d4-4430-92d9-5cda4f7d6dbc" config-ref="Catalog_API_Config" product-id="#[payload.id]"/>
 			<ee:transform doc:name="building a product with amount" doc:id="902501fe-d5bf-4899-a947-5927d8e3cded">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
