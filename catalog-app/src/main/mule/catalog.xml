@@ -826,7 +826,7 @@ output application/json
         </choice>
     </flow>
     <flow name="get:\catalog\products\(product_type):catalog-config">
-        <choice doc:name="Choice" doc:id="00f76858-5bd3-4290-b6dd-49bfb8c1317d" doc:name="Choice">
+        <choice doc:name="Choice" doc:id="00f76858-5bd3-4290-b6dd-49bfb8c1317d">
             <when expression="#[attributes.uriParams.product_type == 'lantern']">
                 <ee:transform doc:name="Lantern List" doc:id="583d7512-e44f-4a9d-a457-46f3cead2946">
                     <ee:message>
