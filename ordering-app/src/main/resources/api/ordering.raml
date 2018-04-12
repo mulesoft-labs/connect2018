@@ -1,0 +1,50 @@
+#%RAML 1.0 
+baseUri: https://mocksvc.mulesoft.com/mocks/f3320813-7d4c-443e-b1ef-14b7a15e3ec4 # 
+
+title: Ordering API
+
+version: 1.1
+mediaType: application/json
+
+uses:
+  order: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-datatypes/1.0.3/orderTypes.raml
+  traits: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/traits.raml
+  product: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-datatypes/1.0.1/productTypes.raml
+
+
+resourceTypes:
+  collection: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.2/collection.raml
+  member: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.2/member.raml
+
+/ordering:
+  /orders:
+    type:
+      collection:
+        response-type: order.NewOrder
+        request-type: order.Order
+        response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-examples/1.0.11/OrderCollectionExample.raml
+    /{order_id}:
+      type:
+        member:
+          get-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-examples/1.0.11/OrderExample.raml
+          get-response-type: order.Order
+          patch-response-type: order.Order
+          patch-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-examples/1.0.11/OrderPatchResponseExample.raml
+    /{order_id}/products: 
+      patch:
+        description: Adds a product to an existing order
+        body:
+          application/json:
+            type: order.PatchOrderProduct
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-examples/1.0.11/OrderPatchRequestExample.raml
+        responses: 
+          200:
+            body:
+              type: order.Order
+              example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-examples/1.0.11/OrderPatchResponseExample.raml
+    /customer/{customer_id}:
+      type:
+        collection:
+          response-type: order.NewOrder
+          request-type: order.Order
+          response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-examples/1.0.11/OrderCollectionExample.raml
