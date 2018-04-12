@@ -8,8 +8,8 @@ http://www.mulesoft.org/schema/mule/location-api http://www.mulesoft.org/schema/
     </http:listener-config>
     <apikit:config name="product-finder-config" raml="product-finder.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" />
     <catalog-api:config name="Catalog_API_Config" doc:name="Catalog API Config" doc:id="800befc8-2630-462e-90ac-0483b5085879" property_host="catalog-app.cloudhub.io" property_port="80" property_basePath="/api" property_protocol="HTTP" />
-	<inventory-api:config name="Inventory_API_Config" doc:name="Inventory API Config" doc:id="847c7a1c-c341-4a2c-b518-388cac1b6834" property_host="mocksvc.mulesoft.com" property_port="443" property_basePath="/mocks/c3592ffd-1fb2-4734-afa2-fb798f21e4f7" property_protocol="HTTPS" />
-	<location-api:config name="Location_API_Config" doc:name="Location API Config" doc:id="c46d46eb-1f4f-4465-be97-5680bc5e68b7" property_host="mocksvc.mulesoft.com" property_port="443" property_basePath="/mocks/e5686b9d-885a-4be9-b95f-f3cf607eb467" property_protocol="HTTPS" />
+	<inventory-api:config name="Inventory_API_Config" doc:name="Inventory API Config" doc:id="847c7a1c-c341-4a2c-b518-388cac1b6834" property_basePath="/mocks/34250b66-0750-46f0-9bed-266dc97ce20b"/>
+	<location-api:config name="Location_API_Config" doc:name="Location API Config" doc:id="c46d46eb-1f4f-4465-be97-5680bc5e68b7" property_basePath="/mocks/3c1e5508-ab0d-4eb4-b815-4b6a960f25a8"/>
 	<flow name="product-finder-main">
         <http:listener config-ref="product-finder-httpListenerConfig" path="/api/*" doc:name="Listener">
             <http:response statusCode="#[vars.httpStatus default 200]" />
