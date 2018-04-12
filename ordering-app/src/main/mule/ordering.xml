@@ -289,11 +289,11 @@ output application/json
     "id": 3345001,
     "products": [
       {
-        "id": 7890002,
+        "id": 7890010,
         "amount": 1
       }
     ],
-    "totalAmountPrice": 69.95,
+    "totalAmountPrice": 49.00,
     "totalAmountPriceCurrency": "USD",
     "shippingStatus": "shipped",
     "customerID": 5640099

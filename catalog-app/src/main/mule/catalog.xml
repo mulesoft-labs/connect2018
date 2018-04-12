@@ -443,7 +443,70 @@ output application/json
             ],
             "averageRate": 4.9
         }      
-     }   
+     },
+     {
+        "id": 7890010,
+        "price": {
+        "value": 49.00,
+        "currency": "USD"
+        },
+			
+        "name": "Swarovski Crystalline Ballpoint Pen",
+        "description": "Your sparkling sense of style shines through with this stunning Swarovski crystalline pen with replaceable ink cartridge. Use it to record your most luxurious secrets and most fabulous thoughts. Available in silver-tone, 18k gold-plated and 18k rose gold tone-plated metal.",
+        "keywords": ["Swarovski", "Ballpoint"],
+        "copy": "Swarovski Crystalline Ballpoint Pen - Rose Gold Tone - 5224390",
+        "image": {
+        "id": 8540010,
+        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSMqg3PdM2510rvpTuawRe4wk-yOSA8p73EhoiratHb8FYgk_vqw4pkbehC6i__jFibXwPHa1E3&usqp=CAY"
+        },
+        "company": {
+            "id": 4607991,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Pen",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+    },
+    {
+        "id": 7890011,
+        "price": {
+	        "value": 68.59,
+	        "currency": "USD"
+        },
+        "name": "Coleman Sundome 2-Person Tent",
+        "description": "2 person 1 room domed tent. Great for small family solo travelers and first time campers. Easy two pole set up with shock corded 8.5 mm fiberglass poles that slip into continuous pole sleeves. Pin and ring design and instaclip attachments. Durable carry bag with separate storage bags for tents poles and stakes and sewn on instructions. Features: exclusive weatherTec system keeps you dry. Adjustable Variflo ventilation front zip door and vent window interior gear pocket and electrical access port and polyethylene. 1000 D- 140 g/sqm floor.",
+        "keywords": ["Tents", "Coleman", "Dome", "Camping", "2Person", "Four Season", "With Carry Bag"],
+        "copy": "Coleman Sundome 2-Person Tent, Green",
+        "image": {
+	        "id": 8540011,
+	        "url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTAB-NLTn_7HFbw2LhGAUNRosCjv5nvlyEWDjUyBuMlp9Zg5qEScR-EOUdKmh_ueKNA8JCDm2v0&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Tent",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+    }   
         
 ]]]></ee:set-payload>
             </ee:message>
@@ -813,7 +876,88 @@ output application/json
                     </ee:message>
                 </ee:transform>
             </when>
-            <otherwise>
+            <when expression="#[attributes.uriParams.product_id == '7890010']" >
+				<ee:transform doc:name="Product 7890010" doc:id="4c9a2eb8-2fb3-4e77-9806-67c26edbc89a" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+        "id": 7890010,
+        "price": {
+        "value": 49.00,
+        "currency": "USD"
+        },
+			
+        "name": "Swarovski Crystalline Ballpoint Pen",
+        "description": "Your sparkling sense of style shines through with this stunning Swarovski crystalline pen with replaceable ink cartridge. Use it to record your most luxurious secrets and most fabulous thoughts. Available in silver-tone, 18k gold-plated and 18k rose gold tone-plated metal.",
+        "keywords": ["Swarovski", "Ballpoint"],
+        "copy": "Swarovski Crystalline Ballpoint Pen - Rose Gold Tone - 5224390",
+        "image": {
+        "id": 8540010,
+        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSMqg3PdM2510rvpTuawRe4wk-yOSA8p73EhoiratHb8FYgk_vqw4pkbehC6i__jFibXwPHa1E3&usqp=CAY"
+        },
+        "company": {
+            "id": 4607991,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Pen",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+    }]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id == '7890011']" >
+				<ee:transform doc:name="Product 7890011" doc:id="969b878c-5daf-46af-bb7b-91e2ffd37f69" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+        "id": 7890011,
+        "price": {
+	        "value": 68.59,
+	        "currency": "USD"
+        },
+        "name": "Coleman Sundome 2-Person Tent",
+        "description": "2 person 1 room domed tent. Great for small family solo travelers and first time campers. Easy two pole set up with shock corded 8.5 mm fiberglass poles that slip into continuous pole sleeves. Pin and ring design and instaclip attachments. Durable carry bag with separate storage bags for tents poles and stakes and sewn on instructions. Features: exclusive weatherTec system keeps you dry. Adjustable Variflo ventilation front zip door and vent window interior gear pocket and electrical access port and polyethylene. 1000 D- 140 g/sqm floor.",
+        "keywords": ["Tents", "Coleman", "Dome", "Camping", "2Person", "Four Season", "With Carry Bag"],
+        "copy": "Coleman Sundome 2-Person Tent, Green",
+        "image": {
+	        "id": 8540011,
+	        "url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTAB-NLTn_7HFbw2LhGAUNRosCjv5nvlyEWDjUyBuMlp9Zg5qEScR-EOUdKmh_ueKNA8JCDm2v0&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Tent",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+    }]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise>
                 <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Product not found">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
