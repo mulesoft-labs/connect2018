@@ -20,7 +20,7 @@ http://www.mulesoft.org/schema/mule/location-api http://www.mulesoft.org/schema/
 		<http:request-connection protocol="HTTPS" host="api.dialogflow.com" port="443"/>
 	</http:request-config>
 	<api-gateway:autodiscovery apiId="11063377" doc:name="API Autodiscovery" doc:id="b8980674-37fc-412d-b906-7a0256b3fe3a" flowRef="send-UI-request-to-DialogFlow" />
-	<ordering-api:config name="Ordering_API_Config" doc:name="Ordering API Config" doc:id="125b4712-daa4-480f-affd-2639de5afc2c" property_host="mocksvc.mulesoft.com" property_port="443" property_basePath="/mocks/f3320813-7d4c-443e-b1ef-14b7a15e3ec4" property_protocol="HTTPS" />
+	<ordering-api:config name="Ordering_API_Config" doc:name="Ordering API Config" doc:id="125b4712-daa4-480f-affd-2639de5afc2c" property_host="ordering-app.cloudhub.io" property_port="80" property_basePath="/api" property_protocol="HTTP" />
 	<catalog-api:config name="Catalog_API_Config" doc:name="Catalog API Config" doc:id="1e3271b5-dd5e-4f0b-8166-cd88c7f87ece" property_host="catalog-app.cloudhub.io" property_port="80" property_basePath="/api" property_protocol="HTTP" />
 	<inventory-api:config name="Inventory_API_Config" doc:name="Inventory API Config" doc:id="3725dd54-2437-44dc-9f23-01981a84adc3" property_host="mocksvc.mulesoft.com" property_port="443" property_basePath="/mocks/34250b66-0750-46f0-9bed-266dc97ce20b" property_protocol="HTTPS" />
 	<location-api:config name="Location_API_Config" doc:name="Location API Config" doc:id="2cbe3040-250c-4dd6-aa19-64c270b36a07" property_host="mocksvc.mulesoft.com" property_port="443" property_basePath="/mocks/3c1e5508-ab0d-4eb4-b815-4b6a960f25a8" property_protocol="HTTPS" />
