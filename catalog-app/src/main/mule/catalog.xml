@@ -825,8 +825,8 @@ output application/json
             </otherwise>
         </choice>
     </flow>
-    <flow name="get:\catalog\products\(product_type):catalog-config">
-        <choice doc:name="Choice" doc:id="00f76858-5bd3-4290-b6dd-49bfb8c1317d" doc:name="Choice">
+    <flow name="get:\catalog\products\type\(product_type):catalog-config">
+        <choice doc:name="Choice" doc:id="00f76858-5bd3-4290-b6dd-49bfb8c1317d">
             <when expression="#[attributes.uriParams.product_type == 'lantern']">
                 <ee:transform doc:name="Lantern List" doc:id="583d7512-e44f-4a9d-a457-46f3cead2946">
                     <ee:message>
@@ -999,10 +999,10 @@ output application/json
                     </ee:message>
                 </ee:transform>
             </when>
-			<otherwise >
-				<ee:transform doc:name="All products" doc:id="c028a564-e0e4-464c-ae86-2b4fe31ed166" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+            <otherwise>
+                <ee:transform doc:name="All products" doc:id="c028a564-e0e4-464c-ae86-2b4fe31ed166">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 [
@@ -1319,9 +1319,9 @@ output application/json
      }   
         
 ]]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</otherwise>
+                    </ee:message>
+                </ee:transform>
+            </otherwise>
         </choice>
     </flow>
 	<flow name="post:\catalog\products:application\json:catalog-config">

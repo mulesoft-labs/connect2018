@@ -21,7 +21,14 @@ resourceTypes:
         response-type: product.ProductData
         request-type: product.NewProductData
         response-example:  !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductCollectionExample.raml
-    /{product_type}:
+    /{product_id}:
+      type:
+        member:
+          get-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductExample.raml
+          get-response-type: product.ProductData
+          patch-response-type: product.ProductData
+          patch-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductExample.raml
+    /type/{product_type}:
       description: Retrieves all the products from a particular type
       get:
         responses:
@@ -30,10 +37,3 @@ resourceTypes:
             application/json:
               type: product.ProductData[]
               example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductCollectionExample.raml
-    /{product_id}:
-      type:
-        member:
-          get-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductExample.raml
-          get-response-type: product.ProductData
-          patch-response-type: product.ProductData
-          patch-response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-examples/1.0.17/ProductExample.raml
