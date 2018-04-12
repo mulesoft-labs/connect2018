@@ -114,7 +114,7 @@
     	<dependency>
             <groupId>a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54</groupId>
             <artifactId>catalog-api</artifactId>
-            <version>1.0.16</version>
+            <version>1.0.17</version>
             <classifier>mule-plugin</classifier>
         </dependency>
     </dependencies>

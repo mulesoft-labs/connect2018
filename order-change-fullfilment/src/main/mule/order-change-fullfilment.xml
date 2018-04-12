@@ -20,10 +20,10 @@ http://www.mulesoft.org/schema/mule/location-api http://www.mulesoft.org/schema/
 		<http:request-connection protocol="HTTPS" host="api.dialogflow.com" port="443"/>
 	</http:request-config>
 	<api-gateway:autodiscovery apiId="11063377" doc:name="API Autodiscovery" doc:id="b8980674-37fc-412d-b906-7a0256b3fe3a" flowRef="send-UI-request-to-DialogFlow" />
-	<ordering-api:config name="Ordering_API_Config" doc:name="Ordering API Config" doc:id="125b4712-daa4-480f-affd-2639de5afc2c" property_host="mocksvc.mulesoft.com" property_port="433" property_basePath="/mocks/976b040b-97fb-4d0e-b98b-0ab2154f7f97" property_protocol="HTTPS" />
+	<ordering-api:config name="Ordering_API_Config" doc:name="Ordering API Config" doc:id="125b4712-daa4-480f-affd-2639de5afc2c" property_host="mocksvc.mulesoft.com" property_port="443" property_basePath="/mocks/f3320813-7d4c-443e-b1ef-14b7a15e3ec4" property_protocol="HTTPS" />
 	<catalog-api:config name="Catalog_API_Config" doc:name="Catalog API Config" doc:id="1e3271b5-dd5e-4f0b-8166-cd88c7f87ece" property_host="catalog-app.cloudhub.io" property_port="80" property_basePath="/api" property_protocol="HTTP" />
-	<inventory-api:config name="Inventory_API_Config" doc:name="Inventory API Config" doc:id="3725dd54-2437-44dc-9f23-01981a84adc3" />
-	<location-api:config name="Location_API_Config" doc:name="Location API Config" doc:id="2cbe3040-250c-4dd6-aa19-64c270b36a07" />
+	<inventory-api:config name="Inventory_API_Config" doc:name="Inventory API Config" doc:id="3725dd54-2437-44dc-9f23-01981a84adc3" property_host="mocksvc.mulesoft.com" property_port="443" property_basePath="/mocks/34250b66-0750-46f0-9bed-266dc97ce20b" property_protocol="HTTPS" />
+	<location-api:config name="Location_API_Config" doc:name="Location API Config" doc:id="2cbe3040-250c-4dd6-aa19-64c270b36a07" property_host="mocksvc.mulesoft.com" property_port="443" property_basePath="/mocks/3c1e5508-ab0d-4eb4-b815-4b6a960f25a8" property_protocol="HTTPS" />
 	<flow name="send-UI-request-to-DialogFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
 		<http:listener doc:name="Listener" doc:id="31da4c63-7064-4eea-ab24-c43e4a3fba5e" config-ref="HTTP_Listener_config" path="/request" outputMimeType="application/json"/>
 		<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json">
@@ -248,24 +248,6 @@ payload.amount as Number]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 			<flow-ref doc:name="build_full_product_Flow" doc:id="15d0812c-2135-4c70-9d33-e8bfcebdb12a" name="build_full_product_Flow"/>
-			<ee:transform doc:name="Transform Message" doc:id="d51c1679-bfb2-4b3a-9282-ec73eb772605" >
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
----
-{
-	id: payload.productData.id,
-	price: payload.productData.price,
-	description: payload.productData.description,
-	copy: payload.productData.copy,
-	image: payload.productData.image,
-	category: payload.productData.category,
-	quantity: payload.inventoryData.quantity,
-	location: payload.locationData,
-	quantity: vars.quantity
-}]]></ee:set-payload>
-				</ee:message>
-			</ee:transform>
 			<scripting:execute engine="groovy" doc:name="Execute" doc:id="0aa320fa-4386-46b0-88b3-3c7de94b5993">
                 <scripting:code>vars.fullProductList.add(payload)</scripting:code>
             </scripting:execute>
@@ -319,9 +301,9 @@ output application/json
 		</ee:transform>
 	</sub-flow>
 	    <sub-flow name="build_full_product_Flow" doc:id="97aaf00e-c810-40fe-928e-545bb21c31f1" >
-		<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="4338f825-2146-4559-89f4-1ee61c46db49" config-ref="Catalog_API_Config" product-id="#[vars.productID]"/>
-		<inventory-api:get-inventory-by-product-id doc:name="Get inventory by product id" doc:id="8b465eee-7d65-4180-a314-08da6432276a" config-ref="Inventory_API_Config" product-id="#[vars.productData.id]"/>
-		<location-api:get-location-by-location-id doc:name="Get location by location id" doc:id="15f19482-6c82-4307-bc15-95875a97f044" config-ref="Location_API_Config" location-id="#[vars.inventoryData.location_id]"/>
+		<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="4338f825-2146-4559-89f4-1ee61c46db49" config-ref="Catalog_API_Config" product-id="#[vars.productID]" target="productData"/>
+		<inventory-api:get-inventory-by-product-id doc:name="Get inventory by product id" doc:id="8b465eee-7d65-4180-a314-08da6432276a" config-ref="Inventory_API_Config" product-id="#[vars.productData.id]" target="inventoryData"/>
+		<location-api:get-location-by-location-id doc:name="Get location by location id" doc:id="15f19482-6c82-4307-bc15-95875a97f044" config-ref="Location_API_Config" location-id="#[vars.inventoryData.location_id]" target="locationData"/>
 		<ee:transform doc:name="Build complete product data" doc:id="e1976893-0663-41e8-bb31-7158d26c175d">
                 <ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -343,7 +325,7 @@ output application/java
             </ee:transform>
 	</sub-flow>
 	<sub-flow name="change-order-quantity-confirmation" doc:id="a39e8416-3103-4681-afa6-88eb7a617ec0" >
-		<catalog-api:get-product-by-product-type doc:name="Get product by product type" doc:id="fb6135f0-39fd-489f-aa02-c5c64594c5e6" config-ref="Catalog_API_Config" product-type="lantern"/>
+		<catalog-api:get-type-by-product-type doc:name="Get type by product type" doc:id="48e0828b-7fa0-44ce-a990-20bc2de10937" config-ref="Catalog_API_Config" product-type="lantern"/>
 		<ee:transform doc:name="5 Lanterns response payload" doc:id="16addbf1-f0f3-4c7e-b839-3b84b2193c53">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -653,5 +635,6 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="eb822827-8c82-4fbb-a161-02f7f839ab93" message="#[payload]"/>
 	</sub-flow>
 </mule>
