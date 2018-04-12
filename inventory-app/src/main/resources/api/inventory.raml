@@ -1,0 +1,70 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/34250b66-0750-46f0-9bed-266dc97ce20b # 
+
+title: Inventory API
+
+version: 1.0
+mediaType: application/json
+
+uses:
+  inventory: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/inventory-datatypes/1.0.2/inventoryTypes.raml
+
+resourceTypes:
+  collection: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.2/collection.raml
+  member: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.2/member.raml
+
+/inventory:
+  get:
+    description: Returns a collection of inventory.Inventory
+    responses:
+      200:
+        body:
+          type: inventory.Inventory[]
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/inventory-examples/1.0.6/inventory-collection-example.raml
+  post:
+    description: Add a new inventory.Inventory item
+    body:
+      type: inventory.NewInventory
+      example: !include exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/inventory-examples/1.0.6/new-inventory-item-example.raml
+    responses:
+      200:
+        body:
+          type: inventory.Inventory
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/inventory-examples/1.0.6/InventoryExample.raml
+
+  /{inventory_id}:
+    get:
+      description: Returns a inventory.Inventory that matches with inventory_id code
+      responses:
+        200:
+          body:
+            type: inventory.Inventory
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/inventory-examples/1.0.6/InventoryExample.raml
+    patch:
+      description: update a inventory.Inventory item
+      body:
+        type: inventory.Inventory
+        example: !include exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/inventory-examples/1.0.6/InventoryExample.raml
+      responses:
+        200:
+          body:
+            type: inventory.Inventory
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/inventory-examples/1.0.6/InventoryExample.raml            
+
+  /{location_id}:
+    get:
+      description: Returns a collection of inventory.Inventory that matches with location_id code
+      responses:
+        200:
+          body:
+            type: inventory.Inventory[]
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/inventory-examples/1.0.6/specific-inventory-collection-example.raml
+
+  /{product_id}:
+    get:
+      description: Returns a collection of inventory.Inventory that matches with product_id code
+      responses:
+        200:
+          body:
+            type: inventory.Inventory[]
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/inventory-examples/1.0.6/inventory-collection-example.raml            

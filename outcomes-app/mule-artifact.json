@@ -1,0 +1,33 @@
+{
+  "configs": [
+    "outcomes-api.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "outcomes-app",
+  "minMuleVersion": "4.1.1",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedResources": [
+        "api/.gitignore",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.2/collection.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.2/member.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/content-cacheable.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/pageable.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/sortable.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/traits.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-datatypes/1.0.5/outcomes-datatypes.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/new-outcomes-response-examples.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/outcomes-request-example.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/outcomes-response-example.raml",
+        "api/outcomes-api.raml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

@@ -1,0 +1,20 @@
+#%RAML 1.0 Library
+
+usage: Customer Types
+uses:
+  util: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-datatypes/1.0.0/utilTypes.raml
+  location: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-datatypes/1.0.0/locationTypes.raml
+
+types:
+  NewCustomer:
+    properties:
+      login: string
+      fullName: string
+      email: string
+      avatar: util.ImageData
+      address: location.AddressData
+
+  Customer:
+    type: NewCustomer
+    properties:
+      customerID: number

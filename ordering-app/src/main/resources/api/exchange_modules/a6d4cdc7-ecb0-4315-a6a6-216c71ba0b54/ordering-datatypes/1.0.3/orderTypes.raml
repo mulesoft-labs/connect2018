@@ -1,0 +1,33 @@
+#%RAML 1.0 Library
+
+usage: Order Types
+uses:
+  product: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/catalog-datatypes/1.0.1/productTypes.raml
+  customer: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-datatypes/1.0.1/customer-datatypes.raml
+
+types:
+  ShippedStatus:
+    enum: [shipped, non-shipped, canceled]
+
+  OrderProduct:
+    properties:
+      id: number
+      amount: number
+
+  NewOrder:
+    properties:
+      totalAmountPrice: number
+      totalAmountPriceCurrency: string
+      shippingStatus: ShippedStatus
+      customerID: number
+      products: OrderProduct[]
+
+  Order:
+    type: NewOrder
+    properties:
+      id: number
+
+  PatchOrderProduct:
+    properties: 
+      id: number
+      products: OrderProduct[]

@@ -1,0 +1,52 @@
+#%RAML 1.0  Library
+
+usage: Outcomes Types
+
+types:
+  Question:
+    properties:
+      question: string
+      id: number
+  NewOutcomesResponse:
+    properties:
+      id: number
+      type: string
+      keywords: string[]
+      questions: Question[]
+  Answer:
+    properties: 
+      question_id: number
+      answer: string
+  OutcomesRequest:
+    properties:
+      outcome_id: number
+      type: string
+      answers: Answer[]
+  AnswerKeyword:
+    type: Answer
+    properties:
+      id: number
+  Image:
+    properties:
+      id: number
+      url: string
+  Price:
+    properties:
+      value: number
+      currency: string
+  RecommendItem:
+    properties:
+      id: number
+      name: string
+      description: string
+      image: Image
+      price: Price
+      category: string
+      link: string
+  OutcomesResponse:
+    properties:
+      outcome_id: number
+      type: string
+      answers_keywords: AnswerKeyword[]
+      profile: string
+      recommend_items: RecommendItem[]

@@ -1,0 +1,46 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/3c1e5508-ab0d-4eb4-b815-4b6a960f25a8 # 
+
+title: Location API
+
+version: 1.0
+mediaType: application/json
+
+uses:
+  location: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/locations-datatypes/1.0.2/locations-datatypes.raml
+
+/locations:
+  get:
+    description: Returns a collection of location.Locations
+    responses:
+      200:
+        body:
+          type: location.Locations
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/locations-examples/1.0.8/locations-collection-examples.raml
+  post:
+    description: Insert a new location.Location
+    body:
+      type: location.NewLocation        
+    responses:
+      200:
+        body:
+          type: location.Location
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/locations-examples/1.0.8/locations-examples.raml
+  patch:
+    description: Update location.Location data
+    body:
+      type: location.Location        
+    responses:
+      200:
+        body:
+          type: location.Location
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/locations-examples/1.0.8/locations-examples.raml
+
+  /{location_id}:
+    get:
+      description: Returns a location.Location
+      responses:
+        200:
+          body:
+            type: location.Location
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/locations-examples/1.0.8/locations-examples.raml

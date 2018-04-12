@@ -1,0 +1,24 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/4c251679-14a0-45ea-b046-3cc81ffb8df0 # 
+
+title: Googles` Merchant API
+
+version: 1.0
+mediaType: application/json
+
+uses:
+  google: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/google-merchant-datatypes/1.0.5/GoogleMerchantTypes.raml
+
+/products:
+  get:
+    description: Returns a collection of google.
+    responses:
+      200:
+        body:
+          type: google.GMerchantProductList
+          example: !include exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/google-merchant-examples/1.0.16/ListProductResponseExample.raml
+  post:
+    description: Post a product to Google
+    body:
+      application/json:
+        type: google.NewGMerchantProduct

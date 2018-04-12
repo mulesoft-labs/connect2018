@@ -1,0 +1,47 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/890da03f-dada-4e76-abce-80b073c2e951 # 
+
+title: Customer API
+
+version: 1.0
+mediaType: application/json
+uses:
+  customer: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-datatypes/1.0.4/customerTypes.raml
+
+/customers:
+  get:
+    description: Returns a collection of customer.Customer
+    responses:
+      200:
+        body:
+          type: customer.Customer[]
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-examples/1.0.6/CustomerCollectionExample.raml
+  post:
+    description: Insert a new customer.Customer
+    body:
+      type: customer.NewCustomer
+      example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-examples/1.0.6/NewCustomerExample.raml
+    responses:
+      200:
+        body:
+          type: customer.Customer
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-examples/1.0.6/CustomerExample.raml
+  patch:
+    description: Update location.Location data
+    body:
+      type: customer.Customer
+      example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-examples/1.0.6/CustomerExample.raml        
+    responses:
+      200:
+        body:
+          type: customer.Customer
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-examples/1.0.6/CustomerExample.raml
+
+  /{customer_id}:
+    get:
+      description: Returns a customer.Customer
+      responses:
+        200:
+          body:
+            type: customer.Customer
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-examples/1.0.6/CustomerExample.raml

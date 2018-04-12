@@ -1,0 +1,15 @@
+#%RAML 1.0 Library
+
+usage: Inventory Types
+
+types:
+  NewInventory:
+    properties: 
+      product_id: number
+      quantity: number
+      location_id: number
+
+  Inventory:
+    type: NewInventory
+    properties: 
+      id: number

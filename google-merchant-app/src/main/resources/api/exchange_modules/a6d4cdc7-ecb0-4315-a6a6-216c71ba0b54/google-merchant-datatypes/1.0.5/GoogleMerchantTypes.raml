@@ -1,0 +1,150 @@
+#%RAML 1.0 Library
+
+usage: Google Merchant API Types
+uses:
+
+types:
+  Destinations:
+    properties:
+      destinationName: string
+      intention: string
+
+  Price:
+    properties:
+      # The price represented as a number.
+      value: string
+      # The currency of the price.
+      currency: string
+  Tax:
+    properties:
+      # The country within which the item is taxed, specified as a CLDR territory code. 
+      country: string
+      # The numeric id of a location that the tax rate applies to as defined in the AdWords API (https://developers.google.com/adwords/api/docs/appendix/geotargeting).
+      locationId: number
+      # The percentage of tax rate that applies to the item price.
+      rate: number
+      # Set to true if tax is charged on shipping.
+      taxShip: boolean
+
+  NewGMerchantProduct:
+    properties:
+      # The item's channel (online or local). 
+      #
+      # Acceptable values are:
+      # "local"
+      # "online"
+      channel: string
+      # The two-letter ISO 639-1 language code for the item.
+      contentLanguage: string
+      # A unique identifier for the item. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. Only valid unicode characters are accepted. See the products feed specification for details.
+      #
+      # Note: Content API methods that operate on products take the REST id of the product, not this identifier.
+      offerId: string
+      # The CLDR territory code for the item.
+      targetCountry: string
+      # Your product’s name
+      title: string
+      # Your product’s description
+      description: string
+      # URL directly linking to your item's page on your website.
+      link: string
+      # TURL of an image of the item.
+      imageLink: string
+      # Availability status of the item. 
+      #
+      #  Acceptable values are:
+      #  "in stock"
+      #  "out of stock"
+      #  "preorder"
+      availability: string
+      # a Price Object
+      price: Price
+      # Your product’s brand name
+      brand: string
+      # Your product’s Manufacturer Part Number (mpn)
+      mpn: string
+      # Your product’s condition
+      #
+      # Supported values:
+      #  "new"
+      #  Brand new, original, unopened packaging
+      #
+      #  "refurbished" 
+      #  Professionally restored to working order, comes with a warranty, may or may not have the original packaging
+      #
+      #  "used" 
+      #  Previously used, original packaging opened or missing
+      condition: string
+      # Google's category of the item (see Google product taxonomy https://support.google.com/merchants/answer/1705911).
+      googleProductCategory: string
+      # Target age group of the item. 
+      #
+      # Acceptable values are:
+      # "adult"
+      # "infant"
+      # "kids"
+      # "newborn"
+      # "toddler"
+      ageGroup: string
+      # Your product’s color(s)
+      color: string
+      # Your product’s targeted gender
+      #
+      # Supported values:
+      # "Male"
+      # "Female"
+      # "Unisex"
+      gender: string
+      # Your product’s fabric or material
+      material: string
+      # System in which the size is specified. Recommended for apparel items. 
+      #
+      # Acceptable values are:
+      # "AU"
+      # "BR"
+      # "CN"
+      # "DE"
+      # "EU"
+      # "FR"
+      # "IT"
+      # "JP"
+      # "MEX"
+      # "UK"
+      # "US"
+      sizeSystem?: string
+      # The cut of the item. Recommended for apparel items. 
+      #
+      # Acceptable values are:
+      # "big and tall"
+      # "maternity"
+      # "oversize"
+      # "petite"
+      # "plus"
+      # "regular"
+      sizeType: string
+      # Your product’s size
+      sizes?: string[]
+      # ID for a group of products that come in different versions (variants)
+      itemGroupId: string
+      # A list of Tax information.
+      taxes?: Tax[]
+      gtin?: string
+      adult?: string
+      multipack?: number
+      isBundle?: boolean
+      pattern?: string
+      destinations?: Destinations[]
+
+  GMerchantProduct:
+    type: NewGMerchantProduct
+    properties:
+      # Google's internal control code
+      kind: string
+      # Google's internal control id
+      id: string
+
+  GMerchantProductList:
+    properties: 
+      kind: string
+      resources: GMerchantProduct[]
+      
