@@ -28,6 +28,6 @@
   },
   "bundleDescriptorLoader": {
     "id": "mule",
-    "attributes": { }
+    "attributes": {}
   }
 }

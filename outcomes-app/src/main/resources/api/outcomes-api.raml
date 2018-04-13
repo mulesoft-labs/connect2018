@@ -1,5 +1,5 @@
-#%RAML 1.0
-baseUri: https://mocksvc.mulesoft.com/mocks/06afd393-0e6f-426e-a141-326c9050e6a2 # 
+#%RAML 1.0 
+baseUri: https://mocksvc.mulesoft.com/mocks/73c5dc46-2666-434d-b7ee-587dc5c2d5a5 # 
 title: Outcomes API
 
 version: 1.0
@@ -9,17 +9,18 @@ uses:
   outcomes: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-datatypes/1.0.5/outcomes-datatypes.raml
 
 /outcomes:
-  get:
-    queryParameters: 
-      keywords:
-        type: string[]
-    description: Returns a outcomes.NewOutcomesResponse
-    responses:
-      200:
-        body:
-          type: outcomes.NewOutcomesResponse
-          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/new-outcomes-response-examples.raml
-  /{outcome_type}:
+  /keywords:
+    get:
+      queryParameters: 
+        keywords:
+          type: string[]
+      description: Returns a outcomes.NewOutcomesResponse
+      responses:
+        200:
+          body:
+            type: outcomes.NewOutcomesResponse
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/new-outcomes-response-examples.raml
+  /type/{outcome_type}:
     get:
       description: Returns a outcomes.NewOutcomesResponse
       responses:
@@ -27,14 +28,20 @@ uses:
           body:
             type: outcomes.NewOutcomesResponse
             example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/new-outcomes-response-examples.raml
-  /outcome:
-    post:
-      description: Creating a outcomes.OutcomesRequest
-      body:
-        type: outcomes.OutcomesRequest
-        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/outcomes-request-example.raml
+  /outcome/{outcome_id}:
+    get:
+      description: Retrieve a outcomes.OutcomesResponse
       responses:
         200:
           body:
             type: outcomes.OutcomesResponse
             example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/outcomes-response-example.raml
+  /outcome:
+    post:
+      description: Creating a outcomes.OutcomesRequest
+      responses:
+        201:
+          headers:
+            Content-Location:
+              type: string
+              example: https://mocksvc.mulesoft.com/mocks/06afd393-0e6f-426e-a141-326c9050e6a2/outcomes/outcome/612009
