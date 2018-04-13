@@ -130,18 +130,17 @@ output application/json
         </error-handler>
     </flow>
     <flow name="get:\outcomes\keywords:outcomes-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="f58dbe8f-6ce4-46a5-92fd-20dfbb0d0501">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
   id: 612009,
-  "type": "camping",
+  "type": "tent camping",
   keywords: [
     "camping", 
-    "outdoor", 
-    "florest", 
+    "outdoor",
     "tent", 
     "sleeping bag", 
     "lantern"
@@ -176,7 +175,7 @@ output application/json
 ---
 {
 	"outcome_id": 612009,
-	"type": "camping",
+	"type": "tent camping",
 	"answers_keywords": [
 		{ 
 			"id": 2001, 
@@ -208,18 +207,17 @@ output application/json
     </flow>
     <flow name="get:\outcomes\type\(outcome_type):outcomes-api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="cc2150d3-aa11-40e8-b5c7-59715c93fd9f">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
   id: 612009,
-  "type": "camping",
+  "type": "tent camping",
   keywords: [
     "camping", 
     "outdoor", 
-    "florest", 
     "tent", 
     "sleeping bag", 
     "lantern"
