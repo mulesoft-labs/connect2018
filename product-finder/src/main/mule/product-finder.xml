@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:location-api="http://www.mulesoft.org/schema/mule/location-api" xmlns:inventory-api="http://www.mulesoft.org/schema/mule/inventory-api" xmlns:catalog-api="http://www.mulesoft.org/schema/mule/catalog-api" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:location-api="http://www.mulesoft.org/schema/mule/location-api" xmlns:inventory-api="http://www.mulesoft.org/schema/mule/inventory-api" xmlns:catalog-api="http://www.mulesoft.org/schema/mule/catalog-api" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
 http://www.mulesoft.org/schema/mule/catalog-api http://www.mulesoft.org/schema/mule/catalog-api/current/mule-catalog-api.xsd
 http://www.mulesoft.org/schema/mule/inventory-api http://www.mulesoft.org/schema/mule/inventory-api/current/mule-inventory-api.xsd
-http://www.mulesoft.org/schema/mule/location-api http://www.mulesoft.org/schema/mule/location-api/current/mule-location-api.xsd">
-    <http:listener-config name="product-finder-httpListenerConfig" doc:name="HTTP Listener config">
-        <http:listener-connection host="0.0.0.0" port="8081" />
+http://www.mulesoft.org/schema/mule/location-api http://www.mulesoft.org/schema/mule/location-api/current/mule-location-api.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+    <http:listener-config name="product-finder-httpsListenerConfig" doc:name="HTTP Listener config">
+        <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
+			</tls:context>
+		</http:listener-connection>
     </http:listener-config>
     <apikit:config name="product-finder-config" raml="product-finder.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" />
-    <catalog-api:config name="Catalog_API_Config" doc:name="Catalog API Config" doc:id="800befc8-2630-462e-90ac-0483b5085879" property_host="catalog-app.cloudhub.io" property_port="80" property_basePath="/api" property_protocol="HTTP" />
-	<inventory-api:config name="Inventory_API_Config" doc:name="Inventory API Config" doc:id="847c7a1c-c341-4a2c-b518-388cac1b6834" property_basePath="/mocks/34250b66-0750-46f0-9bed-266dc97ce20b"/>
-	<location-api:config name="Location_API_Config" doc:name="Location API Config" doc:id="c46d46eb-1f4f-4465-be97-5680bc5e68b7" property_basePath="/mocks/3c1e5508-ab0d-4eb4-b815-4b6a960f25a8"/>
+    <catalog-api:config name="Catalog_API_Config" doc:name="Catalog API Config" doc:id="800befc8-2630-462e-90ac-0483b5085879" property_host="catalog-app.cloudhub.io" property_basePath="/api"/>
+	<inventory-api:config name="Inventory_API_Config" doc:name="Inventory API Config" doc:id="847c7a1c-c341-4a2c-b518-388cac1b6834" property_basePath="/api" property_host="inventory-app.cloudhub.io"/>
+	<location-api:config name="Location_API_Config" doc:name="Location API Config" doc:id="c46d46eb-1f4f-4465-be97-5680bc5e68b7" property_basePath="/api" property_host="locations-app.cloudhub.io"/>
+	<global-property doc:name="Global Property" doc:id="9cfa0f01-f2b9-43d7-be82-001a11fc15b3" name="https.port" value="8082" />
 	<flow name="product-finder-main">
-        <http:listener config-ref="product-finder-httpListenerConfig" path="/api/*" doc:name="Listener">
+        <http:listener config-ref="product-finder-httpsListenerConfig" path="/api/*" doc:name="Listener">
             <http:response statusCode="#[vars.httpStatus default 200]" />
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body><![CDATA[#[payload]]]></http:body>
@@ -100,7 +106,7 @@ output application/json
         </error-handler>
     </flow>
     <flow name="product-finder-console">
-        <http:listener config-ref="product-finder-httpListenerConfig" path="/console/*" doc:name="Listener">
+        <http:listener config-ref="product-finder-httpsListenerConfig" path="/console/*" doc:name="Listener">
             <http:response statusCode="#[vars.httpStatus default 200]" />
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body><![CDATA[#[payload]]]></http:body>
@@ -178,7 +184,7 @@ output application/java
 	</sub-flow>
 	<flow name="post:\products:application\json:product-finder-config">
         <choice doc:name="Choice" doc:id="8225b14b-dbee-4006-a89d-00cd047537ae" >
-			<when expression="#[isEmpty(payload)]" >
+			<when expression="#[payload == null or isEmpty(payload)]" >
 				<set-payload value="{}" doc:name="There is no payload, so return a empty payload too..." doc:id="6a10351f-09fe-4925-9950-796f5533d743" mimeType="application/json" />
 			</when>
 			<otherwise>
@@ -197,8 +203,38 @@ output application/json
 	location: payload.location
 }]]></ee:set-payload>
 					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="product" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	price: payload.price,
+	description: payload.description,
+	copy: payload.copy,
+	image: payload.image,
+	category: payload.category,
+	quantity: payload.quantity,
+	location: payload.location
+}]]></ee:set-variable>
+					</ee:variables>
 				</ee:transform>
 				<catalog-api:create-product doc:name="Create product" doc:id="f54c89d5-e9ae-4168-988a-1451c619f376" config-ref="Catalog_API_Config"/>
+				<ee:transform doc:name="Transform Message" doc:id="96f4760f-b6fc-4fed-83d3-50c8f10dbe2c" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	price: payload.price,
+	description: payload.description,
+	copy: payload.copy,
+	image: payload.image,
+	category: vars.product.category,
+	quantity: vars.product.quantity,
+	location: vars.product.location
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</otherwise>
 		</choice>
     </flow>
@@ -227,7 +263,37 @@ payload]]></ee:set-payload>
         <logger level="INFO" message="delete:\products\(product_id):product-finder-config" />
     </flow>
     <flow name="patch:\products\(product_id):product-finder-config">
-        <logger level="INFO" message="patch:\products\(product_id):product-finder-config" />
+		<ee:transform doc:name="Transform Message" doc:id="ae8c673e-471f-4f5b-9098-27601173d47c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "id": 7890001,
+    "price": {
+      "value": 47.95,
+      "currency": "USD"
+    },
+    "description": "Made from the same warm material as the adult size for backpacking and family camping, Eureka's Cyprus Junior is a three-season sleeping bag with toasty ThermaShield insulation that's temperature rated at 15°F. The boy-specific junior size and fit reduces unnecessary weight and bulk while on the trail.",
+    "copy": "Eureka 15°F Cypress Junior Sleeping Bag - Mummy (for Boys) - Grey/Green ( )",
+    "image": {
+      "id": 8540001,
+      "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
+    },
+    "category": "Sleeping Bags",
+    "quantity": 1010,
+    "location": {
+      "id": 8624,
+      "addressType": "STORE",
+      "country": "USA",
+      "state": "CA",
+      "city": "San Francisco",
+      "street_address": "610 Old Mason Street",
+      "zip": 94129
+    }
+ }]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
     </flow>
     <flow name="post:\products\price\(price):application\json:product-finder-config">
         <logger level="INFO" message="post:\products\price\(price):application\json:product-finder-config" />
