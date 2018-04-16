@@ -1,0 +1,317 @@
+[
+    {
+        "id": "orderId123456",
+        "metadata": {
+            "mixins": {
+                "additionalCode": "https://${api.proxy}/hybris/schema/v1/kiwistest/example-schema.json"
+            }
+        },
+        "mixins": {
+            "additionalCode": {
+                "code": "DFG-334-98330-X"
+            }
+        },
+        "created": "2014-03-31T10:18:21.134Z",
+        "completed": "2014-04-15T10:18:21.134Z",
+        "lastStatusChange": "2014-04-15T10:18:21.134Z",
+        "status": "COMPLETED",
+        "siteCode": "Germany",
+        "entries": [
+            {
+                "id": "1234546",
+                "amount": 2,
+                "originalAmount": 450,
+                "unitPrice": 420,
+                "totalPrice": 840,
+                "link": "https://${api.proxy}/hybris/product/v2/products/MUG",
+                "product": {
+                    "description": "A mug you've always wanted !",
+                    "name": "Mug",
+                    "sku": "mug-product",
+                    "published": true,
+                    "images": [
+                        {
+                            "id": "media123456",
+                            "url": "https://${api.proxy}/hybris/product/v2/media/media123456?tenantInfo"
+                        }
+                    ]
+                },
+                "variant": {
+                    "id": "438954845899094",
+                    "name": "Black Small YaaS Mug",
+                    "code": "yaas-mug-black-small",
+                    "images": [
+                        {
+                            "id": "12345678",
+                            "url": "https://${api.proxy}/hybris/product/v2/media/12345678?tenantInfo"
+                        }
+                    ],
+                    "options": {
+                        "mug": {
+                            "color": "black",
+                            "size": "small"
+                        }
+                    },
+                    "mixins": {
+                        "additionalVariantCode": {
+                            "code": "variant code"
+                        }
+                    }
+                }
+            },
+            {
+                "id": "1234547",
+                "amount": 5,
+                "unitPrice": 240,
+                "totalPrice": 1200,
+                "product": {
+                    "metadata": {
+                        "mixins": {
+                            "color": "https://${api.proxy}/hybris/schema/v1/kiwistest/color_v1.json"
+                        }
+                    },
+                    "description": "A Shirt you've always wanted !",
+                    "name": "Shirt",
+                    "sku": "shirt-product",
+                    "published": true,
+                    "images": [
+                        {
+                            "id": "media1234567",
+                            "url": "https://${api.proxy}/hybris/product/v2/media/media1234567?tenantInfo"
+                        }
+                    ],
+                    "mixins": {
+                        "color": {
+                            "red": 234,
+                            "green": 231,
+                            "blue": 123
+                        }
+                    }
+                },
+                "variant": {
+                    "id": "968954845899234",
+                    "name": "Black Small YaaS T-Shirt",
+                    "code": "yaas-t-shirt-black-small",
+                    "images": [
+                        {
+                            "id": "12345679",
+                            "url": "https://${api.proxy}/hybris/product/v2/media/12345679?tenantInfo"
+                        }
+                    ],
+                    "options": {
+                        "tshirt": {
+                            "color": "black",
+                            "size": "small"
+                        }
+                    },
+                    "mixins": {
+                        "additionalVariantCode": {
+                            "code": "variant code"
+                        }
+                    }
+                }
+            }
+        ],
+        "discounts": [
+            {
+                "code": "SUMMER_SALE",
+                "name": "Summer Sale 10% off everything",
+                "amount": 204,
+                "currency": "USD",
+                "discountRate": 10,
+                "sequenceId": 1,
+                "link": {
+                    "id": "B2TD3JM",
+                    "type": "y-coupon",
+                    "url": "https://${api.proxy}/hybris/coupon/v1/coupons/B2TD3JM"
+                }
+            }
+        ],
+        "customer": {
+            "id": "C1234567890",
+            "title": "Dr.",
+            "name": "Example Buyer",
+            "firstName": "Example",
+            "lastName": "Buyer",
+            "email": "noreply@yaastest.com",
+            "company": "hybris"
+        },
+        "billingAddress": {
+            "contactName": "Example Buyer",
+            "street": "Nymphenburger Str.",
+            "streetNumber": "86",
+            "city": "Munich",
+            "state": "Bavaria",
+            "country": "Germany",
+            "zipCode": "132 45",
+            "contactPhone": "+49 1111 222 333"
+        },
+        "shippingAddress": {
+            "contactName": "Joe Smith",
+            "companyName": "Cargo Services Airfreight",
+            "street": "Cheng Xiang Zhen Guan Tang Lu",
+            "streetNumber": "1031",
+            "extraLine1": "No. 2058",
+            "extraLine2": "Suzhou City",
+            "zipCode": "201202",
+            "city": "Taicang City",
+            "state": "Jiangsu Province",
+            "country": "CN",
+            "contactPhone": "+86 182 9349 4663",
+            "metadata": {
+                "mixins": {
+                    "secondaryContactPhone": "https://${api.proxy}/hybris/schema/v1/kiwistest/contact-number.json"
+                }
+            },
+            "mixins": {
+                "secondaryContactPhone": {
+                    "number": "+86 334 0033 9934"
+                }
+            }
+        },
+        "subTotalPrice": 1881,
+        "totalPrice": 2041,
+        "currency": "USD",
+        "payments": [
+            {
+                "status": "SUCCESS",
+                "method": "STRIPE",
+                "paymentResponse": "",
+                "paidAmount": 2041,
+                "currency": "USD"
+            }
+        ],
+        "tax": {
+            "total": {
+                "amount": 150,
+                "currency": "USD"
+            },
+            "lines": [
+                {
+                    "amount": 150,
+                    "currency": "USD",
+                    "code": "VAT",
+                    "name": "Regular VAT",
+                    "rate": 10,
+                    "taxable": 1500,
+                    "sequenceId": 1,
+                    "inclusive": false
+                }
+            ]
+        },
+        "shipping": {
+            "total": {
+                "amount": 10,
+                "currency": "USD"
+            },
+            "lines": [
+                {
+                    "amount": 10,
+                    "currency": "USD",
+                    "code": "dhlstd",
+                    "name": "DHL Standard"
+                }
+            ]
+        },
+        "shipments": [
+            {
+                "trackingNumber": "123987456",
+                "carrier": "UPS",
+                "shippedDate": "2016-06-25T16:22:52.966Z",
+                "expectDeliveryOn": "2016-06-27"
+            }
+        ]
+    },
+    {
+        "id": "orderId123457",
+        "created": "2015-02-11T03:12:33.345Z",
+        "status": "CREATED",
+        "siteCode": "Germany",
+        "entries": [
+            {
+                "metadata": {
+                    "mixins": {
+                        "additionalCode": "https://${api.proxy}/hybris/schema/v1/kiwistest/example-schema.json"
+                    }
+                },
+                "id": "1234546",
+                "amount": 1,
+                "originalAmount": 450,
+                "unitPrice": 420,
+                "totalPrice": 420,
+                "link": "https://${api.proxy}/hybris/product/v2/products/MUG",
+                "product": {
+                    "description": "A mug you've always wanted !",
+                    "name": "Mug",
+                    "sku": "mug-product",
+                    "published": true,
+                    "images": [
+                        {
+                            "id": "media123456",
+                            "url": "https://${api.proxy}/hybris/product/v2/media/media123456?tenantInfo"
+                        }
+                    ]
+                },
+                "mixins": {
+                    "additionalCode": {
+                        "code": "ABC"
+                    }
+                }
+            }
+        ],
+        "customer": {
+            "id": "C1234567890",
+            "title": "Dr.",
+            "name": "Example Buyer",
+            "firstName": "Example",
+            "lastName": "Buyer",
+            "email": "noreply@yaastest.com",
+            "company": "hybris",
+            "metadata": {
+                "mixins": {
+                    "work_phone": "https://${api.proxy}/hybris/schema/v1/kiwistest/contact-number.json"
+                }
+            },
+            "mixins": {
+                "work_phone": {
+                    "number": "+86 334 0033 9934"
+                }
+            }
+        },
+        "billingAddress": {
+            "contactName": "Example Buyer",
+            "street": "Nymphenburger Str.",
+            "streetNumber": "86",
+            "city": "Munich",
+            "state": "Bavaria",
+            "country": "DE",
+            "zipCode": "132 45",
+            "contactPhone": "+49 1111 222 333"
+        },
+        "shippingAddress": {
+            "contactName": "Joe Smith",
+            "companyName": "Cargo Services Airfreight",
+            "street": "Cheng Xiang Zhen Guan Tang Lu",
+            "streetNumber": "1031",
+            "extraLine1": "No. 2058",
+            "extraLine2": "Suzhou City",
+            "zipCode": "201202",
+            "city": "Taicang City",
+            "state": "Jiangsu Province",
+            "country": "CN",
+            "contactPhone": "+86 182 9349 4663",
+            "metadata": {
+                "mixins": {
+                    "secondaryContactPhone": "https://${api.proxy}/hybris/schema/v1/kiwistest/contact-number.json"
+                }
+            },
+            "mixins": {
+                "secondaryContactPhone": {
+                    "number": "+86 334 0033 9934"
+                }
+            }
+        },
+        "totalPrice": 420,
+        "currency": "USD"
+    }
+]

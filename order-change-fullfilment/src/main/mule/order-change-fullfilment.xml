@@ -24,6 +24,14 @@ http://www.mulesoft.org/schema/mule/location-api http://www.mulesoft.org/schema/
 	<catalog-api:config name="Catalog_API_Config" doc:name="Catalog API Config" doc:id="1e3271b5-dd5e-4f0b-8166-cd88c7f87ece" property_host="catalog-app.cloudhub.io" property_basePath="/api"/>
 	<inventory-api:config name="Inventory_API_Config" doc:name="Inventory API Config" doc:id="3725dd54-2437-44dc-9f23-01981a84adc3" property_host="inventory-app.cloudhub.io" property_basePath="/api"/>
 	<location-api:config name="Location_API_Config" doc:name="Location API Config" doc:id="2cbe3040-250c-4dd6-aa19-64c270b36a07" property_host="locations-app.cloudhub.io" property_basePath="/api"/>
+		
+	<flow name="order-change-fullfilmentFlow" doc:id="c659e6a9-f568-4ac4-a07a-3b06ce163cba" >
+		<http:listener doc:name="Listener" doc:id="589b4cfa-39e0-4ba7-9dc9-21cc45a51025" config-ref="HTTP_Listener_config" path="/chat"/>
+		<scripting:execute engine="groovy" doc:name="Execute read index.html file from resource classpath" doc:id="40cafedc-8f29-49d8-9c49-5da60829e60f">
+			<scripting:code>return Thread.currentThread().getContextClassLoader().getResourceAsStream('index.html').text</scripting:code>
+		</scripting:execute>
+		<set-payload value="#[payload]" doc:name="Set Payload mimeType to text/html" doc:id="897645ab-d3b7-40bb-8392-76be680e7521" mimeType="text/html"/>
+	</flow>
 	<flow name="send-UI-request-to-DialogFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
 		<http:listener doc:name="Listener" doc:id="31da4c63-7064-4eea-ab24-c43e4a3fba5e" config-ref="HTTP_Listener_config" path="/request" outputMimeType="application/json"/>
 		<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json">
