@@ -1,0 +1,61 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/225bfbcf-920d-4179-8d06-f6d60596a7e0 # 
+title: social-recommendations-api
+mediaType: application/json
+
+types:
+  ArtPiece:
+    type: string
+  PaintColor:
+    type: string
+  Choices:
+    properties:
+      artPieces: ArtPiece[]
+      paintColors: PaintColor[]
+  ChoiceResults:
+    properties:
+      artPiece: ArtPiece
+      paintColor: PaintColor
+      count: integer
+      latest: string[]
+  Recommendation:
+    properties:
+      clientId:
+      name:
+      choice:
+        type: integer[]
+        minItems: 2
+        maxItems: 2
+
+
+/choices:
+  get:
+    responses:
+      200:
+        body:
+          type: Choices
+  put:
+    body:
+      type: Choices
+    responses:
+      200:
+
+/recommendations:
+  post:
+    responses: 
+      200:
+        body:
+          type: Recommendation
+  put:
+    headers:
+      Authorization:
+    body:
+      type: Recommendation[]
+    responses:
+      200:
+  /summary:
+    get:
+      responses: 
+        200:
+          body:
+            type: ChoiceResults[][]

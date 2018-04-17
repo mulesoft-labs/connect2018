@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="Choices" format="java">
+      <types:shape format="java" element="com.mulesoft.social.Choices"/>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#c55422d1-42c9-4397-a83f-aa51aec903f2">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="Choices"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

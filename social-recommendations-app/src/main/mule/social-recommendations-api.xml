@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+    <http:listener-config name="social-recommendations-api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="social-recommendations-api-config" raml="social-recommendations-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <os:object-store name="Object_store" doc:name="Object store" doc:id="82d12c98-c51e-47fa-88da-f88eab854327" />
+	<flow name="social-recommendations-api-main">
+        <http:listener config-ref="social-recommendations-api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="social-recommendations-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="social-recommendations-api-console">
+        <http:listener config-ref="social-recommendations-api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="social-recommendations-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\choices:application\json:social-recommendations-api-config">
+        <ee:transform doc:name="Transform Message" doc:id="e98295cc-52d9-4d56-b3d4-580242261365" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="paintColors" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.paintColors]]></ee:set-variable>
+				<ee:set-variable variableName="artPieces" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.artPieces]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<java:new doc:name="Create the Choices Object" doc:id="1404de6a-05ac-4a2b-8bcc-5ab7d752f059" class="com.mulesoft.social.Choices" constructor="Choices()" target="choices"/>
+		<scripting:execute doc:name="Execute" doc:id="f1aa398d-889b-4a1f-a9c6-f1a9763a3330" engine="groovy">
+			<scripting:code >vars.choices.setArtPieces(vars.artPieces)</scripting:code>
+		</scripting:execute>
+		<scripting:execute engine="groovy" doc:name="Copy_of_Execute" doc:id="f1aa398d-889b-4a1f-a9c6-f1a9763a3330">
+			<scripting:code>vars.choices.setPaintColors(vars.paintColors)</scripting:code>
+		</scripting:execute>
+		<os:store doc:name="Store" doc:id="454ff8ed-aa30-4119-a63c-c495dd0a678d" key="choices" objectStore="Object_store">
+			<os:value ><![CDATA[#[vars.choices]]]></os:value>
+		</os:store>
+		<logger level="INFO" message="put:\choices:application\json:social-recommendations-api-config" doc:name="Logger"/>
+    </flow>
+    <flow name="put:\recommendations:application\json:social-recommendations-api-config">
+        <logger level="INFO" message="put:\recommendations:application\json:social-recommendations-api-config" />
+    </flow>
+    <flow name="get:\choices:social-recommendations-api-config">
+        <os:retrieve doc:name="Retrieve choices" doc:id="69972c13-704c-4e93-aa2f-09f2fe619f45" key="choices" objectStore="Object_store" target="choices">
+		</os:retrieve>
+		<ee:transform doc:name="Transform Message" doc:id="c55422d1-42c9-4397-a83f-aa51aec903f2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	paintColors: vars.choices.paintColors,
+	artPieces: vars.choices.artPieces
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" message="get:\choices:social-recommendations-api-config" />
+    </flow>
+    <flow name="get:\recommendations\summary:social-recommendations-api-config">
+        <ee:transform doc:name="Transform Message" doc:id="b363cf80-ecaa-4ecc-9370-533066c6b278" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[
+	[
+		{
+			artPiece: "https://afremov.com/images/product/image_20.jpeg", 
+			paintColor: "#FFFFFF", 
+			count: 1,
+			latest: ["user1", "user2", "user3"]
+		},
+		{
+			artPiece: "https://afremov.com/images/product/image_20.jpeg", 
+			paintColor: "#AAAAAA", 
+			count: 2,
+			latest: ["user4", "user5", "user6"]
+		},
+		{
+			artPiece: "https://afremov.com/images/product/image_20.jpeg", 
+			paintColor: "#CACACA", 
+			count: 3,
+			latest: ["user7", "user8", "user9"]
+		}
+	],
+	[
+		{
+			artPiece: "https://afremov.com/images/product/image_584.jpeg", 
+			paintColor: "#FFFFFF", 
+			count: 4,
+			latest: ["user10", "user11", "user12"]
+		},
+		{
+			artPiece: "https://afremov.com/images/product/image_584.jpeg", 
+			paintColor: "#AAAAAA", 
+			count: 5,
+			latest: ["user13", "user14", "user15"]
+		},
+		{
+			artPiece: "https://afremov.com/images/product/image_584.jpeg", 
+			paintColor: "#CACACA", 
+			count: 6,
+			latest: ["user16", "user17", "user18"]
+		}
+	],
+	[
+		{
+			artPiece: "https://afremov.com/images/product/LOVE-BY-THE-PALETTE.jpg", 
+			paintColor: "#FFFFFF", 
+			count: 7,
+			latest: ["user19", "user20", "user21"]
+		},
+		{
+			artPiece: "https://afremov.com/images/product/LOVE-BY-THE-PALETTE.jpg", 
+			paintColor: "#AAAAAA", 
+			count: 8,
+			latest: ["user22", "user23", "user24"]
+		},
+		{
+			artPiece: "https://afremov.com/images/product/LOVE-BY-THE-PALETTE.jpg", 
+			paintColor: "#CACACA", 
+			count: 9,
+			latest: ["user25", "user26", "user27"]
+		}
+	]
+]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" message="get:\recommendations\summary:social-recommendations-api-config" />
+    </flow>
+    <flow name="post:\recommendations:social-recommendations-api-config">
+		<logger level="INFO" message="post:\recommendations:social-recommendations-api-config" doc:name="Logger"/>
+    </flow>
+</mule>
