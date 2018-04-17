@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <http:listener-config name="ordering-httpsListenerConfig" doc:name="HTTP Listener config">
         <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS">
 			<tls:context >
@@ -11,6 +12,9 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
     </http:listener-config>
     <apikit:config name="ordering-config" raml="ordering.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <global-property doc:name="Global Property" doc:id="3e850447-0ad2-4d82-a0f5-df35de6b857b" name="https.port" value="8082" />
+	<http:request-config name="SAP-Hybris-Order-API" doc:name="HTTP Request configuration" doc:id="aaaacfc0-dbd1-41fa-8147-45c6abb86c7d" basePath="/api" >
+		<http:request-connection protocol="HTTPS" host="hybris-ordering-app.cloudhub.io" port="443" />
+	</http:request-config>
 	<flow name="ordering-main">
         <http:listener config-ref="ordering-httpsListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -284,75 +288,24 @@ output application/json
     </flow>
     <flow name="get:\ordering\orders\(order_id):ordering-config">
         <logger level="INFO" doc:id="11a6baff-bc36-46bf-8c82-7018e57b4680" message="#[attributes.uriParams]" doc:name="Logger"/>
-        <choice doc:name="Choice" doc:id="b42f2a6c-12af-4677-a3e9-eb5c42a43310">
-            <when expression="#[attributes.uriParams.order_id == '3345001']">
-                <ee:transform doc:name="Order 3345001" doc:id="ac26e6d3-4a3f-4451-94cb-02113fc4853d">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
+        <http:request method="GET" doc:name="Retrieve order from Hybris" doc:id="deb0c3ae-178f-4761-b07e-70a4b2d5c727" config-ref="SAP-Hybris-Order-API" path='/{tenant}/orders/{orderId}'>
+			<http:headers ><![CDATA[#[output applicaton/java
 ---
 {
-    "id": 3345001,
-    "products": [
-      {
-        "id": 7890010,
-        "amount": 1
-      }
-    ],
-    "totalAmountPrice": 49.00,
-    "totalAmountPriceCurrency": "USD",
-    "shippingStatus": "shipped",
-    "customerID": 5640099
-  }]]></ee:set-payload>
-                    </ee:message>
-                </ee:transform>
-            </when>
-            <when expression="#[attributes.uriParams.order_id == '3345002']">
-                <ee:transform doc:name="Order 3345002" doc:id="a82b6f23-308e-4241-b810-90517a459b41">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
+	"Authorization" : "Bearer access_token"
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output applicaton/java
 ---
 {
-    "id": 3345002,
-    "products": [
-      {
-        "id": 7890001,
-        "amount": 3
-      }
-    ],
-    "totalAmountPrice": 143.85,
-    "totalAmountPriceCurrency": "USD",
-    "shippingStatus": "non-shipped",
-    "customerID": 5640099
-  }]]></ee:set-payload>
-                    </ee:message>
-                </ee:transform>
-            </when>
-            <when expression="#[attributes.uriParams.order_id == '3345003']">
-                <ee:transform doc:name="Order 3345003" doc:id="eceff330-f14c-4f8f-80c6-8d4c1462e4a6">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-    "id": 3345003,
-    "products": [
-      {
-        "id": 7890003,
-        "amount": 1
-      }
-    ],
-    "totalAmountPrice": 199.95,
-    "totalAmountPriceCurrency": "USD",
-    "shippingStatus": "shipped",
-    "customerID": 5640099
-  }]]></ee:set-payload>
-                    </ee:message>
-                </ee:transform>
-            </when>
-            <otherwise>
-                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Product not found">
+	"tenant" : "tenant",
+	"orderId" : attributes.uriParams.order_id as Number
+}]]]></http:uri-params>
+		</http:request>
+			
+		<choice doc:name="Choice" doc:id="b42f2a6c-12af-4677-a3e9-eb5c42a43310">
+			<when expression="#[(payload.trim == '{}') == true]">
+				<ee:transform xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Order not found">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -360,8 +313,33 @@ output application/json
 {}]]></ee:set-payload>
                     </ee:message>
                 </ee:transform>
+            </when>
+            <otherwise>
+				<ee:transform doc:name="Order" doc:id="ac26e6d3-4a3f-4451-94cb-02113fc4853d">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "id": payload.id,
+    "products": payload.entries map ((entry, index) -> {
+    		"id": entry.id,
+    		"amount": entry.amount
+    	}),
+    "totalAmountPrice": payload.totalPrice,
+    "totalAmountPriceCurrency": payload.currency,
+    "shippingStatus":
+    	if ((upper(payload.status as String) == "COMPLETED" or upper(payload.status as String) == "SHIPPED") == true)
+    		"shipped"
+    	else
+    		"non-shipped",
+    "customerID": payload.customer.id
+}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
             </otherwise>
         </choice>
+		<logger level="INFO" doc:name="Logger" doc:id="a4d0ef60-0ac1-4ad6-ae4e-759b5d16028a" message="#[payload]"/>
     </flow>
     <flow name="post:\ordering\orders\customer\(customer_id):application\json:ordering-config">
         <logger level="INFO" message="post:\ordering\orders\customer\(customer_id):application\json:ordering-config" />

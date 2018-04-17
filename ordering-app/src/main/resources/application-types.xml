@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="hybris-ordering-getOrder-response-example" format="json">
+      <types:example format="json" location="examples/hybris-ordering-getOrder-response-example.json"/>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#ac26e6d3-4a3f-4451-94cb-02113fc4853d">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="hybris-ordering-getOrder-response-example"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
