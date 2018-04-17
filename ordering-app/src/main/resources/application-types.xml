@@ -4,12 +4,24 @@
     <types:type name="hybris-ordering-getOrder-response-example" format="json">
       <types:example format="json" location="examples/hybris-ordering-getOrder-response-example.json"/>
     </types:type>
+    <types:type name="hybris-ordering-getOrders-response-example" format="json">
+      <types:example format="json" location="examples/hybris-ordering-getOrders-response-example.json"/>
+    </types:type>
   </types:catalog>
   <types:enrichment select="#ac26e6d3-4a3f-4451-94cb-02113fc4853d">
     <types:processor-declaration>
       <types:input-event>
         <types:message>
           <types:payload type="hybris-ordering-getOrder-response-example"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#92f6cd49-b94c-4153-9c66-051c13071520">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="hybris-ordering-getOrders-response-example"/>
         </types:message>
       </types:input-event>
     </types:processor-declaration>
