@@ -276,7 +276,8 @@ payload map ((order, index) -> {
     </flow>
     <flow name="get:\ordering\orders\(order_id):ordering-config">
         <logger level="INFO" doc:id="11a6baff-bc36-46bf-8c82-7018e57b4680" message="#[attributes.uriParams]" doc:name="Logger"/>
-		<set-payload value="#[attributes.uriParams.order_id as Number]" doc:name="Set the payload wirh OrderID" doc:id="4db06b08-fd91-41bc-b028-5218c7d146e9" />
+		<set-payload value="#[attributes.uriParams.order_id as String]" doc:name="Set the payload wirh OrderID" doc:id="4db06b08-fd91-41bc-b028-5218c7d146e9" />
+		<flow-ref doc:name="buildOrder_flow" doc:id="5168fea4-72d4-4f87-a547-f1063d02bc95" name="buildOrder_flow"/>
     </flow>
     <sub-flow name="buildOrder_flow" doc:id="da136116-78bf-414e-b152-64ee4f9c712e" >
 		<http:request method="GET" doc:name="Retrieve order from Hybris" doc:id="deb0c3ae-178f-4761-b07e-70a4b2d5c727" config-ref="SAP-Hybris-Order-API" path="/{tenant}/orders/{orderId}">
@@ -293,7 +294,7 @@ payload map ((order, index) -> {
 }]]]></http:uri-params>
 		</http:request>
 		<choice doc:name="Choice" doc:id="b42f2a6c-12af-4677-a3e9-eb5c42a43310">
-			<when expression="#[(payload.trim == '{}') == true]">
+			<when expression="#[(payload == '{}') == true]">
 				<ee:transform xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Order not found">
                     <ee:message>
@@ -319,7 +320,7 @@ output application/json
     "totalAmountPrice": payload.totalPrice,
     "totalAmountPriceCurrency": payload.currency,
     "shippingStatus":
-    	if ((upper(payload.status as String) == "COMPLETED" or upper(payload.status as String) == "SHIPPED") == true)
+    	if ((upper((payload.status default "") as String) == "COMPLETED" or upper((payload.status default "") as String) == "SHIPPED") == true)
     		"shipped"
     	else
     		"non-shipped",

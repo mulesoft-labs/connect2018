@@ -1261,11 +1261,11 @@ output application/json
                     </ee:message>
                 </ee:transform>
             </when>
-            <when expression="#[attributes.uriParams.orderId == 'orderid123456']" >
+            <when expression="#[attributes.uriParams.orderId == 'orderId123456']" >
 				<ee:transform doc:name="Order orderId123456" doc:id="3455b9a7-eeda-4bab-9829-fe9dc9e42a68" >
 					<ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
     id: "orderId123456",
@@ -1497,7 +1497,7 @@ output application/java
 				<ee:transform doc:name="Order orderId123457" doc:id="b8a8918b-7367-498b-b509-cd33f4e394a8" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
     id: "orderId123457",
