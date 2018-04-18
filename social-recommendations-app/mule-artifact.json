@@ -15,7 +15,6 @@
         "api/social-recommendations-api.raml"
       ],
       "exportedPackages": [
-        "com.mulesoft.social"
       ]
     }
   },

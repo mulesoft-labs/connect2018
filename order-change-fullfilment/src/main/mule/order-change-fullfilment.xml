@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:location-api="http://www.mulesoft.org/schema/mule/location-api" xmlns:inventory-api="http://www.mulesoft.org/schema/mule/inventory-api"
-	xmlns:catalog-api="http://www.mulesoft.org/schema/mule/catalog-api"
-	xmlns:ordering-api="http://www.mulesoft.org/schema/mule/ordering-api" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:location-api="http://www.mulesoft.org/schema/mule/location-api"
+	xmlns:inventory-api="http://www.mulesoft.org/schema/mule/inventory-api"
+	xmlns:catalog-api="http://www.mulesoft.org/schema/mule/catalog-api" xmlns:ordering-api="http://www.mulesoft.org/schema/mule/ordering-api" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
@@ -12,7 +12,8 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/ordering-api http://www.mulesoft.org/schema/mule/ordering-api/current/mule-ordering-api.xsd
 http://www.mulesoft.org/schema/mule/catalog-api http://www.mulesoft.org/schema/mule/catalog-api/current/mule-catalog-api.xsd
 http://www.mulesoft.org/schema/mule/inventory-api http://www.mulesoft.org/schema/mule/inventory-api/current/mule-inventory-api.xsd
-http://www.mulesoft.org/schema/mule/location-api http://www.mulesoft.org/schema/mule/location-api/current/mule-location-api.xsd">
+http://www.mulesoft.org/schema/mule/location-api http://www.mulesoft.org/schema/mule/location-api/current/mule-location-api.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0fb42499-27d6-4b80-820b-111294c44e78" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
@@ -25,6 +26,14 @@ http://www.mulesoft.org/schema/mule/location-api http://www.mulesoft.org/schema/
 	<inventory-api:config name="Inventory_API_Config" doc:name="Inventory API Config" doc:id="3725dd54-2437-44dc-9f23-01981a84adc3" property_host="inventory-app.cloudhub.io" property_basePath="/api"/>
 	<location-api:config name="Location_API_Config" doc:name="Location API Config" doc:id="2cbe3040-250c-4dd6-aa19-64c270b36a07" property_host="locations-app.cloudhub.io" property_basePath="/api"/>
 		
+	<http:listener-config name="HTTPS_Listener_config" doc:name="HTTP Listener config" doc:id="24d47fbb-9eb5-4eae-ac14-baabb6eb921c" >
+		<http:listener-connection protocol="HTTPS" host="0.0.0.0" port="${https.port}" >
+			<tls:context >
+				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
+			</tls:context>
+		</http:listener-connection>
+	</http:listener-config>
+	<global-property doc:name="Global Property" doc:id="2747b0e1-652e-4cb3-9b31-6ca6471b383b" name="https.port" value="8082" />
 	<flow name="order-change-fullfilmentFlow" doc:id="c659e6a9-f568-4ac4-a07a-3b06ce163cba" >
 		<http:listener doc:name="Listener" doc:id="589b4cfa-39e0-4ba7-9dc9-21cc45a51025" config-ref="HTTP_Listener_config" path="/chat"/>
 		<scripting:execute engine="groovy" doc:name="Execute read index.html file from resource classpath" doc:id="40cafedc-8f29-49d8-9c49-5da60829e60f">
@@ -33,7 +42,7 @@ http://www.mulesoft.org/schema/mule/location-api http://www.mulesoft.org/schema/
 		<set-payload value="#[payload]" doc:name="Set Payload mimeType to text/html" doc:id="897645ab-d3b7-40bb-8392-76be680e7521" mimeType="text/html"/>
 	</flow>
 	<flow name="send-UI-request-to-DialogFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
-		<http:listener doc:name="Listener" doc:id="31da4c63-7064-4eea-ab24-c43e4a3fba5e" config-ref="HTTP_Listener_config" path="/request" outputMimeType="application/json"/>
+		<http:listener doc:name="HTTPS Listener" doc:id="4d15d5bc-7695-46f4-b407-56b41ce33c44" config-ref="HTTPS_Listener_config" path="/request"/>
 		<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json">
 			<http:headers ><![CDATA[#[output applicaton/java
 ---

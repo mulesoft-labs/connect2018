@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
-http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
-    <http:listener-config name="social-recommendations-api-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8081" />
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+    <http:listener-config name="social-recommendations-api-httpsListenerConfig" doc:name="HTTP Listener config">
+        <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
+			</tls:context>
+		</http:listener-connection>
     </http:listener-config>
-    <apikit:config name="social-recommendations-api-config" raml="social-recommendations-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="social-recommendations-api-config" raml="social-recommendations-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router"/>
     <os:object-store name="Object_store" doc:name="Object store" doc:id="82d12c98-c51e-47fa-88da-f88eab854327" />
+	<global-property doc:name="Global Property" doc:id="63d994eb-f3c6-4bbc-a4fa-8f389fb19946" name="https.port" value="8082" />
 	<flow name="social-recommendations-api-main">
-        <http:listener config-ref="social-recommendations-api-httpListenerConfig" path="/api/*">
+        <http:listener config-ref="social-recommendations-api-httpsListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="social-recommendations-api-config" />
@@ -102,13 +108,13 @@ output application/json
         </error-handler>
     </flow>
     <flow name="social-recommendations-api-console">
-        <http:listener config-ref="social-recommendations-api-httpListenerConfig" path="/console/*">
+        <http:listener config-ref="social-recommendations-api-httpsListenerConfig" path="/console/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
         <apikit:console config-ref="social-recommendations-api-config" />
@@ -129,55 +135,33 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\choices:application\json:social-recommendations-api-config">
-        <ee:transform doc:name="Transform Message" doc:id="e98295cc-52d9-4d56-b3d4-580242261365" >
+        <logger level="INFO" doc:name="Logger" doc:id="93d55c88-5808-46f0-82fa-accec5343179" message="#[payload]"/>
+		<os:store doc:name="Store" doc:id="454ff8ed-aa30-4119-a63c-c495dd0a678d" key="choices" objectStore="Object_store">
+		</os:store>
+		<ee:transform doc:name="Transform Message" doc:id="f8b416ce-ceb2-467c-a1b1-d92ae608bfec" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
 }]]></ee:set-payload>
 			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="paintColors" ><![CDATA[%dw 2.0
-output application/java
----
-payload.paintColors]]></ee:set-variable>
-				<ee:set-variable variableName="artPieces" ><![CDATA[%dw 2.0
-output application/java
----
-payload.artPieces]]></ee:set-variable>
-			</ee:variables>
 		</ee:transform>
-		<java:new doc:name="Create the Choices Object" doc:id="1404de6a-05ac-4a2b-8bcc-5ab7d752f059" class="com.mulesoft.social.Choices" constructor="Choices()" target="choices"/>
-		<scripting:execute doc:name="Execute" doc:id="f1aa398d-889b-4a1f-a9c6-f1a9763a3330" engine="groovy">
-			<scripting:code >vars.choices.setArtPieces(vars.artPieces)</scripting:code>
-		</scripting:execute>
-		<scripting:execute engine="groovy" doc:name="Copy_of_Execute" doc:id="f1aa398d-889b-4a1f-a9c6-f1a9763a3330">
-			<scripting:code>vars.choices.setPaintColors(vars.paintColors)</scripting:code>
-		</scripting:execute>
-		<os:store doc:name="Store" doc:id="454ff8ed-aa30-4119-a63c-c495dd0a678d" key="choices" objectStore="Object_store">
-			<os:value ><![CDATA[#[vars.choices]]]></os:value>
-		</os:store>
 		<logger level="INFO" message="put:\choices:application\json:social-recommendations-api-config" doc:name="Logger"/>
     </flow>
     <flow name="put:\recommendations:application\json:social-recommendations-api-config">
         <logger level="INFO" message="put:\recommendations:application\json:social-recommendations-api-config" />
     </flow>
     <flow name="get:\choices:social-recommendations-api-config">
-        <os:retrieve doc:name="Retrieve choices" doc:id="69972c13-704c-4e93-aa2f-09f2fe619f45" key="choices" objectStore="Object_store" target="choices">
-		</os:retrieve>
-		<ee:transform doc:name="Transform Message" doc:id="c55422d1-42c9-4397-a83f-aa51aec903f2" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+        <os:retrieve doc:name="Retrieve choices from OS" doc:id="69972c13-704c-4e93-aa2f-09f2fe619f45" key="choices" objectStore="Object_store" />
+		<ee:transform doc:name="Transform byteArray to Json" doc:id="d27594c0-cb8e-4035-bc23-ab1dda9edc7f">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{
-	paintColors: vars.choices.paintColors,
-	artPieces: vars.choices.artPieces
-}]]></ee:set-payload>
+payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" message="get:\choices:social-recommendations-api-config" />
     </flow>
     <flow name="get:\recommendations\summary:social-recommendations-api-config">
         <ee:transform doc:name="Transform Message" doc:id="b363cf80-ecaa-4ecc-9370-533066c6b278" >
