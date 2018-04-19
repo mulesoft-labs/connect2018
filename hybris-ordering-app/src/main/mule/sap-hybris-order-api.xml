@@ -950,10 +950,16 @@ output application/json
                 <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Order not found">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
-output application/json
+output application/java
 ---
-{}]]></ee:set-payload>
+""]]></ee:set-payload>
                     </ee:message>
+                    <ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+404]]></ee:set-variable>
+					</ee:variables>
                 </ee:transform>
             </otherwise>
         </choice>
@@ -1350,10 +1356,16 @@ output application/json
                 <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Order not found">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
-output application/json
+output application/java
 ---
-{}]]></ee:set-payload>
+""]]></ee:set-payload>
                     </ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+404]]></ee:set-variable>
+					</ee:variables>
                 </ee:transform>
             </otherwise>
         </choice>

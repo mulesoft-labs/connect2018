@@ -235,7 +235,22 @@ output application/json
 			<ee:variables >
 			</ee:variables>
 		</ee:transform>
-		<ordering-api:update-products-by-order-id doc:name="Update products by order id" doc:id="b54f29bd-2e78-4ccf-ac45-1128cd2c4398" config-ref="Ordering_API_Config" order-id="#[payload.id]"/>
+		<try doc:name="Try" doc:id="b4d407fe-228d-457d-915d-0ea6d3b410eb" >
+			<ordering-api:update-products-by-order-id doc:name="Update products by order id" doc:id="b54f29bd-2e78-4ccf-ac45-1128cd2c4398" config-ref="Ordering_API_Config" order-id="#[payload.id]" />
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="ed20a2d8-658f-432d-8798-8cf01287403d" >
+					<ee:transform doc:name="Transform Message" doc:id="0c92cdbf-24dc-4210-99d5-72179b702960" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+				</on-error-continue>
+			</error-handler>
+		</try>
 		<ee:transform doc:name="prepare products to be enriched" doc:id="03d1830f-b259-4dcd-bf88-28c7583c4cda" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -575,7 +590,22 @@ payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<java:new doc:name="New fullProductList {as an ArrayList}" doc:id="d7419e5e-600f-448e-b511-cb9eeec8957e" target="fullProductList" class="java.util.ArrayList" constructor="ArrayList()" />
-		<ordering-api:get-order-by-order-id doc:name="Get order by order id" doc:id="e4447682-e3e6-4352-a364-e8d6ed421b9e" config-ref="Ordering_API_Config" order-id="#[vars.orderID]"/>
+		<try doc:name="Try" doc:id="7988c150-750d-4e71-8dd9-5e7e33b94386" >
+			<ordering-api:get-order-by-order-id doc:id="e4447682-e3e6-4352-a364-e8d6ed421b9e" config-ref="Ordering_API_Config" order-id="#[vars.orderID]" doc:name="Get order by order id" />
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="a8f65c4e-d60f-4bdd-b3cf-a8c69fe14455" >
+					<ee:transform doc:name="Transform Message" doc:id="c20857b5-958d-46e2-9b29-00c529f501ae" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+				</on-error-continue>
+			</error-handler>
+		</try>
 		<ee:transform doc:name="building the product Listn" doc:id="f5406c13-b298-4f5d-9cf3-547ef5b2ac2b">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0

@@ -280,7 +280,8 @@ payload map ((order, index) -> {
 		<flow-ref doc:name="buildOrder_flow" doc:id="5168fea4-72d4-4f87-a547-f1063d02bc95" name="buildOrder_flow"/>
     </flow>
     <sub-flow name="buildOrder_flow" doc:id="da136116-78bf-414e-b152-64ee4f9c712e" >
-		<http:request method="GET" doc:name="Retrieve order from Hybris" doc:id="deb0c3ae-178f-4761-b07e-70a4b2d5c727" config-ref="SAP-Hybris-Order-API" path="/{tenant}/orders/{orderId}">
+		<try doc:name="Try" doc:id="49f87d38-1c90-48c9-ba33-445d69d72576" >
+			<http:request method="GET" doc:name="Retrieve order from Hybris" doc:id="deb0c3ae-178f-4761-b07e-70a4b2d5c727" config-ref="SAP-Hybris-Order-API" path="/{tenant}/orders/{orderId}" >
 			<http:headers><![CDATA[#[output applicaton/java
 ---
 {
@@ -293,20 +294,7 @@ payload map ((order, index) -> {
 	"orderId" : payload
 }]]]></http:uri-params>
 		</http:request>
-		<choice doc:name="Choice" doc:id="b42f2a6c-12af-4677-a3e9-eb5c42a43310">
-			<when expression="#[(payload == '{}') == true]">
-				<ee:transform xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Order not found">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{}]]></ee:set-payload>
-                    </ee:message>
-                </ee:transform>
-            </when>
-            <otherwise>
-				<ee:transform doc:name="Order" doc:id="ac26e6d3-4a3f-4451-94cb-02113fc4853d">
+			<ee:transform doc:name="Order" doc:id="ac26e6d3-4a3f-4451-94cb-02113fc4853d">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -327,9 +315,29 @@ output application/json
     "customerID": payload.customer.id
 }]]></ee:set-payload>
                     </ee:message>
+					<ee:variables>
+					</ee:variables>
                 </ee:transform>
-            </otherwise>
-        </choice>
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="be3e7d36-1f21-4c10-9332-b5f7e4847618" >
+					<ee:transform xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Order not found">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+""]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+						<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
+output application/java
+---
+404]]></ee:set-variable>
+					</ee:variables>
+                </ee:transform>
+				</on-error-continue>
+			</error-handler>
+		</try>
 	</sub-flow>
 	<flow name="post:\ordering\orders\customer\(customer_id):application\json:ordering-config">
         <logger level="INFO" message="post:\ordering\orders\customer\(customer_id):application\json:ordering-config" />
