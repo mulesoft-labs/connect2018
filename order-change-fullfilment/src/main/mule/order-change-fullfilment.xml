@@ -131,7 +131,7 @@ output application/json
         "parameters": {
 		  "new_products": [
 		  	{
-		  		"id": 17890001,
+		  		"id": 7890001,
 		  		"currentAmount": 3,
 		  		"newAmount": 2
 		  	}
@@ -402,7 +402,7 @@ output application/java
 }]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<java:new doc:name="New products as an ArrayList" doc:id="62458363-cfb7-4008-9fe1-c9d3bf18da8e" class="java.util.ArrayList" constructor="ArrayList()" target="products"/>
+		<java:new doc:name="New products as an ArrayList" doc:id="62458363-cfb7-4008-9fe1-c9d3bf18da8e" class="java.util.ArrayList" constructor="ArrayList()" target="products" />
 		<foreach doc:name="For Each" doc:id="fe25ed68-9801-4df2-a3e4-b95a18fb55ac" collection="#[payload]">
 			<ee:transform doc:name="Transform Message" doc:id="b5d95473-2404-4ff2-8e78-d8f4252bdeb4">
 			<ee:message>
@@ -443,9 +443,7 @@ output application/java
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/java
 ---
-{
-  product: vars.product
-}]]></ee:set-payload>
+payload]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
 					<ee:set-variable variableName="customerID" ><![CDATA[%dw 2.0
@@ -454,9 +452,29 @@ output application/java
 payload.customerID as Number]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<scripting:execute engine="groovy" doc:name="Execute" doc:id="4b7b2de5-a9d4-4ef7-bd32-272b7fb8dfb4" >
-				<scripting:code >vars.products.add(payload)</scripting:code>
+			<java:new doc:name="Copy_of_New fullProductList {as an ArrayList}" doc:id="d7419e5e-600f-448e-b511-cb9eeec8957e" class="java.util.ArrayList" constructor="ArrayList()" target="fullProductList" />
+			<flow-ref doc:name="order-change-fullfilmentSub_Flow" doc:id="f007c926-e936-4592-8b7f-271ea8f9122e" name="order-change-fullfilmentSub_Flow"/>
+			<ee:transform doc:name="Transform Message" doc:id="9b383e1e-b8cf-44e7-9777-de020f2fd968" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+vars.fullProductList.product]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<foreach doc:name="For Each" doc:id="5acf4207-4d7c-4350-a993-ea12d91e4ed2" >
+				<ee:transform doc:name="Transform Message" doc:id="466dff47-0ef3-4014-8ea2-48afd6d33c71" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+product: payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<scripting:execute engine="groovy" doc:name="Execute" doc:id="4b7b2de5-a9d4-4ef7-bd32-272b7fb8dfb4">
+				<scripting:code>vars.products.add(payload)</scripting:code>
 			</scripting:execute>
+			</foreach>
 		</foreach>
 		<ee:transform doc:name="Transform Message" doc:id="2019d878-9ebf-4ce5-a057-01efdd4e7c39">
 			<ee:message>
@@ -469,10 +487,13 @@ output application/json
   	"text": "No problem, that has not shipped yet, so I can just change the quantity for you. Is that OK?",
   	"order" : {
   	   "id": vars.orderID,
-  	   "totalAmountPrice": sum(vars.products.*product.price.value) * (sum(vars.products.*product.quantity) as Number),
+  	   "totalAmountPrice": sum(vars.products.*product.object.price.value) * (sum(vars.products.*product.object.quantity) as Number),
   	   "totalAmountPriceCurrency": vars.products[0].product.price.currency,
   	   "customerID": vars.customerID,
-  	   "products": vars.products
+  	   "products": 
+			vars.products.product.object map (
+				$
+			)
   	}
   }
 }]]></ee:set-payload>
@@ -539,13 +560,13 @@ output application/json
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
-payload.result.contexts[0].parameters.number as Number]]></ee:set-payload>
+3345002]]></ee:set-payload>
 			</ee:message>
 			<ee:variables>
 				<ee:set-variable variableName="orderID"><![CDATA[%dw 2.0
 output application/java
 ---
-payload.result.contexts[0].parameters.number as Number]]></ee:set-variable>
+3345002]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="filOrderDetail" doc:id="fa35943b-eb50-4685-9d58-f3e21fc19b4a" name="filOrderDetail" />
@@ -578,34 +599,7 @@ output application/json
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="a8a9e85e-62d9-48b2-9559-c9219f055f5b" message="#[payload]" />
 	</sub-flow>
-	<sub-flow name="filOrderDetail" doc:id="27da3670-7def-4a61-9d7c-f83974b17aa0" >
-		<ee:transform doc:name="building URL and orderID vars" doc:id="c0b3d5bd-1e6b-476a-833e-3727154d11be">
-			<ee:message>
-			</ee:message>
-			<ee:variables>
-				<ee:set-variable variableName="orderID"><![CDATA[%dw 2.0
-output application/java
----
-payload]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<java:new doc:name="New fullProductList {as an ArrayList}" doc:id="d7419e5e-600f-448e-b511-cb9eeec8957e" target="fullProductList" class="java.util.ArrayList" constructor="ArrayList()" />
-		<try doc:name="Try" doc:id="7988c150-750d-4e71-8dd9-5e7e33b94386" >
-			<ordering-api:get-order-by-order-id doc:id="e4447682-e3e6-4352-a364-e8d6ed421b9e" config-ref="Ordering_API_Config" order-id="#[vars.orderID]" doc:name="Get order by order id" />
-			<error-handler >
-				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="a8f65c4e-d60f-4bdd-b3cf-a8c69fe14455" >
-					<ee:transform doc:name="Transform Message" doc:id="c20857b5-958d-46e2-9b29-00c529f501ae" >
-						<ee:message >
-							<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
----
-{
-}]]></ee:set-payload>
-						</ee:message>
-					</ee:transform>
-				</on-error-continue>
-			</error-handler>
-		</try>
+	<sub-flow name="order-change-fullfilmentSub_Flow" doc:id="808cfa3f-40a4-4958-bbba-f492c795e9e1" >
 		<ee:transform doc:name="building the product Listn" doc:id="f5406c13-b298-4f5d-9cf3-547ef5b2ac2b">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -631,7 +625,7 @@ output application/java
 payload.amount as Number]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="dd27fcc9-53d4-4430-92d9-5cda4f7d6dbc" config-ref="Catalog_API_Config" product-id="#[payload.id]"/>
+			<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="dd27fcc9-53d4-4430-92d9-5cda4f7d6dbc" config-ref="Catalog_API_Config" product-id="#[payload.id]" />
 			<ee:transform doc:name="building a product with amount" doc:id="902501fe-d5bf-4899-a947-5927d8e3cded">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
@@ -662,9 +656,39 @@ output application/java
 				<scripting:code>vars.fullProductList.add(payload)</scripting:code>
 			</scripting:execute>
 		</foreach>
-		<ee:transform doc:name="Transform Message" doc:id="55cc34ee-fc7e-4468-a6a3-d6e978c47d48" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+	</sub-flow>
+	<sub-flow name="filOrderDetail" doc:id="27da3670-7def-4a61-9d7c-f83974b17aa0" >
+		<ee:transform doc:name="building URL and orderID vars" doc:id="c0b3d5bd-1e6b-476a-833e-3727154d11be">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="orderID"><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<try doc:name="Try" doc:id="7988c150-750d-4e71-8dd9-5e7e33b94386" >
+			<ordering-api:get-order-by-order-id doc:id="e4447682-e3e6-4352-a364-e8d6ed421b9e" config-ref="Ordering_API_Config" order-id="#[vars.orderID]" doc:name="Get order by order id" />
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="a8f65c4e-d60f-4bdd-b3cf-a8c69fe14455" >
+					<ee:transform doc:name="Transform Message" doc:id="c20857b5-958d-46e2-9b29-00c529f501ae" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+				</on-error-continue>
+			</error-handler>
+		</try>
+		<java:new doc:name="New fullProductList {as an ArrayList}" doc:id="d7419e5e-600f-448e-b511-cb9eeec8957e" target="fullProductList" class="java.util.ArrayList" constructor="ArrayList()" />
+		<flow-ref doc:name="order-change-fullfilmentSub_Flow" doc:id="5503ff65-50cf-4451-af02-4d6478e389cb" name="order-change-fullfilmentSub_Flow"/>
+		<ee:transform doc:name="Transform Message" doc:id="55cc34ee-fc7e-4468-a6a3-d6e978c47d48">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {

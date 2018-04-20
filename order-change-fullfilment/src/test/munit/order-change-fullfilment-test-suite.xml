@@ -94,5 +94,10 @@
 			<flow-ref doc:name="Flow-ref to add-new-product" doc:id="41d80ff3-7f6b-4e32-82ec-c8a2def10886" name="add-new-product"/>
 		</munit:execution>
 	</munit:test>
+	<munit:test name="order-change-fullfilment-test-suite-pre-change-item-quantityTest" description="Test" doc:id="11b4adbd-becb-4576-a50c-a12de992378e" >
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to pre-change-item-quantity" doc:id="e0318171-fe8d-4040-81ff-e084f4a1d58e" name="pre-change-item-quantity"/>
+		</munit:execution>
+	</munit:test>
 
 </mule>
