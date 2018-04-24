@@ -193,7 +193,7 @@ output application/json
   {
     id: 7890002,
     price: {
-      value: 69.95,
+      value: 40.90,
       currency: "USD"
     },
     name: "Goal Zero Lighthouse 400",
@@ -590,7 +590,7 @@ output application/json
 {
       "id": 7890002,
       "price": {
-        "value": 69.95,
+        "value": 40.90,
         "currency": "USD"
       },
       "name": "Goal Zero Lighthouse 400",

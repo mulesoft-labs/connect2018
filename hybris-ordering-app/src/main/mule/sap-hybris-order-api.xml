@@ -211,9 +211,9 @@ output application/json
             {
                 "id": "7890002",
                 "amount": 1,
-                "originalAmount": 69.95,
-                "unitPrice": 69.95,
-                "totalPrice": 69.95,
+                "originalAmount": 40.90,
+                "unitPrice": 40.90,
+                "totalPrice": 40.90,
                 "link": "",
                 "product": {
                     "description": "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
@@ -328,7 +328,7 @@ output application/json
         "siteCode": "USA",
         "entries": [
             {
-                "id": "7890002",
+                "id": "7890001",
                 "amount": 3,
                 "originalAmount": 47.95,
                 "unitPrice": 47.95,
@@ -561,414 +561,13 @@ output application/json
     </flow>
     <flow name="get:\(tenant)\orders\(orderId):sap-hybris-order-api-config">
         <logger level="INFO" doc:id="11a6baff-bc36-46bf-8c82-7018e57b4680" message="#[attributes.uriParams]" doc:name="Logger"/>
-        <choice doc:name="Choice" doc:id="b42f2a6c-12af-4677-a3e9-eb5c42a43310">
-            <when expression="#[attributes.uriParams.orderId == '3345001']">
-                <ee:transform doc:name="Order 3345001" doc:id="ac26e6d3-4a3f-4451-94cb-02113fc4853d">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-        "id": "3345001",
-        "metadata": {},
-        "mixins": {},
-        "created": "2014-03-31T10:18:21.134Z",
-        "completed": "2014-04-15T10:18:21.134Z",
-        "lastStatusChange": "2014-04-15T10:18:21.134Z",
-        "status": "SHIPPED",
-        "siteCode": "USA",
-        "entries": [
-            {
-                "id": "7890002",
-                "amount": 1,
-                "originalAmount": 69.95,
-                "unitPrice": 69.95,
-                "totalPrice": 69.95,
-                "link": "",
-                "product": {
-                    "description": "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
-                    "name": "Goal Zero Lighthouse 400",
-                    "sku": "Lantern",
-                    "published": true,
-                    "images": [
-                        {
-                            "id": "8540002",
-                            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
-                        }
-                    ]
-                },
-                "variant": {
-                    "id": "0",
-                    "name": "0",
-                    "code": "0",
-                    "images": [
-                        {
-                            "id": "",
-                            "url": ""
-                        }
-                    ],
-                    "options": {
-                        "mug": {
-                            "color": "",
-                            "size": ""
-                        }
-                    },
-                    "mixins": {
-                        "additionalVariantCode": {
-                            "code": ""
-                        }
-                    }
-                }
-            }
-        ],
-        "discounts": [],
-        "customer": {
-            "id": "5640099",
-            "title": "",
-            "name": "Uri Sarid",
-            "firstName": "Uri",
-            "lastName": "Sarid",
-            "email": "uri.sarid@mulesoft.com",
-            "company": "Mulesoft"
-        },
-        "billingAddress": {
-            "contactName": "Uri Sarid",
-            "street": "Geary St",
-            "streetNumber": "77",
-            "city": "San Francisco",
-            "state": "CALIFORNIA",
-            "country": "US",
-            "zipCode": "94108",
-            "contactPhone": ""
-        },
-        "shippingAddress": {
-            "contactName": "",
-            "companyName": "Cargo Services Airfreight",
-            "street": "Mason Street",
-            "streetNumber": "610",
-            "zipCode": "94129",
-            "city": "San Francisco",
-            "state": "CALIFORNIA",
-            "country": "USA"
-        },
-        "subTotalPrice": 69.95,
-        "totalPrice": 69.95,
-        "currency": "USD",
-        "payments": [
-            {
-                "status": "SUCCESS",
-                "method": "STRIPE",
-                "paymentResponse": "",
-                "paidAmount": 69.95,
-                "currency": "USD"
-            }
-        ],
-        "tax": {
-            "total": {
-                "amount": 0,
-                "currency": "USD",
-                "inclusive": false
-            },
-            "lines": [
-                {
-                    "amount": 0,
-                    "currency": "USD",
-                    "sequenceId": 1,
-                    "inclusive": false
-                }
-            ]
-        },
-        "shipping": {
-            "total": {
-                "amount": 0,
-                "currency": "USD"
-            },
-            "lines": []
-        },
-        "shipments": []
-    }]]></ee:set-payload>
-                    </ee:message>
-                </ee:transform>
-            </when>
-            <when expression="#[attributes.uriParams.orderId == '3345002']">
-                <ee:transform doc:name="Order 3345002" doc:id="a82b6f23-308e-4241-b810-90517a459b41">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-        "id": "3345002",
-        "metadata": {},
-        "mixins": {},
-        "created": "2014-03-31T10:18:21.134Z",
-        "completed": "2014-04-15T10:18:21.134Z",
-        "lastStatusChange": "2014-04-15T10:18:21.134Z",
-        "status": "CONFIRMED",
-        "siteCode": "USA",
-        "entries": [
-            {
-                "id": "7890002",
-                "amount": 3,
-                "originalAmount": 47.95,
-                "unitPrice": 47.95,
-                "totalPrice": 143.85,
-                "link": "",
-                "product": {
-                    "description": "Made from the same warm material as the adult size for backpacking and family camping, Eureka's Cyprus Junior is a three-season sleeping bag with toasty ThermaShield insulation that's temperature rated at 15°F. The boy-specific junior size and fit reduces unnecessary weight and bulk while on the trail.",
-                    "name": "Eureka Cypress Sleeping Bag",
-                    "sku": "Sleeping Bags",
-                    "published": true,
-                    "images": [
-                        {
-                            "id": "8540001",
-                            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
-                        }
-                    ]
-                },
-                "variant": {
-                    "id": "0",
-                    "name": "0",
-                    "code": "0",
-                    "images": [
-                        {
-                            "id": "",
-                            "url": ""
-                        }
-                    ],
-                    "options": {
-                        "mug": {
-                            "color": "",
-                            "size": ""
-                        }
-                    },
-                    "mixins": {
-                        "additionalVariantCode": {
-                            "code": ""
-                        }
-                    }
-                }
-            }
-        ],
-        "discounts": [],
-        "customer": {
-            "id": "5640099",
-            "title": "",
-            "name": "Uri Sarid",
-            "firstName": "Uri",
-            "lastName": "Sarid",
-            "email": "uri.sarid@mulesoft.com",
-            "company": "Mulesoft"
-        },
-        "billingAddress": {
-            "contactName": "Uri Sarid",
-            "street": "Geary St",
-            "streetNumber": "77",
-            "city": "San Francisco",
-            "state": "CALIFORNIA",
-            "country": "US",
-            "zipCode": "94108",
-            "contactPhone": ""
-        },
-        "shippingAddress": {
-            "contactName": "",
-            "companyName": "Cargo Services Airfreight",
-            "street": "Mason Street",
-            "streetNumber": "610",
-            "zipCode": "94129",
-            "city": "San Francisco",
-            "state": "CALIFORNIA",
-            "country": "USA"
-        },
-        "subTotalPrice": 143.85,
-        "totalPrice": 143.85,
-        "currency": "USD",
-        "payments": [
-            {
-                "status": "SUCCESS",
-                "method": "STRIPE",
-                "paymentResponse": "",
-                "paidAmount": 143.85,
-                "currency": "USD"
-            }
-        ],
-        "tax": {
-            "total": {
-                "amount": 0,
-                "currency": "USD",
-                "inclusive": false
-            },
-            "lines": [
-                {
-                    "amount": 0,
-                    "currency": "USD",
-                    "sequenceId": 1,
-                    "inclusive": false
-                }
-            ]
-        },
-        "shipping": {
-            "total": {
-                "amount": 0,
-                "currency": "USD"
-            },
-            "lines": []
-        },
-        "shipments": []
-    }]]></ee:set-payload>
-                    </ee:message>
-                </ee:transform>
-            </when>
-            <when expression="#[attributes.uriParams.orderId == '3345003']">
-                <ee:transform doc:name="Order 3345003" doc:id="a7bc28cf-1736-4d77-b614-8b7b54f63e27">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-        "id": "3345003",
-        "metadata": {},
-        "mixins": {},
-        "created": "2014-03-31T10:18:21.134Z",
-        "completed": "2014-04-15T10:18:21.134Z",
-        "lastStatusChange": "2014-04-15T10:18:21.134Z",
-        "status": "COMPLETED",
-        "siteCode": "USA",
-        "entries": [
-            {
-                "id": "7890003",
-                "amount": 1,
-                "originalAmount": 199.95,
-                "unitPrice": 199.95,
-                "totalPrice": 199.95,
-                "link": "",
-                "product": {
-                    "description": "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
-                    "name": "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter",
-                    "sku": "Battery",
-                    "published": true,
-                    "images": [
-                        {
-                            "id": "8540003",
-                            "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTqPH1wK0UGXcI55H1rSwKukYH4_AfAU40OH_noVqt4M_E95UTOyZvkdAvMYE_tNfeV-c3Cao8&usqp=CAE"
-                        }
-                    ]
-                },
-                "variant": {
-                    "id": "0",
-                    "name": "0",
-                    "code": "0",
-                    "images": [
-                        {
-                            "id": "",
-                            "url": ""
-                        }
-                    ],
-                    "options": {
-                        "mug": {
-                            "color": "",
-                            "size": ""
-                        }
-                    },
-                    "mixins": {
-                        "additionalVariantCode": {
-                            "code": ""
-                        }
-                    }
-                }
-            }
-        ],
-        "discounts": [],
-        "customer": {
-            "id": "5640099",
-            "title": "",
-            "name": "Uri Sarid",
-            "firstName": "Uri",
-            "lastName": "Sarid",
-            "email": "uri.sarid@mulesoft.com",
-            "company": "Mulesoft"
-        },
-        "billingAddress": {
-            "contactName": "Uri Sarid",
-            "street": "Geary St",
-            "streetNumber": "77",
-            "city": "San Francisco",
-            "state": "CALIFORNIA",
-            "country": "US",
-            "zipCode": "94108",
-            "contactPhone": ""
-        },
-        "shippingAddress": {
-            "contactName": "",
-            "companyName": "Cargo Services Airfreight",
-            "street": "Mason Street",
-            "streetNumber": "610",
-            "zipCode": "94129",
-            "city": "San Francisco",
-            "state": "CALIFORNIA",
-            "country": "USA"
-        },
-        "subTotalPrice": 199.95,
-        "totalPrice": 199.95,
-        "currency": "USD",
-        "payments": [
-            {
-                "status": "SUCCESS",
-                "method": "STRIPE",
-                "paymentResponse": "",
-                "paidAmount": 199.95,
-                "currency": "USD"
-            }
-        ],
-        "tax": {
-            "total": {
-                "amount": 0,
-                "currency": "USD",
-                "inclusive": false
-            },
-            "lines": [
-                {
-                    "amount": 0,
-                    "currency": "USD",
-                    "sequenceId": 1,
-                    "inclusive": false
-                }
-            ]
-        },
-        "shipping": {
-            "total": {
-                "amount": 0,
-                "currency": "USD"
-            },
-            "lines": []
-        },
-        "shipments": []
-    }]]></ee:set-payload>
-                    </ee:message>
-                </ee:transform>
-            </when>
-			<otherwise>
-                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Order not found">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/java
----
-""]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables >
-						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
-output application/java
----
-404]]></ee:set-variable>
-					</ee:variables>
-                </ee:transform>
-            </otherwise>
-        </choice>
+		<set-variable value="#[attributes.uriParams.orderId]" doc:name="Set orderID" doc:id="4f1f2979-b6a6-464e-88dc-24feb2778e17" variableName="orderId"/>
+		<flow-ref doc:name="select-order" doc:id="8179900f-5e9e-48da-b323-5b9e86d9aa6c" name="select-order"/>
         
     </flow>
-    <flow name="get:\(tenant)\orders\(orderId)\transitions:sap-hybris-order-api-config">
-                <logger level="INFO" doc:id="11a6baff-bc36-46bf-8c82-7018e57b4680" message="#[attributes.uriParams]" doc:name="Logger"/>
-        <choice doc:name="Choice" doc:id="b42f2a6c-12af-4677-a3e9-eb5c42a43310">
-            <when expression="#[attributes.uriParams.orderId == '3345001']">
+    <flow name="select-order" doc:id="684b3a0d-e208-4618-a66c-af7e24a5423f" >
+		<choice doc:name="Choice" doc:id="b42f2a6c-12af-4677-a3e9-eb5c42a43310">
+            <when expression="#[vars.orderId == '3345001']">
                 <ee:transform doc:name="Order 3345001" doc:id="ac26e6d3-4a3f-4451-94cb-02113fc4853d">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
@@ -987,9 +586,9 @@ output application/json
             {
                 "id": "7890002",
                 "amount": 1,
-                "originalAmount": 69.95,
-                "unitPrice": 69.95,
-                "totalPrice": 69.95,
+                "originalAmount": 40.90,
+                "unitPrice": 40.90,
+                "totalPrice": 40.90,
                 "link": "",
                 "product": {
                     "description": "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
@@ -1096,7 +695,7 @@ output application/json
                     </ee:message>
                 </ee:transform>
             </when>
-            <when expression="#[attributes.uriParams.orderId == '3345002']">
+            <when expression="#[vars.orderId == '3345002']">
                 <ee:transform doc:name="Order 3345002" doc:id="a82b6f23-308e-4241-b810-90517a459b41">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
@@ -1113,7 +712,7 @@ output application/json
         "siteCode": "USA",
         "entries": [
             {
-                "id": "7890002",
+                "id": "7890001",
                 "amount": 3,
                 "originalAmount": 47.95,
                 "unitPrice": 47.95,
@@ -1224,7 +823,7 @@ output application/json
                     </ee:message>
                 </ee:transform>
             </when>
-            <when expression="#[attributes.uriParams.orderId == '3345003']">
+            <when expression="#[vars.orderId == '3345003']">
                 <ee:transform doc:name="Order 3345003" doc:id="a7bc28cf-1736-4d77-b614-8b7b54f63e27">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
@@ -1360,8 +959,8 @@ output application/java
 ---
 ""]]></ee:set-payload>
                     </ee:message>
-					<ee:variables >
-						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+                    <ee:variables>
+						<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 404]]></ee:set-variable>
@@ -1369,8 +968,13 @@ output application/java
                 </ee:transform>
             </otherwise>
         </choice>
+	</flow>
+	<flow name="get:\(tenant)\orders\(orderId)\transitions:sap-hybris-order-api-config">
+                <logger level="INFO" doc:id="11a6baff-bc36-46bf-8c82-7018e57b4680" message="#[attributes.uriParams]" doc:name="Logger"/>
+        <set-variable value="#[attributes.uriParams.orderId]" doc:name="Set orderID" doc:id="c5013ad5-3516-49bb-806f-a986566c32d8" variableName="orderId"/>
         
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="42330c25-be91-41b5-a24b-d95066eb2d71">
+        <flow-ref doc:name="select-order" doc:id="f94ae768-d884-45c2-8772-792a1b8ead1e" name="select-order"/>
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="42330c25-be91-41b5-a24b-d95066eb2d71">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
