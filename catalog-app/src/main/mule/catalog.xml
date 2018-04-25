@@ -242,7 +242,7 @@ output application/json
   {
     id: 7890003,
     price: {
-      value: 199.95,
+      value: 199.00,
       currency: "USD"
     },
     name: "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter",
@@ -512,7 +512,38 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-    }   
+    },
+    {
+        "id": 7890012,
+        "price": {
+	        "value": 204.74,
+	        "currency": "USD"
+        },
+        "name": "Floureon 42000mAh Portable Power Station Emergency External Battery Pack Generator Backup",
+        "description": "AC output is customized according to different countries, areas. a)Please keep the device away from coin, jewelry, keys or other metal object or there will be short circuit hazard. b)Please don't heat this device. Throw the device in the fire, water and other liquid container is not allowed. Please keep the device away from the sun directly. c)Please keep the device away from high humidity and dusty environment d)Please don't crash the device. Open the device privately is not allowed e)Please don't fall down and hard shock on this device. This is normal.",
+        "keywords": ["Charger", "Powerbank", "Battery"],
+        "copy": "Floureon 42000mAh Portable Power Station Emergency External Battery Pack Generator Backup, 200W(Max) 120V 2 AC Outlets/4 USB Ports/Solar Input, Power",
+        "image": {
+	        "id": 8540012,
+	        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTwAq4Kn9qdOEMn0aeZkxL5NXEIkp_BPIJ79a6K62Xlz-y0ZRimB5Km18b7rODNyOAF1fmKBBk&usqp=CAE"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Battery",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}    
         
 ]]]></ee:set-payload>
             </ee:message>
@@ -960,6 +991,46 @@ output application/json
             "averageRate": 0.0
         }
     }]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890012']" >
+				<ee:transform doc:name="Product 7890012" doc:id="ac73fe9b-7bb5-46d4-a3ab-c5656380d21a" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890012,
+        "price": {
+	        "value": 204.74,
+	        "currency": "USD"
+        },
+        "name": "Floureon 42000mAh Portable Power Station Emergency External Battery Pack Generator Backup",
+        "description": "AC output is customized according to different countries, areas. a)Please keep the device away from coin, jewelry, keys or other metal object or there will be short circuit hazard. b)Please don't heat this device. Throw the device in the fire, water and other liquid container is not allowed. Please keep the device away from the sun directly. c)Please keep the device away from high humidity and dusty environment d)Please don't crash the device. Open the device privately is not allowed e)Please don't fall down and hard shock on this device. This is normal.",
+        "keywords": ["Charger", "Powerbank", "Battery"],
+        "copy": "Floureon 42000mAh Portable Power Station Emergency External Battery Pack Generator Backup, 200W(Max) 120V 2 AC Outlets/4 USB Ports/Solar Input, Power",
+        "image": {
+	        "id": 8540012,
+	        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTwAq4Kn9qdOEMn0aeZkxL5NXEIkp_BPIJ79a6K62Xlz-y0ZRimB5Km18b7rODNyOAF1fmKBBk&usqp=CAE"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Battery",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+}]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 			</when>
