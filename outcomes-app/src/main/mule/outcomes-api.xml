@@ -247,6 +247,10 @@ output application/json
     <flow name="post:\outcomes\outcome:outcomes-api-config">
 		<ee:transform doc:name="Transform Message" doc:id="75234c79-9fa1-4b54-90a3-6493fe453a33">
 			<ee:message>
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+""]]></ee:set-payload>
 			</ee:message>
 			<ee:variables>
 				<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
@@ -261,5 +265,6 @@ output application/java
 }]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<logger level="INFO" message="post:\outcomes\outcome:application\json:outcomes-api-config" />
     </flow>
 </mule>
