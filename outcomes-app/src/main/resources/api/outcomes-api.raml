@@ -1,5 +1,5 @@
 #%RAML 1.0
-baseUri: https://mocksvc.mulesoft.com/mocks/d270d7e0-8e7b-4c30-be13-9d9a56aafa19 # 
+baseUri: https://mocksvc.mulesoft.com/mocks/2f8f2e60-27a6-48c9-b492-fd7993bd1bc4 # 
 title: Outcomes API
 
 version: 1.0
@@ -39,3 +39,11 @@ uses:
             Content-Location:
               type: string
               example: https://outcomes-app.cloudhub.io/api/outcomes/outcome/1234
+    /{outcome_id}:
+      get:
+        description: Retrieve a created outcome
+        responses:
+          200:
+            body:
+              type: outcomes.OutcomesResponse
+              example: !include exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/outcomes-response-example.raml
