@@ -1,0 +1,54 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/9ab54348-de37-4c55-9c44-f8d93d7e236e # baseUri: https://mocksvc.mulesoft.com/mocks/ddcf4682-62ac-41c6-bc5f-4be00b3b8299 # 
+version: v1
+
+uses: 
+  shelves: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-datatypes/1.0.2/dynamic_shelf-datatypes.raml
+
+title: Dynamic Shelf API
+
+mediaType: application/json
+
+/dynamic_shelf:
+  /status:
+    get:
+      description: retrieve all the itens
+      queryParameters: 
+        userName?: string
+      responses:
+        200:
+          body:
+            type: shelves.ShelvesStatus
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.2/shelves_status-example.raml
+  /itemUpdates:
+    put:
+      description: update shelf item
+      body:
+        type: shelves.UpdateItem
+        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.2/shelf_item-update-example.raml
+      responses:
+        204:
+  /saying:
+    put:
+      description:
+      body:
+        type: shelves.Saying
+        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.2/saying-example.raml
+      responses:
+        204:
+  /fanOn:
+    put:
+      description:
+      body:
+        type: shelves.Activated
+        example: !include exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.2/activated-example.raml
+      responses:
+        204:
+  /droneDelivered:
+    put:
+      description:
+      body:
+        type: shelves.Activated
+        example: !include exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.2/activated-example.raml
+      responses:
+        204:

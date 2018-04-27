@@ -246,7 +246,7 @@ output application/json
       currency: "USD"
     },
     name: "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter",
-    description: "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
+    description: "Goal Zero Yeti 150 Solar Generator, 22004 A plug-and-play, silent, fume-free generator for emergencies, camping, or wherever you need power. The Goal Zero Yeti 150 Solar Generator is a gas-free source of portable power to keep lights, phones and laptops powered on through any situation.",
     keywords: [
       "GOAL ZERO", 
       "Solar", 
@@ -677,7 +677,7 @@ output application/json
         "currency": "USD"
       },
       "name": "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter",
-      "description": "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
+      "description": "Goal Zero Yeti 150 Solar Generator, 22004 A plug-and-play, silent, fume-free generator for emergencies, camping, or wherever you need power. The Goal Zero Yeti 150 Solar Generator is a gas-free source of portable power to keep lights, phones and laptops powered on through any situation.",
       "keywords": ["GOAL ZERO", "Solar", "160 watt", "With Inverter", "Portable"],
       "copy": "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter - 14 Ah - 14-29V",
       "image": {

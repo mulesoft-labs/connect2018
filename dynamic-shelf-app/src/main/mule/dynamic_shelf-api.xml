@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+    <http:listener-config name="dynamic_shelf-api-httpListenerConfig" doc:name="HTTP Listener config">
+        <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
+			</tls:context>
+		</http:listener-connection>
+    </http:listener-config>
+    <apikit:config name="dynamic_shelf-api-config" raml="dynamic_shelf-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <global-property doc:name="Global Property" doc:id="5cc586ba-fe96-4a69-97b4-d30d74cebb79" name="https.port" value="8082" />
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="ad8f1fac-e718-4958-8c1f-09768991633f" />
+	<api-gateway:autodiscovery apiId="12136280" doc:name="API Autodiscovery" doc:id="2663210a-2bec-42a9-aac5-99dc882264a3" flowRef="dynamic_shelf-api-main" />
+	<flow name="dynamic_shelf-api-main">
+        <http:listener config-ref="dynamic_shelf-api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="dynamic_shelf-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="dynamic_shelf-api-console">
+        <http:listener config-ref="dynamic_shelf-api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="dynamic_shelf-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\dynamic_shelf\droneDelivered:application\json:dynamic_shelf-api-config">
+        <os:store doc:name="Store droneDelivered" doc:id="83b65f70-a7ac-43ee-ae2d-d90bc3f529a7" key="droneDelivered" objectStore="Object_store">
+			<os:value ><![CDATA[#[payload.activated]]]></os:value>
+		</os:store>
+		<logger level="INFO" message="put:\dynamic_shelf\droneDelivered:application\json:dynamic_shelf-api-config" />
+    </flow>
+    <flow name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config">
+        <os:store doc:name="Store fanOn" doc:id="1ee2dc3a-7e80-4d17-a569-2655d1721841" key="fanOn" objectStore="Object_store">
+			<os:value ><![CDATA[#[payload.activated]]]></os:value>
+		</os:store>
+		<logger level="INFO" message="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config" />
+    </flow>
+    <flow name="put:\dynamic_shelf\itemUpdates:application\json:dynamic_shelf-api-config">
+        <logger level="INFO" message="put:\dynamic_shelf\itemUpdates:application\json:dynamic_shelf-api-config" />
+    </flow>
+    <flow name="put:\dynamic_shelf\saying:application\json:dynamic_shelf-api-config">
+        <os:store doc:name="Store saying" doc:id="c8c7bc0d-b3d3-40fc-b2c6-fa460a906dbc" key="saying" objectStore="Object_store">
+			<os:value><![CDATA[#[payload.text]]]></os:value>
+		</os:store>
+		<logger level="INFO" message="put:\dynamic_shelf\saying:application\json:dynamic_shelf-api-config" />
+    </flow>
+    <flow name="get:\dynamic_shelf\status:dynamic_shelf-api-config">
+		<os:retrieve doc:name="Retrieving Saying" doc:id="79a1b6f0-6317-4907-9c1c-8e1ff4e9ecfc" key="saying" target="saying" objectStore="Object_store">
+			<os:default-value ><![CDATA[ ]]></os:default-value>
+		</os:retrieve>
+		<os:retrieve doc:name="Retrieve fanOn" doc:id="876ed2ae-731d-4efe-99e8-a0c828def267" key="fanOn" objectStore="Object_store" target="fanOn">
+			<os:default-value ><![CDATA[false]]></os:default-value>
+		</os:retrieve>
+		<os:retrieve doc:name="Retrieve droneDelivered" doc:id="7db921dd-d183-4b05-93fd-4e64389b85d9" key="droneDelivered" objectStore="Object_store" target="droneDelivered">
+			<os:default-value ><![CDATA[false]]></os:default-value>
+		</os:retrieve>
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="673e7163-77eb-44ab-8241-643cb828bb2a">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  locations: [
+    {
+      id: 7890011,
+      name: "Coleman Sundome 2-Person Tent",
+      description: "2 person 1 room domed tent. Great for small family solo travelers and first time campers. Easy two pole set up with shock corded 8.5 mm fiberglass poles that slip into continuous pole sleeves. Pin and ring design and instaclip attachments. Durable carry bag with separate storage bags for tents poles and stakes and sewn on instructions. Features: exclusive weatherTec system keeps you dry. Adjustable Variflo ventilation front zip door and vent window interior gear pocket and electrical access port and polyethylene. 1000 D- 140 g/sqm floor.",
+      price: {
+        currency: "USD",
+        value: 68.59
+      },
+      image: {
+        id: 8540011,
+        url: "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTAB-NLTn_7HFbw2LhGAUNRosCjv5nvlyEWDjUyBuMlp9Zg5qEScR-EOUdKmh_ueKNA8JCDm2v0&usqp=CAY"
+      }
+    }, 
+    {
+      id: 7890009,
+      name: "Coleman Lantern",
+      description: "Light up your next outdoor gathering with a super-bright lantern! The versatile Premium Powerhouse runs on either Coleman Liquid fuel or unleaded gasoline and uses less fuel than lanterns powered by propane. Delivering an extra-bright 1107 lumens on high, the Coleman Premium Powerhouse Dual Fuel Lantern features an adjustable dimmer knob to allow the perfect amount of light for your campsite, barbecue and more!",
+      price: {
+        currency: "USD",
+        value: 89.79
+      },
+      image: {
+        id: 8540009,
+        url: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRrT8bmktPPrwX1z974P8DriLGtyegoXAX90JRrStaYCnIwC_g6Nng2gyucVrk8WNAN3TkkfBb2&usqp=CAY"
+      }
+    }, 
+    {
+      id: 7890008,
+      name: "Sintechno Camping Portable Lantern",
+      description: "Sintechno Inc This portable emergency / camp lantern uses 36 white SMD Super Bright LED's which can be recharged by both included solar panel and AC power adapter.",
+      price: {
+        currency: "USD",
+        value: 85.99
+      },
+      image: {
+        id: 8540008,
+        url: "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcREYcHVgrBWpAew2bVIrZB4mu7rvhKm-ijxtkSmBvizfVW2NGC--h6jlCX-Gbc7S9rwihlJ7C9D&usqp=CAY"
+      }
+    }, 
+    {
+      id: 7890012,
+      name: "Floureon 42000mAh Portable Power Station Emergency External Battery Pack Generator Backup",
+      description: "AC output is customized according to different countries, areas. a)Please keep the device away from coin, jewelry, keys or other metal object or there will be short circuit hazard. b)Please don't heat this device. Throw the device in the fire, water and other liquid container is not allowed. Please keep the device away from the sun directly. c)Please keep the device away from high humidity and dusty environment d)Please don't crash the device. Open the device privately is not allowed e)Please don't fall down and hard shock on this device. This is normal.",
+      price: {
+        currency: "USD",
+        value: 204.74
+      },
+      image: {
+        id: 8540012,
+        url: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTwAq4Kn9qdOEMn0aeZkxL5NXEIkp_BPIJ79a6K62Xlz-y0ZRimB5Km18b7rODNyOAF1fmKBBk&usqp=CAE"
+      }
+    }, 
+    {
+      id: 7890003,
+      name: "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter",
+      description: "Goal Zero Yeti 150 Solar Generator, 22004 A plug-and-play, silent, fume-free generator for emergencies, camping, or wherever you need power. The Goal Zero Yeti 150 Solar Generator is a gas-free source of portable power to keep lights, phones and laptops powered on through any situation.",
+      price: {
+        currency: "USD",
+        value: 199.00
+      },
+      image: {
+        id: 8540003,
+        url: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTqPH1wK0UGXcI55H1rSwKukYH4_AfAU40OH_noVqt4M_E95UTOyZvkdAvMYE_tNfeV-c3Cao8&usqp=CAE"
+      }
+    }, 
+    {
+      id: 7890002,
+      name: "Goal Zero Lighthouse 400",
+      description: "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
+      price: {
+        currency: "USD",
+        value: 40.90
+      },
+      image: {
+        id: 8540002,
+        url: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcg1_pBwGoE4XItBXqfhkq8sqCkoBs6ZLKX1JQv9gOxl3M-2vlHF-VX6j-SEMWnOPTuzLQ0VPV&usqp=CAY"
+      }
+    }, 
+    {
+      id: 7890001,
+      name: "Eureka Cypress Sleeping Bag",
+      description: "Made from the same warm material as the adult size for backpacking and family camping, Eureka's Cyprus Junior is a three-season sleeping bag with toasty ThermaShield insulation that's temperature rated at 15°F. The boy-specific junior size and fit reduces unnecessary weight and bulk while on the trail.",
+      price: {
+        currency: "USD",
+        value: 47.95
+      },
+      image: {
+        id: 8540001,
+        url: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSzTFAyV9Trgw3J3gmxL0unF0f1JTFmU1YBXsSnhB47xVbxxuBf3WzDerHeqM97Vfg0leKvu0i4&usqp=CAY"
+      }
+    }, 
+    {
+      id: 7890014,
+      name: "Wilson Sporting Goods Traditional Soccer Ball Size 4 Synthetic Leather",
+      description: "Synthetic leather cover with shiny finish in a traditional black and white pattern. Superior playability. Butyl bladder for excellent air retention, shape & feel. Official size & weight.",
+      image: {
+        id: 8540014,
+        url: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTr-XPLd0DzVWhmg8THgYqfMjHOdFBeqUdkeZ8VCyLB7d4q41_Y9TD6WTr1Ab_0nYR4Wvf1JhwX&usqp=CAY"
+      },
+      price: {
+        value: 8.99,
+        currency: "USD"
+      }
+    }
+  ],
+  fanOn: vars.fanOn as Boolean,
+  saying: trim(vars.saying as String),
+  droneDelivered: vars.droneDelivered as Boolean
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>
