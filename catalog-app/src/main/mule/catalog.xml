@@ -543,8 +543,224 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}    
-        
+	},
+  {
+        "id": 7890013,
+        "price": {
+            "value": 6.99,
+            "currency": "USD"
+        },
+        "name": "Mattel UNO Card Game",
+        "description": "Easy to pick up...impossible to put down. Play by matching color or number, or play an action card against your opponent. When you're down to one card, don't forget to yell \"UNO!\" Contains 108 cards and instructions. For 2 to 10 players. Ages 7 and older.",
+        "keywords": ["cards", "cardgames", "games"],
+        "copy": "Mattel UNO Card Game",
+        "image": {
+            "id": 8540013,
+            "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRAGd8aVBgzIinWYF-YCl1TCwi1agSVjqIWmA3RSZenW8KOeYQC&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Games",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	},
+  {
+        "id": 7890014,
+        "price": {
+            "value": 6.44,
+            "currency": "USD"
+        },
+        "name": "Water Bottle",
+        "description": "This 3 gallon stackable water bottle is perfect for storing liquid and serving to a large amount of people. Proudly made, it is guaranteed to last a lifetime with its BPA free material and easy-to-grip handle. You'll never have to worry",
+        "keywords": ["water", "botle"],
+        "copy": "Water Bottle",
+        "image": {
+            "value": 6.44,
+            "currency": "USD"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "water",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	},
+  {
+        "id": 7890015,
+        "price": {
+            "value": 9.00,
+            "currency": "USD"
+        },
+        "name": "Campfire Mini Marshmallows Packs - White 12-Piece Box",
+        "description": "Ancient Egyptians were probably the first people to enjoy the treats we know today as marshmallows. As early as 2000 BCE, Egyptians were squeezing sap from the mallow plant and mixing it with nuts and honey to create a dessert so rare and delicious, it was reserved for royalty. We have no way of knowing what these early marshmallows looked like -- the pillowy shapes with which we are familiar today didn’t originate until the 19th century, when confectioners in France learned how to create a more stable version involving gelatin. Not all marshmallows are created equal. Take these minis, for example -- unlike their bigger brothers, these tiny treats don’t fare well in a campfire. But they still pack a ton of marshmallowy goodness in itty bitty bite-size form! These sweet little things are perfect in hot cocoa, or they make great solo snacks when you’re crave a little surge of yum. And with 90 calories and no fat per pack, they're ideal for a guilt-free nibble!",
+        "keywords": ["candies", "campfire"],
+        "copy": "Campfire Mini Marshmallows Packs - White 12-Piece Box",
+        "image": {
+            "id": 8540015,
+            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQCHUAWnjyenL7VNfKyjXqyyuSvCdcelRSkhwwQnoVTgXBIhxvWnhU7aH8DSdz4hKz9BZkWQSdT&usqp=CAE"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Candies",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	},
+  {
+        "id": 7890016,
+        "price": {
+            "value": 49.95,
+            "currency": "USD"
+        },
+        "name": "Waterproof Outdoor Blanket Green | L.L.Bean",
+        "description": "Don't let a little wet grass ruin your picnic or breakfast at the campsite. This versatile waterproof blanket has a rugged polyurethane-coated nylon backing that keeps moisture from seeping through to the supersoft fleece surface. Top- 100% polyester fleece. Bottom- 100% nylon. Machine wash and dry. Super-soft polyester-fleece surface. Rugged polyurethane-coated nylon backing keeps moisture from seeping through. Great choice for sporting events, the beach on a boat or in your car's safety kit. Stuff sack included.",
+        "keywords": ["blanket", "water", "proof"],
+        "copy": "Waterproof Outdoor Blanket Green | L.L.Bean",
+        "image": {
+            "id": 8540016,
+            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQCHUAWnjyenL7VNfKyjXqyyuSvCdcelRSkhwwQnoVTgXBIhxvWnhU7aH8DSdz4hKz9BZkWQSdT&usqp=CAE"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Blanket",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	},
+  {
+        "id": 7890017,
+        "price": {
+            "value": 8.99,
+            "currency": "USD"
+        },
+        "name": "Wilson Sporting Goods Traditional Soccer Ball Size 4 Synthetic Leather",
+        "description": "Synthetic leather cover with shiny finish in a traditional black and white pattern. Superior playability. Butyl bladder for excellent air retention, shape & feel. Official size & weight.",
+        "keywords": ["ball", "soccer"],
+        "copy": "Wilson Sporting Goods Traditional Soccer Ball Size 4 Synthetic Leather",
+        "image": {
+            "id": 8540017,
+            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTr-XPLd0DzVWhmg8THgYqfMjHOdFBeqUdkeZ8VCyLB7d4q41_Y9TD6WTr1Ab_0nYR4Wvf1JhwX&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Ball",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	},
+  {
+        "id": 7890018,
+        "price": {
+            "value": 4.99,
+            "currency": "USD"
+        },
+        "name": "Repel Family Dry Aerosol Insect Repellent, 10% Deet - 4 fl oz spray",
+        "description": "Repel Family Dry Aerosol provides hour of protection from mosquitoes and biting flies. Also repel ticks, chiggers, no-see-ums, gnats and fleas. Repel Family Dry Aerosol offers long-lasting protection-- it s not greasy and has no unpleasant odor.",
+        "keywords": ["insect", "repellent"],
+        "copy": "Repel Family Dry Aerosol Insect Repellent, 10% Deet - 4 fl oz spray",
+        "image": {
+            "id": 8540018,
+            "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRqw24-M_195-JQoMOSSVlWEWjlM5UcJI-DqK2zYWVZHsbTNBdneFQKa_WnjjT2nFmn39X920Mc&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Repellent",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	},
+  {
+        "id": 7890019,
+        "price": {
+            "value": 6.99,
+            "currency": "USD"
+        },
+        "name": "Ignite-O FS855-24 Fire Starter Packets",
+        "description": "The Quick, Clean & Easy Way to Start Your Fire! Big flame Burns up to 15 minutes No Fumes; No Residue Just light the packet! The cleaner way to light your fire for fireplaces, wood stoves, charcoal grills and campfires. Contains 20 packets.",
+        "keywords": ["fire", "starter"],
+        "copy": "Ignite-O FS855-24 Fire Starter Packets",
+        "image": {
+            "id": 8540019,
+            "url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQuq5gS5UD67LAemZvDEhaE332K8Z3sjlYxr75shbA0Ezl_As8&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Utilities",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
 ]]]></ee:set-payload>
             </ee:message>
         </ee:transform>
@@ -1031,6 +1247,334 @@ output application/json
             "averageRate": 0.0
         }
 }]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890013']" >
+				<ee:transform doc:name="Product 7890013" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890013,
+        "price": {
+            "value": 6.99,
+            "currency": "USD"
+        },
+        "name": "Mattel UNO Card Game",
+        "description": "Easy to pick up...impossible to put down. Play by matching color or number, or play an action card against your opponent. When you're down to one card, don't forget to yell \"UNO!\" Contains 108 cards and instructions. For 2 to 10 players. Ages 7 and older.",
+        "keywords": ["cards", "cardgames", "games"],
+        "copy": "Mattel UNO Card Game",
+        "image": {
+            "id": 8540013,
+            "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRAGd8aVBgzIinWYF-YCl1TCwi1agSVjqIWmA3RSZenW8KOeYQC&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Games",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890013']" >
+				<ee:transform doc:name="Product 7890013" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890013,
+        "price": {
+            "value": 6.99,
+            "currency": "USD"
+        },
+        "name": "Mattel UNO Card Game",
+        "description": "Easy to pick up...impossible to put down. Play by matching color or number, or play an action card against your opponent. When you're down to one card, don't forget to yell \"UNO!\" Contains 108 cards and instructions. For 2 to 10 players. Ages 7 and older.",
+        "keywords": ["cards", "cardgames", "games"],
+        "copy": "Mattel UNO Card Game",
+        "image": {
+            "id": 8540013,
+            "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRAGd8aVBgzIinWYF-YCl1TCwi1agSVjqIWmA3RSZenW8KOeYQC&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Games",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890014']" >
+				<ee:transform doc:name="Product 7890014" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890014,
+        "price": {
+            "value": 6.44,
+            "currency": "USD"
+        },
+        "name": "Water Bottle",
+        "description": "This 3 gallon stackable water bottle is perfect for storing liquid and serving to a large amount of people. Proudly made, it is guaranteed to last a lifetime with its BPA free material and easy-to-grip handle. You'll never have to worry",
+        "keywords": ["water", "botle"],
+        "copy": "Water Bottle",
+        "image": {
+            "value": 6.44,
+            "currency": "USD"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "water",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890015']" >
+				<ee:transform doc:name="Product 7890015" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890015,
+        "price": {
+            "value": 9.00,
+            "currency": "USD"
+        },
+        "name": "Campfire Mini Marshmallows Packs - White 12-Piece Box",
+        "description": "Ancient Egyptians were probably the first people to enjoy the treats we know today as marshmallows. As early as 2000 BCE, Egyptians were squeezing sap from the mallow plant and mixing it with nuts and honey to create a dessert so rare and delicious, it was reserved for royalty. We have no way of knowing what these early marshmallows looked like -- the pillowy shapes with which we are familiar today didn’t originate until the 19th century, when confectioners in France learned how to create a more stable version involving gelatin. Not all marshmallows are created equal. Take these minis, for example -- unlike their bigger brothers, these tiny treats don’t fare well in a campfire. But they still pack a ton of marshmallowy goodness in itty bitty bite-size form! These sweet little things are perfect in hot cocoa, or they make great solo snacks when you’re crave a little surge of yum. And with 90 calories and no fat per pack, they're ideal for a guilt-free nibble!",
+        "keywords": ["candies", "campfire"],
+        "copy": "Campfire Mini Marshmallows Packs - White 12-Piece Box",
+        "image": {
+            "id": 8540015,
+            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQCHUAWnjyenL7VNfKyjXqyyuSvCdcelRSkhwwQnoVTgXBIhxvWnhU7aH8DSdz4hKz9BZkWQSdT&usqp=CAE"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Candies",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890016']" >
+				<ee:transform doc:name="Product 7890016" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890016,
+        "price": {
+            "value": 49.95,
+            "currency": "USD"
+        },
+        "name": "Waterproof Outdoor Blanket Green | L.L.Bean",
+        "description": "Don't let a little wet grass ruin your picnic or breakfast at the campsite. This versatile waterproof blanket has a rugged polyurethane-coated nylon backing that keeps moisture from seeping through to the supersoft fleece surface. Top- 100% polyester fleece. Bottom- 100% nylon. Machine wash and dry. Super-soft polyester-fleece surface. Rugged polyurethane-coated nylon backing keeps moisture from seeping through. Great choice for sporting events, the beach on a boat or in your car's safety kit. Stuff sack included.",
+        "keywords": ["blanket", "water", "proof"],
+        "copy": "Waterproof Outdoor Blanket Green | L.L.Bean",
+        "image": {
+            "id": 8540016,
+            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQCHUAWnjyenL7VNfKyjXqyyuSvCdcelRSkhwwQnoVTgXBIhxvWnhU7aH8DSdz4hKz9BZkWQSdT&usqp=CAE"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Blanket",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890017']" >
+				<ee:transform doc:name="Product 7890017" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890017,
+        "price": {
+            "value": 8.99,
+            "currency": "USD"
+        },
+        "name": "Wilson Sporting Goods Traditional Soccer Ball Size 4 Synthetic Leather",
+        "description": "Synthetic leather cover with shiny finish in a traditional black and white pattern. Superior playability. Butyl bladder for excellent air retention, shape & feel. Official size & weight.",
+        "keywords": ["ball", "soccer"],
+        "copy": "Wilson Sporting Goods Traditional Soccer Ball Size 4 Synthetic Leather",
+        "image": {
+            "id": 8540017,
+            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTr-XPLd0DzVWhmg8THgYqfMjHOdFBeqUdkeZ8VCyLB7d4q41_Y9TD6WTr1Ab_0nYR4Wvf1JhwX&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Ball",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890018']" >
+				<ee:transform doc:name="Product 7890018" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890018,
+        "price": {
+            "value": 4.99,
+            "currency": "USD"
+        },
+        "name": "Repel Family Dry Aerosol Insect Repellent, 10% Deet - 4 fl oz spray",
+        "description": "Repel Family Dry Aerosol provides hour of protection from mosquitoes and biting flies. Also repel ticks, chiggers, no-see-ums, gnats and fleas. Repel Family Dry Aerosol offers long-lasting protection-- it s not greasy and has no unpleasant odor.",
+        "keywords": ["insect", "repellent"],
+        "copy": "Repel Family Dry Aerosol Insect Repellent, 10% Deet - 4 fl oz spray",
+        "image": {
+            "id": 8540018,
+            "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRqw24-M_195-JQoMOSSVlWEWjlM5UcJI-DqK2zYWVZHsbTNBdneFQKa_WnjjT2nFmn39X920Mc&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Repellent",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890019']" >
+				<ee:transform doc:name="Product 7890019" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890019,
+        "price": {
+            "value": 6.99,
+            "currency": "USD"
+        },
+        "name": "Ignite-O FS855-24 Fire Starter Packets",
+        "description": "The Quick, Clean & Easy Way to Start Your Fire! Big flame Burns up to 15 minutes No Fumes; No Residue Just light the packet! The cleaner way to light your fire for fireplaces, wood stoves, charcoal grills and campfires. Contains 20 packets.",
+        "keywords": ["fire", "starter"],
+        "copy": "Ignite-O FS855-24 Fire Starter Packets",
+        "image": {
+            "id": 8540019,
+            "url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQuq5gS5UD67LAemZvDEhaE332K8Z3sjlYxr75shbA0Ezl_As8&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Utilities",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 			</when>
