@@ -145,6 +145,10 @@ output application/json
       value: 47.95,
       currency: "USD"
     },
+    "discountedPrice": {
+        "value": 39.88,
+        "currency": "USD"
+    },
     name: "Eureka Cypress Sleeping Bag",
     description: "Made from the same warm material as the adult size for backpacking and family camping, Eureka's Cyprus Junior is a three-season sleeping bag with toasty ThermaShield insulation that's temperature rated at 15°F. The boy-specific junior size and fit reduces unnecessary weight and bulk while on the trail.",
     keywords: [
@@ -196,6 +200,10 @@ output application/json
       value: 40.90,
       currency: "USD"
     },
+    "discountedPrice": {
+        "value": 29.88,
+        "currency": "USD"
+    },
     name: "Goal Zero Lighthouse 400",
     description: "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
     keywords: [
@@ -245,6 +253,10 @@ output application/json
       value: 199.00,
       currency: "USD"
     },
+    "discountedPrice": {
+        "value": 179.88,
+        "currency": "USD"
+    },
     name: "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter",
     description: "Goal Zero Yeti 150 Solar Generator, 22004 A plug-and-play, silent, fume-free generator for emergencies, camping, or wherever you need power. The Goal Zero Yeti 150 Solar Generator is a gas-free source of portable power to keep lights, phones and laptops powered on through any situation.",
     keywords: [
@@ -292,8 +304,12 @@ output application/json
   {
         "id": 7890006,
         "price": {
-        "value": 74.99,
-        "currency": "USD"
+            "value": 74.99,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 70.88,
+            "currency": "USD"
         },
         "name": "Coleman Lantern",
         "description": "Take the convenience of Three lights in one with you with the Coleman Trifecta LED Lantern. During an emergency, pop one of the three lights off the base for a personal flashlight. They recharge once theyre back on the base for hands-free light. The lantern runs cool so its always safe to touch, even when its been on for hours. Model # 2000013867 Features: Even distribution of light Choose your power, 4D batteries, or CPX 6 rechargeable Hi/Low for optimal light output 3 removable panels",
@@ -335,8 +351,12 @@ output application/json
     {
         "id": 7890007,
         "price": {
-        "value": 71.99,
-        "currency": "USD"
+            "value": 71.99,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 52.88,
+            "currency": "USD"
         },
         "name": "Coleman Lantern",
         "description": "Uses 8 D batteries, not included. Imported.",
@@ -378,8 +398,12 @@ output application/json
         {
         "id": 7890008,
         "price": {
-        "value": 85.99,
-        "currency": "USD"
+            "value": 85.99,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 60.22,
+            "currency": "USD"
         },
         "name": "Sintechno Camping Portable Lantern",
         "description": "Sintechno Inc This portable emergency / camp lantern uses 36 white SMD Super Bright LED's which can be recharged by both included solar panel and AC power adapter.",
@@ -410,8 +434,12 @@ output application/json
   {
         "id": 7890009,
         "price": {
-        "value": 89.79,
-        "currency": "USD"
+            "value": 89.79,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 82.88,
+            "currency": "USD"
         },	
         "name": "Coleman Lantern",
         "description": "Light up your next outdoor gathering with a super-bright lantern! The versatile Premium Powerhouse runs on either Coleman Liquid fuel or unleaded gasoline and uses less fuel than lanterns powered by propane. Delivering an extra-bright 1107 lumens on high, the Coleman Premium Powerhouse Dual Fuel Lantern features an adjustable dimmer knob to allow the perfect amount of light for your campsite, barbecue and more!",
@@ -456,7 +484,10 @@ output application/json
         "value": 49.00,
         "currency": "USD"
         },
-			
+        "discountedPrice": {
+            "value": 43.88,
+            "currency": "USD"
+        },			
         "name": "Swarovski Crystalline Ballpoint Pen",
         "description": "Your sparkling sense of style shines through with this stunning Swarovski crystalline pen with replaceable ink cartridge. Use it to record your most luxurious secrets and most fabulous thoughts. Available in silver-tone, 18k gold-plated and 18k rose gold tone-plated metal.",
         "keywords": ["Swarovski", "Ballpoint"],
@@ -487,6 +518,10 @@ output application/json
         "price": {
 	        "value": 68.59,
 	        "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 64.88,
+            "currency": "USD"
         },
         "name": "Coleman Sundome 2-Person Tent",
         "description": "2 person 1 room domed tent. Great for small family solo travelers and first time campers. Easy two pole set up with shock corded 8.5 mm fiberglass poles that slip into continuous pole sleeves. Pin and ring design and instaclip attachments. Durable carry bag with separate storage bags for tents poles and stakes and sewn on instructions. Features: exclusive weatherTec system keeps you dry. Adjustable Variflo ventilation front zip door and vent window interior gear pocket and electrical access port and polyethylene. 1000 D- 140 g/sqm floor.",
@@ -519,6 +554,10 @@ output application/json
 	        "value": 204.74,
 	        "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 200.88,
+            "currency": "USD"
+        },
         "name": "Floureon 42000mAh Portable Power Station Emergency External Battery Pack Generator Backup",
         "description": "AC output is customized according to different countries, areas. a)Please keep the device away from coin, jewelry, keys or other metal object or there will be short circuit hazard. b)Please don't heat this device. Throw the device in the fire, water and other liquid container is not allowed. Please keep the device away from the sun directly. c)Please keep the device away from high humidity and dusty environment d)Please don't crash the device. Open the device privately is not allowed e)Please don't fall down and hard shock on this device. This is normal.",
         "keywords": ["Charger", "Powerbank", "Battery"],
@@ -548,6 +587,10 @@ output application/json
         "id": 7890013,
         "price": {
             "value": 6.99,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 4.88,
             "currency": "USD"
         },
         "name": "Mattel UNO Card Game",
@@ -581,6 +624,10 @@ output application/json
             "value": 6.44,
             "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 4.88,
+            "currency": "USD"
+        },
         "name": "Water Bottle",
         "description": "This 3 gallon stackable water bottle is perfect for storing liquid and serving to a large amount of people. Proudly made, it is guaranteed to last a lifetime with its BPA free material and easy-to-grip handle. You'll never have to worry",
         "keywords": ["water", "botle"],
@@ -610,6 +657,10 @@ output application/json
         "id": 7890015,
         "price": {
             "value": 9.00,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 7.22,
             "currency": "USD"
         },
         "name": "Campfire Mini Marshmallows Packs - White 12-Piece Box",
@@ -643,6 +694,10 @@ output application/json
             "value": 49.95,
             "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 44.44,
+            "currency": "USD"
+        },
         "name": "Waterproof Outdoor Blanket Green | L.L.Bean",
         "description": "Don't let a little wet grass ruin your picnic or breakfast at the campsite. This versatile waterproof blanket has a rugged polyurethane-coated nylon backing that keeps moisture from seeping through to the supersoft fleece surface. Top- 100% polyester fleece. Bottom- 100% nylon. Machine wash and dry. Super-soft polyester-fleece surface. Rugged polyurethane-coated nylon backing keeps moisture from seeping through. Great choice for sporting events, the beach on a boat or in your car's safety kit. Stuff sack included.",
         "keywords": ["blanket", "water", "proof"],
@@ -672,6 +727,10 @@ output application/json
         "id": 7890017,
         "price": {
             "value": 8.99,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 6.88,
             "currency": "USD"
         },
         "name": "Wilson Sporting Goods Traditional Soccer Ball Size 4 Synthetic Leather",
@@ -705,6 +764,10 @@ output application/json
             "value": 4.99,
             "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 3.77,
+            "currency": "USD"
+        },
         "name": "Repel Family Dry Aerosol Insect Repellent, 10% Deet - 4 fl oz spray",
         "description": "Repel Family Dry Aerosol provides hour of protection from mosquitoes and biting flies. Also repel ticks, chiggers, no-see-ums, gnats and fleas. Repel Family Dry Aerosol offers long-lasting protection-- it s not greasy and has no unpleasant odor.",
         "keywords": ["insect", "repellent"],
@@ -736,6 +799,10 @@ output application/json
             "value": 6.99,
             "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 5.55,
+            "currency": "USD"
+        },
         "name": "Ignite-O FS855-24 Fire Starter Packets",
         "description": "The Quick, Clean & Easy Way to Start Your Fire! Big flame Burns up to 15 minutes No Fumes; No Residue Just light the packet! The cleaner way to light your fire for fireplaces, wood stoves, charcoal grills and campfires. Contains 20 packets.",
         "keywords": ["fire", "starter"],
@@ -764,6 +831,10 @@ output application/json
         "id": 7890020,
         "price": {
             "value": 130.89,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 125.11,
             "currency": "USD"
         },
         "name": "Clay Alder Home Owsley Futon Mattress",
@@ -797,6 +868,10 @@ output application/json
             "value": 700,
             "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 791.33,
+            "currency": "USD"
+        },
         "name": "Bed With Built-in Workstation",
         "description": "Make the most of your children's bedroom floor space with this all-inclusive bedroom set! This loft bed features a stable and sturdy upper twin bunk, a separate lower bed on movable casters, and a built-in workstation to double as a handy computer desk. Mattress, box springs and bedding (comforters, sheets, pillows, etc.) are NOT included.",
         "keywords": ["bed", "twin", "workstation"],
@@ -826,6 +901,10 @@ output application/json
         "id": 7890022,
         "price": {
             "value": 25.00,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 20.00,
             "currency": "USD"
         },
         "name": "Book Rack Storage Bookshelf",
@@ -859,6 +938,10 @@ output application/json
             "value": 144.88,
             "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 139.88,
+            "currency": "USD"
+        },
         "name": "Chair Cubes",
         "description": "Office Furniture > Chairs & Sofas Childrens Factory 910007 Chair Cube Set, Assorted - Polyethylene - 15\" Length x 15\" Width x 15\" Height Lightweight chairs conveniently provide multiple uses and can be used both indoors and outdoors. Use them as chairs with either a 6\" high seat or 9\" high seat. Or, flip them over to use them as a table or a seat for adults. Chairs are made from nontoxic, recyclable polyethylene for safe use by everyone.",
         "keywords": [""],
@@ -888,6 +971,10 @@ output application/json
         "id": 7890024,
         "price": {
             "value": 85.98,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 80.98,
             "currency": "USD"
         },
         "name": "Safavieh Kids Transitional Geometric",
@@ -934,6 +1021,10 @@ output application/json
     value: 47.95,
     currency: "USD"
   },
+	"discountedPrice": {
+	    "value": 39.88,
+	    "currency": "USD"
+	},
   name: "Eureka Cypress Sleeping Bag",
   description: "Made from the same warm material as the adult size for backpacking and family camping, Eureka's Cyprus Junior is a three-season sleeping bag with toasty ThermaShield insulation that's temperature rated at 15°F. The boy-specific junior size and fit reduces unnecessary weight and bulk while on the trail.",
   keywords: [
@@ -994,6 +1085,10 @@ output application/json
         "value": 40.90,
         "currency": "USD"
       },
+	    "discountedPrice": {
+	        "value": 29.88,
+	        "currency": "USD"
+	    },
       "name": "Goal Zero Lighthouse 400",
       "description": "This 400-lumen (max. setting) lantern can be charged three ways: from the sun using Goal Zero solar panels (not included), from USB or manually with the hand crank built into the top. Full charge lasts up to 48 hours on the Li-NMC battery.",
       "keywords": ["Goal Zero","Lighthouse", "Camping light", "lantern"],
@@ -1046,6 +1141,10 @@ output application/json
         "value": 199.95,
         "currency": "USD"
       },
+    "discountedPrice": {
+        "value": 179.88,
+        "currency": "USD"
+    },
       "name": "Goal Zero Yeti 150 Solar Generator External Battery Pack/Power Inverter",
       "description": "Goal Zero Yeti 150 Solar Generator, 22004 A plug-and-play, silent, fume-free generator for emergencies, camping, or wherever you need power. The Goal Zero Yeti 150 Solar Generator is a gas-free source of portable power to keep lights, phones and laptops powered on through any situation.",
       "keywords": ["GOAL ZERO", "Solar", "160 watt", "With Inverter", "Portable"],
@@ -1097,6 +1196,10 @@ output application/json
         "price": {
         "value": 74.99,
         "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 70.88,
+            "currency": "USD"
         },
         "name": "Coleman Lantern",
         "description": "Take the convenience of Three lights in one with you with the Coleman Trifecta LED Lantern. During an emergency, pop one of the three lights off the base for a personal flashlight. They recharge once theyre back on the base for hands-free light. The lantern runs cool so its always safe to touch, even when its been on for hours. Model # 2000013867 Features: Even distribution of light Choose your power, 4D batteries, or CPX 6 rechargeable Hi/Low for optimal light output 3 removable panels",
@@ -1150,6 +1253,10 @@ output application/json
         "value": 71.99,
         "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 52.88,
+            "currency": "USD"
+        },
         "name": "Coleman Lantern",
         "description": "Uses 8 D batteries, not included. Imported.",
         "keywords": [],
@@ -1202,6 +1309,10 @@ output application/json
         "value": 85.99,
         "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 60.22,
+            "currency": "USD"
+        },
         "name": "Sintechno Camping Portable Lantern",
         "description": "Sintechno Inc This portable emergency / camp lantern uses 36 white SMD Super Bright LED's which can be recharged by both included solar panel and AC power adapter.",
         "keywords": [],
@@ -1242,7 +1353,10 @@ output application/json
         "value": 89.79,
         "currency": "USD"
         },
-			
+        "discountedPrice": {
+            "value": 82.88,
+            "currency": "USD"
+        },
         "name": "Coleman Lantern",
         "description": "Light up your next outdoor gathering with a super-bright lantern! The versatile Premium Powerhouse runs on either Coleman Liquid fuel or unleaded gasoline and uses less fuel than lanterns powered by propane. Delivering an extra-bright 1107 lumens on high, the Coleman Premium Powerhouse Dual Fuel Lantern features an adjustable dimmer knob to allow the perfect amount of light for your campsite, barbecue and more!",
         "keywords": [],
@@ -1295,7 +1409,10 @@ output application/json
         "value": 49.00,
         "currency": "USD"
         },
-			
+        "discountedPrice": {
+            "value": 43.88,
+            "currency": "USD"
+        },
         "name": "Swarovski Crystalline Ballpoint Pen",
         "description": "Your sparkling sense of style shines through with this stunning Swarovski crystalline pen with replaceable ink cartridge. Use it to record your most luxurious secrets and most fabulous thoughts. Available in silver-tone, 18k gold-plated and 18k rose gold tone-plated metal.",
         "keywords": ["Swarovski", "Ballpoint"],
@@ -1335,6 +1452,10 @@ output application/json
         "price": {
 	        "value": 68.59,
 	        "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 64.88,
+            "currency": "USD"
         },
         "name": "Coleman Sundome 2-Person Tent",
         "description": "2 person 1 room domed tent. Great for small family solo travelers and first time campers. Easy two pole set up with shock corded 8.5 mm fiberglass poles that slip into continuous pole sleeves. Pin and ring design and instaclip attachments. Durable carry bag with separate storage bags for tents poles and stakes and sewn on instructions. Features: exclusive weatherTec system keeps you dry. Adjustable Variflo ventilation front zip door and vent window interior gear pocket and electrical access port and polyethylene. 1000 D- 140 g/sqm floor.",
@@ -1376,6 +1497,10 @@ output application/json
 	        "value": 204.74,
 	        "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 200.88,
+            "currency": "USD"
+        },
         "name": "Floureon 42000mAh Portable Power Station Emergency External Battery Pack Generator Backup",
         "description": "AC output is customized according to different countries, areas. a)Please keep the device away from coin, jewelry, keys or other metal object or there will be short circuit hazard. b)Please don't heat this device. Throw the device in the fire, water and other liquid container is not allowed. Please keep the device away from the sun directly. c)Please keep the device away from high humidity and dusty environment d)Please don't crash the device. Open the device privately is not allowed e)Please don't fall down and hard shock on this device. This is normal.",
         "keywords": ["Charger", "Powerbank", "Battery"],
@@ -1405,7 +1530,7 @@ output application/json
 				</ee:transform>
 			</when>
 			<when expression="#[attributes.uriParams.product_id =='7890013']" >
-				<ee:transform doc:name="Product 7890013" >
+				<ee:transform doc:name="Product 7890013" doc:id="703c4088-f691-42f3-9522-3b07a3bc929c">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1416,45 +1541,8 @@ output application/json
             "value": 6.99,
             "currency": "USD"
         },
-        "name": "Mattel UNO Card Game",
-        "description": "Easy to pick up...impossible to put down. Play by matching color or number, or play an action card against your opponent. When you're down to one card, don't forget to yell \"UNO!\" Contains 108 cards and instructions. For 2 to 10 players. Ages 7 and older.",
-        "keywords": ["cards", "cardgames", "games"],
-        "copy": "Mattel UNO Card Game",
-        "image": {
-            "id": 8540013,
-            "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRAGd8aVBgzIinWYF-YCl1TCwi1agSVjqIWmA3RSZenW8KOeYQC&usqp=CAY"
-        },
-        "company": {
-            "id": 4607992,
-            "name": "Macy's",
-            "address" : {
-                "country": "USA",
-                "state": "CA",
-                "city": "San Francisco",
-                "street_address": "170 O'Farrell Street",
-                "zip": 94102
-            }
-        },
-        "category": "Games",
-        "review": {
-            "reviews": [],
-            "averageRate": 0.0
-        }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890013']" >
-				<ee:transform doc:name="Product 7890013" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-{
-        "id": 7890013,
-        "price": {
-            "value": 6.99,
+        "discountedPrice": {
+            "value": 4.88,
             "currency": "USD"
         },
         "name": "Mattel UNO Card Game",
@@ -1487,7 +1575,7 @@ output application/json
 				</ee:transform>
 			</when>
 			<when expression="#[attributes.uriParams.product_id =='7890014']" >
-				<ee:transform doc:name="Product 7890014" >
+				<ee:transform doc:name="Product 7890014" doc:id="55c3cba4-42a3-4176-9bc2-d606da716155">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1496,6 +1584,10 @@ output application/json
         "id": 7890014,
         "price": {
             "value": 6.44,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 4.88,
             "currency": "USD"
         },
         "name": "Water Bottle",
@@ -1528,7 +1620,7 @@ output application/json
 				</ee:transform>
 			</when>
 			<when expression="#[attributes.uriParams.product_id =='7890015']" >
-				<ee:transform doc:name="Product 7890015" >
+				<ee:transform doc:name="Product 7890015" doc:id="e596376c-397d-4aaa-b210-3f6aee5136b2">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1537,6 +1629,10 @@ output application/json
         "id": 7890015,
         "price": {
             "value": 9.00,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 7.22,
             "currency": "USD"
         },
         "name": "Campfire Mini Marshmallows Packs - White 12-Piece Box",
@@ -1569,7 +1665,7 @@ output application/json
 				</ee:transform>
 			</when>
 			<when expression="#[attributes.uriParams.product_id =='7890016']" >
-				<ee:transform doc:name="Product 7890016" >
+				<ee:transform doc:name="Product 7890016" doc:id="a233d489-7fc2-4003-8f1d-f26f38ec203b">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1578,6 +1674,10 @@ output application/json
         "id": 7890016,
         "price": {
             "value": 49.95,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 44.44,
             "currency": "USD"
         },
         "name": "Waterproof Outdoor Blanket Green | L.L.Bean",
@@ -1610,7 +1710,7 @@ output application/json
 				</ee:transform>
 			</when>
 			<when expression="#[attributes.uriParams.product_id =='7890017']" >
-				<ee:transform doc:name="Product 7890017" >
+				<ee:transform doc:name="Product 7890017" doc:id="c6273c1b-a80b-4030-b2ef-76df163a664c">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1619,6 +1719,10 @@ output application/json
         "id": 7890017,
         "price": {
             "value": 8.99,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 6.88,
             "currency": "USD"
         },
         "name": "Wilson Sporting Goods Traditional Soccer Ball Size 4 Synthetic Leather",
@@ -1651,7 +1755,7 @@ output application/json
 				</ee:transform>
 			</when>
 			<when expression="#[attributes.uriParams.product_id =='7890018']" >
-				<ee:transform doc:name="Product 7890018" >
+				<ee:transform doc:name="Product 7890018" doc:id="a5ecb611-15ac-442f-9936-8bf4f7926ad6">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1660,6 +1764,10 @@ output application/json
         "id": 7890018,
         "price": {
             "value": 4.99,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 3.77,
             "currency": "USD"
         },
         "name": "Repel Family Dry Aerosol Insect Repellent, 10% Deet - 4 fl oz spray",
@@ -1692,7 +1800,7 @@ output application/json
 				</ee:transform>
 			</when>
 			<when expression="#[attributes.uriParams.product_id =='7890019']" >
-				<ee:transform doc:name="Product 7890019" >
+				<ee:transform doc:name="Product 7890019" doc:id="60e51e78-6408-44ad-a748-170c7d4d7255">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1701,6 +1809,10 @@ output application/json
         "id": 7890019,
         "price": {
             "value": 6.99,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 5.55,
             "currency": "USD"
         },
         "name": "Ignite-O FS855-24 Fire Starter Packets",
@@ -1733,7 +1845,7 @@ output application/json
 				</ee:transform>
             </when>
 			<when expression="#[attributes.uriParams.product_id =='7890020']" >
-				<ee:transform doc:name="Product 7890020" >
+				<ee:transform doc:name="Product 7890020" doc:id="4e878c1b-6e30-48a2-adbf-de81fceaa2e4">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1742,6 +1854,10 @@ output application/json
         "id": 7890020,
         "price": {
             "value": 130.89,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 125.11,
             "currency": "USD"
         },
         "name": "Clay Alder Home Owsley Futon Mattress",
@@ -1774,7 +1890,7 @@ output application/json
 				</ee:transform>
 			</when>
 			<when expression="#[attributes.uriParams.product_id =='7890021']" >
-				<ee:transform doc:name="Product 7890021" >
+				<ee:transform doc:name="Product 7890021" doc:id="8828b18a-c14a-42ec-a80a-5b8c96a08c1a">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1783,6 +1899,10 @@ output application/json
         "id": 7890021,
         "price": {
             "value": 700,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 791.33,
             "currency": "USD"
         },
         "name": "Bed With Built-in Workstation",
@@ -1815,7 +1935,7 @@ output application/json
 				</ee:transform>
 			</when>
 			<when expression="#[attributes.uriParams.product_id =='7890022']" >
-				<ee:transform doc:name="Product 7890022" >
+				<ee:transform doc:name="Product 7890022" doc:id="2202d82d-4dd6-4a63-a764-b555a092c894">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1824,6 +1944,10 @@ output application/json
         "id": 7890022,
         "price": {
             "value": 25.00,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 20.00,
             "currency": "USD"
         },
         "name": "Book Rack Storage Bookshelf",
@@ -1856,7 +1980,7 @@ output application/json
 				</ee:transform>
 			</when>
 			<when expression="#[attributes.uriParams.product_id =='7890023']" >
-				<ee:transform doc:name="Product 7890023" >
+				<ee:transform doc:name="Product 7890023" doc:id="da59bf96-334a-4aba-a6ed-3fc760808cbd">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1865,6 +1989,10 @@ output application/json
         "id": 7890023,
         "price": {
             "value": 144.88,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 139.88,
             "currency": "USD"
         },
         "name": "Chair Cubes",
@@ -1897,7 +2025,7 @@ output application/json
 				</ee:transform>
 			</when>
 			<when expression="#[attributes.uriParams.product_id =='7890024']" >
-				<ee:transform doc:name="Product 7890024" >
+				<ee:transform doc:name="Product 7890024" doc:id="3005a639-e3c1-4fd7-a290-e62703aabfdc">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -1906,6 +2034,10 @@ output application/json
         "id": 7890024,
         "price": {
             "value": 85.98,
+            "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 80.98,
             "currency": "USD"
         },
         "name": "Safavieh Kids Transitional Geometric",
@@ -1964,6 +2096,10 @@ output application/json
         "value": 74.99,
         "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 70.88,
+            "currency": "USD"
+        },
         "name": "Coleman Lantern",
         "description": "Take the convenience of Three lights in one with you with the Coleman Trifecta LED Lantern. During an emergency, pop one of the three lights off the base for a personal flashlight. They recharge once theyre back on the base for hands-free light. The lantern runs cool so its always safe to touch, even when its been on for hours. Model # 2000013867 Features: Even distribution of light Choose your power, 4D batteries, or CPX 6 rechargeable Hi/Low for optimal light output 3 removable panels",
         "keywords": [],
@@ -2006,6 +2142,10 @@ output application/json
         "price": {
         "value": 71.99,
         "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 52.88,
+            "currency": "USD"
         },
         "name": "Coleman Lantern",
         "description": "Uses 8 D batteries, not included. Imported.",
@@ -2050,6 +2190,10 @@ output application/json
         "value": 85.99,
         "currency": "USD"
         },
+        "discountedPrice": {
+            "value": 60.22,
+            "currency": "USD"
+        },
         "name": "Sintechno Camping Portable Lantern",
         "description": "Sintechno Inc This portable emergency / camp lantern uses 36 white SMD Super Bright LED's which can be recharged by both included solar panel and AC power adapter.",
         "keywords": [],
@@ -2081,6 +2225,10 @@ output application/json
         "price": {
         "value": 89.79,
         "currency": "USD"
+        },
+        "discountedPrice": {
+            "value": 82.88,
+            "currency": "USD"
         },	
         "name": "Coleman Lantern",
         "description": "Light up your next outdoor gathering with a super-bright lantern! The versatile Premium Powerhouse runs on either Coleman Liquid fuel or unleaded gasoline and uses less fuel than lanterns powered by propane. Delivering an extra-bright 1107 lumens on high, the Coleman Premium Powerhouse Dual Fuel Lantern features an adjustable dimmer knob to allow the perfect amount of light for your campsite, barbecue and more!",
