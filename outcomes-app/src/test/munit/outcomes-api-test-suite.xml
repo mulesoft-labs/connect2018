@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<munit:config name="outcomes-api-test-suite.xml" />
+	<munit:test name="outcomes-api-test-suite-get:\outcomes:outcomes-api-configTest" description="Test" doc:id="c8ea813a-ab17-405b-8a87-e5159cfa89be" >
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="5c0c2f70-0be5-4d79-8198-30fb36a92ed9" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+					<ee:set-attributes ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	queryParams: {
+		keywords: ["furniture"]
+	}
+	
+}]]></ee:set-attributes>
+				</ee:message>
+				<ee:variables >
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="Flow-ref to get:\outcomes:outcomes-api-config" doc:id="0049d8d5-1014-4855-989f-fb691c617067" name="get:\outcomes:outcomes-api-config"/>
+			<logger level="INFO" doc:name="Logger" doc:id="04be543a-011a-47c7-b353-70df39f906b6" message="#[payload]" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="outcomes-api-test-suite-get:\outcomes\(outcome_type):outcomes-api-configTest" description="Test" doc:id="9543de2b-422c-4f8e-98e8-0fb2721c2dee" >
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="5c0c2f70-0be5-4d79-8198-30fb36a92ed9">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+					<ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{
+	uriParams: {
+		outcome_type: "tent camping"
+	}
+	
+}]]></ee:set-attributes>
+				</ee:message>
+				<ee:variables />
+			</ee:transform>
+			<flow-ref doc:name="get:\outcomes\(outcome_type):outcomes-api-config" doc:id="8bb67c73-15b3-42cf-8faf-0a25b3c71562" name="get:\outcomes\(outcome_type):outcomes-api-config"/>
+			<logger level="INFO" doc:name="Logger" doc:id="04be543a-011a-47c7-b353-70df39f906b6" message="#[payload]" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="outcomes-api-test-suite-get:\outcomes\outcome\(outcome_id):outcomes-api-configTest" description="Test" doc:id="34e14a4e-f38e-4c52-aeaa-63a8b3e6c2b2" >
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="5c0c2f70-0be5-4d79-8198-30fb36a92ed9">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+					<ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{
+	uriParams: {
+		outcome_id: 612009
+	}
+	
+}]]></ee:set-attributes>
+				</ee:message>
+				<ee:variables />
+			</ee:transform>
+			<flow-ref doc:name="get:\outcomes\outcome\(outcome_id):outcomes-api-config" doc:id="bcdd4916-5a1a-48a4-8d82-f5f44943767a" name="get:\outcomes\outcome\(outcome_id):outcomes-api-config"/>
+			<logger level="INFO" doc:name="Logger" doc:id="04be543a-011a-47c7-b353-70df39f906b6" message="#[payload]" />
+		</munit:execution>
+	</munit:test>
+
+</mule>

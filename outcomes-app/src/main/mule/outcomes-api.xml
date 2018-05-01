@@ -135,7 +135,9 @@ output application/json
         </error-handler>
     </flow>
     <flow name="get:\outcomes:outcomes-api-config">
-        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+        <choice doc:name="Choice" doc:id="e0133d7f-7861-4b39-a821-27f156ee1b56" >
+			<when expression="#[attributes.queryParams.keywords contains 'camping']" >
+				<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="972174c2-8614-4f29-8b3e-b985392411c6" doc:name="Outcome 612009">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -171,13 +173,64 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+			</when>
+			<when expression="#[attributes.queryParams.keywords contains 'furniture']" >
+				<ee:transform doc:name="Outcome 612010" doc:id="972174c2-8614-4f29-8b3e-b985392411c6" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: 612010,
+  "type": "furniture",
+  keywords: [
+    "furniture",    
+    "kids",
+    "bedroom"
+  ],
+  questions: [
+    {
+      question: "Are you looking for furniture?",
+      id: 1005
+    }, 
+    {
+      question: "Ok, The furniture it's for a bedroom?",
+      id: 1006
+    }, 
+    {
+      question: "What's the age?",
+      id: 1007
+    }, 
+    {
+      question: "Is it a boy?",
+      id: 1008
+    }
+  ]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="60c89795-19df-4fec-b3ce-28e59f0923d6" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
     </flow>
     <flow name="get:\outcomes\(outcome_type):outcomes-api-config">
-        <ee:transform xsi:schemaLocation="
+        <choice doc:name="Choice" doc:id="16a55b92-d391-494b-988c-f61bf2774ac8" >
+			<when expression="#[attributes.uriParams.outcome_type == 'tent camping']" >
+				<ee:transform xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd 
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="c01491ac-7a73-4093-93dc-b8898cbcad14" doc:name="Outcome 612009">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -213,6 +266,55 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.outcome_type == 'furniture']" >
+				<ee:transform doc:name="Outcome 612010" doc:id="972174c2-8614-4f29-8b3e-b985392411c6" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: 612010,
+  "type": "furniture",
+  keywords: [
+    "furniture",    
+    "kids",
+    "bedroom"
+  ],
+  questions: [
+    {
+      question: "Are you looking for furniture?",
+      id: 1005
+    }, 
+    {
+      question: "Ok, The furniture it's for a bedroom?",
+      id: 1006
+    }, 
+    {
+      question: "What's the age?",
+      id: 1007
+    }, 
+    {
+      question: "Is it a boy?",
+      id: 1008
+    }
+  ]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="961f9759-aa44-41c4-8b00-66852a9c6cac" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
     </flow>
     <flow name="post:\outcomes\outcome:application\json:outcomes-api-config">
         <ee:transform doc:name="Transform Message" doc:id="75234c79-9fa1-4b54-90a3-6493fe453a33">
@@ -235,15 +337,17 @@ output application/java
 }]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
-        <logger level="INFO" message="post:\outcomes\outcome:application\json:outcomes-api-config" />
+        <logger level="INFO" message="post:\outcomes\outcome:application\json:outcomes-api-config" doc:name="Logger"/>
     </flow>
     <flow name="get:\outcomes\outcome\(outcome_id):outcomes-api-config">
         <logger level="INFO" message="get:\outcomes\outcome\(outcome_id):outcomes-api-config" doc:name="Logger"/>
-		<ee:transform doc:name="Setting up outcomes 612009 product list" doc:id="49e634dd-0e05-4356-89fb-9e74203f574c" >
-			<ee:message >
+		<choice doc:name="Choice" doc:id="fc6837c5-cd6a-464c-90f1-c485ab6149dc">
+			<when expression="#[attributes.uriParams.outcome_id == 612009]">
+				<ee:transform doc:name="Setting up outcomes 612009 product list" doc:id="49e634dd-0e05-4356-89fb-9e74203f574c">
+			<ee:message>
 			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="productIDs" ><![CDATA[%dw 2.0
+			<ee:variables>
+				<ee:set-variable variableName="productIDs"><![CDATA[%dw 2.0
 output application/java
 ---
 [
@@ -282,26 +386,87 @@ output application/java
 ]]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<java:new doc:name="New fullProductList {as an ArrayList}" class="java.util.ArrayList" constructor="ArrayList()" target="fullProductList" doc:id="e119d918-9c13-4d57-b815-95e1a0ef3e3f" />
-        <foreach doc:name="For Each" collection="#[vars.productIDs]">
-			<ee:transform doc:name="Outcome Product" doc:id="0a7f8662-46a9-412d-8738-2fd53dd395a7" >
-				<ee:message >
+				<flow-ref doc:name="outcomes-apiSub_Flow" doc:id="d87f5b98-9819-4403-ab13-5e46ba62e120" name="outcomes-apiSub_Flow"/>
+			</when>
+			<when expression="#[attributes.uriParams.outcome_id == 612010]">
+				<ee:transform doc:name="Setting up outcomes 612010 product list" doc:id="49e634dd-0e05-4356-89fb-9e74203f574c" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable variableName="productIDs" ><![CDATA[%dw 2.0
+output application/java
+---
+[
+	{
+            "productID": 7890001,
+            "link": "https://www.opticsplanet.com/eureka-cypress-15-deg-jr-sleeping-bag.html"
+        },
+        {
+            "productID": 7890013,
+            "link": "https://www.bestbuy.com/site/mattel-uno-card-game-multi/4189414.p?skuId=4189414&ref=212&loc=1&gclid=CLGLpaWpsdoCFQXefgodwe8BQQ&gclsrc=ds"
+        },
+        {
+            "productID": 7890014,
+            "link": "https://www.walmart.com/ip/3-Gallon-Stackable-Water-Bottle/180676866?wmlspartner=wlpa&selectedSellerId=0&adid=22222222227069156862&wmlspartner=wmtlabs&wl0=&wl1=g&wl2=c&wl3=176561934607&wl4=pla-280895208199&wl5=9031944&wl6=&wl7=&wl8=&wl9=pla&wl10=8175035&wl11=online&wl12=180676866&wl13=&veh=sem"
+        },
+        {
+            "productID": 7890015,
+            "link": "https://www.candywarehouse.com/campfire-mini-marshmallows-packs-12-piece-box/?gclid=CjwKCAjwwbHWBRBWEiwAMIV7E6BY_79vtXjPbF1wAhoaoZLEpiQlEncVmUUCTxadAS63x96-1K5g1hoC5lEQAvD_BwE"
+        },
+        {
+            "productID": 7890016,
+            "link": "https://www.llbean.com/llb/shop/514485?originalProduct=57230&productId=939399&attrValue_0=Deep%20Forest&pla1=0&mr:device=c&mr:adType=plaonline&qs=3125182_google&lsft=qs:3125182_google,product:0GKD150000&gclid=CjwKCAjwwbHWBRBWEiwAMIV7E9lLzcCOvixfdCqBh0zOHAthdk4AolNsvO7p-OOMf0q9EDDDk2WH1xoC1mIQAvD_BwE&gclsrc=aw.ds&dclid=CNeElqK8sdoCFZJ2Ygodg7AEyA"
+        },
+        {
+            "productID": 7890017,
+            "link": "https://www.walmart.com/ip/Wilson-Traditional-Soccer-Ball/9854920?wmlspartner=wlpa&adid=22222222227029515237&wl0=&wl1=g&wl2=c&wl3=49182447512&wl4=pla-71924460414&wl5=9031944&wl6=&wl7=&wl8=&wl9=pla&wl10=8175035&wl11=online&wl12=9854920&wl13=&veh=sem"
+        },
+        {
+            "productID": 7890018,
+            "link": "https://www.target.com/p/repel-family-dry-aerosol-4-oz/-/A-14782293?ref=tgt_adv_XS000000&AFID=google_pla_df&CPNG=PLA_Sports+Shopping&adgroup=SC_Sports&LID=700000001170770pgs&network=g&device=c&location=9031944&gclid=CjwKCAjwwbHWBRBWEiwAMIV7E-SMX2Ioi-cdwnxjRMwRIXTyKnLSo9IGInsdYRmZRkOYceTMSKgVoRoCV3EQAvD_BwE&gclsrc=aw.ds"
+        },
+        {
+            "productID": 7890019,
+            "link": "http://www.acehardware.com/product/index.jsp?productId=71043076&KPID=22159723&cid=CAPLA:G:Shopping_-_Hearth_Products_&_Accs=&pla=pla_22159723&k_clickid=98dfbd6f-978b-417b-a575-e7467f145b88&gclid=CjwKCAjwwbHWBRBWEiwAMIV7E8En3BcXY2OWQ31IHQEqY3kJo7EcXMzCKW0WAPnyCcwNoqLq0t2AxBoCbiQQAvD_BwE"
+        }
+]]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<flow-ref doc:name="outcomes-apiSub_Flow" doc:id="aa8f7cd0-64b6-4eb8-ac99-8fcafa7741d7" name="outcomes-apiSub_Flow"/>
+			</when>
+			<otherwise>
+				<ee:transform doc:name="Transform Message" doc:id="dea75902-ad16-4d90-96f8-0fae7f6a047d">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+    </flow>
+	<sub-flow name="outcomes-apiSub_Flow" doc:id="26370f07-7c9c-45ec-bfa8-bfd1722d0418" >
+		<java:new doc:name="New fullProductList {as an ArrayList}" class="java.util.ArrayList" constructor="ArrayList()" target="fullProductList" doc:id="e119d918-9c13-4d57-b815-95e1a0ef3e3f"/>
+		<foreach doc:name="For Each" collection="#[vars.productIDs]">
+			<ee:transform doc:name="Outcome Product" doc:id="0a7f8662-46a9-412d-8738-2fd53dd395a7">
+				<ee:message>
 				</ee:message>
-				<ee:variables >
-					<ee:set-variable variableName="productID" ><![CDATA[%dw 2.0
+				<ee:variables>
+					<ee:set-variable variableName="productID"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.productID]]></ee:set-variable>
-					<ee:set-variable variableName="link" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="link"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.link]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<product-finder:get-product-by-product-id doc:name="Get product by product id" doc:id="d0ec45d6-6aee-46ed-b583-591d21c8f35a" product-id="#[vars.productID]" config-ref="Product_finder_Config"/>
-			<ee:transform doc:name="Product Outcome" doc:id="be3cd198-f105-49d0-a4bd-a10ba4af5212" >
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
+			<product-finder:get-product-by-product-id doc:name="Get product by product id" doc:id="d0ec45d6-6aee-46ed-b583-591d21c8f35a" product-id="#[vars.productID]" config-ref="Product_finder_Config" />
+			<ee:transform doc:name="Product Outcome" doc:id="be3cd198-f105-49d0-a4bd-a10ba4af5212">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 {
@@ -317,11 +482,11 @@ output application/java
 }]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
-			<scripting:execute engine="groovy" doc:name="Execute" >
+			<scripting:execute engine="groovy" doc:name="Execute">
                 <scripting:code>vars.fullProductList.add(payload)</scripting:code>
             </scripting:execute>
         </foreach>
-        <ee:transform doc:name="Transform Message" doc:id="4a6e0e3d-c5f8-44b5-9414-480da395d42f">
+		<ee:transform doc:name="Transform Message" doc:id="4a6e0e3d-c5f8-44b5-9414-480da395d42f">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -330,8 +495,8 @@ vars.fullProductList]]></ee:set-payload>
             </ee:message>
         </ee:transform>
 		<ee:transform doc:name="Transform Message" doc:id="bd6a9ca4-1967-44ed-96b5-3456ddf2b282">
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -373,8 +538,8 @@ output application/json
     		}
 }]]></ee:set-payload>
 			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="outboundHeaders" ><![CDATA[%dw 2.0
+			<ee:variables>
+				<ee:set-variable variableName="outboundHeaders"><![CDATA[%dw 2.0
 output application/java
 ---
 {
@@ -382,5 +547,5 @@ output application/java
 }]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-    </flow>
+	</sub-flow>
 </mule>
