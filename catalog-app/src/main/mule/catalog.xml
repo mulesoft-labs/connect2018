@@ -760,6 +760,160 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
+	},{
+        "id": 7890020,
+        "price": {
+            "value": 130.89,
+            "currency": "USD"
+        },
+        "name": "Clay Alder Home Owsley Futon Mattress",
+        "description": "Clay Alder Home Owsley Full-size 8-inch Futon Mattress Give house guests a comfortable place to rest with this 8-inch futon mattress.",
+        "keywords": ["Futon", "Mattress"],
+        "copy": "Clay Alder Home Owsley Full-Size 8-Inch Futon Mattress (Khaki (Green))",
+        "image": {
+            "id": 8540020,
+            "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTHWjrNzzzE1tLM0dYQCIRjwY1-Et00jLPuaD6VjzH1HKiVeH9BGHH60USGE-I&usqp=CAE"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "mattress",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	},
+    {
+        "id": 7890021,
+        "price": {
+            "value": 700,
+            "currency": "USD"
+        },
+        "name": "Bed With Built-in Workstation",
+        "description": "Make the most of your children's bedroom floor space with this all-inclusive bedroom set! This loft bed features a stable and sturdy upper twin bunk, a separate lower bed on movable casters, and a built-in workstation to double as a handy computer desk. Mattress, box springs and bedding (comforters, sheets, pillows, etc.) are NOT included.",
+        "keywords": ["bed", "twin", "workstation"],
+        "copy": "Furniture of America Carmenie Twin Over Twin Loft Bed With Built-in Workstation (Oak (Brown))",
+        "image": {
+            "id": 8540021,
+            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTT4RUgHVYhGF5gCj-8KzLh96rXB-k2I_YkEuUib09lOjQazrDnImqONtmBqSwhwVUOpTJkXsVB&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Bed",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	},
+    {
+        "id": 7890022,
+        "price": {
+            "value": 25.00,
+            "currency": "USD"
+        },
+        "name": "Book Rack Storage Bookshelf",
+        "description": "Espresso Kids Book Rack Storage Bookshelf The space-saving Tot Tutors Kids Book Rack Storage Bookshelf with book-storage sling pockets displays book covers forward for easy recognition by young children. The 4 colorful, deep, sleeves hold books of almost any size for easy book viewing.",
+        "keywords": ["Bookshelf", "Rack"],
+        "copy": "Tot Tutors WO595 Espresso Kids Book Rack Storage Bookshelf",
+        "image": {
+            "id": 8540022,
+            "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTfOcaGAdB3cgqc7gp4xQxX8q6tSPgb6jFt0IXpaKNRIkf4yq8Od4xVFhRxaijAJCpNclrycC5c&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Bookshelf",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	},
+    {
+        "id": 7890023,
+        "price": {
+            "value": 144.88,
+            "currency": "USD"
+        },
+        "name": "Chair Cubes",
+        "description": "Office Furniture > Chairs & Sofas Childrens Factory 910007 Chair Cube Set, Assorted - Polyethylene - 15\" Length x 15\" Width x 15\" Height Lightweight chairs conveniently provide multiple uses and can be used both indoors and outdoors. Use them as chairs with either a 6\" high seat or 9\" high seat. Or, flip them over to use them as a table or a seat for adults. Chairs are made from nontoxic, recyclable polyethylene for safe use by everyone.",
+        "keywords": [""],
+        "copy": "Chair Cubes - Set of Four",
+        "image": {
+            "id": 8540023,
+            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSWNJfDDiZAR56GlwbrlWIEy6Ug20ThENLB9YfAmhrHgnKcwA6M4Tgpqp4M3Wgvz9pQlluSTWib&usqp=CAE"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Chair",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	},
+    {
+        "id": 7890024,
+        "price": {
+            "value": 85.98,
+            "currency": "USD"
+        },
+        "name": "Safavieh Kids Transitional Geometric",
+        "description": "Save Money. These hand-tufted 100 percent pure wool rugs are designed in stimulating colors and patterns that will brighten and energize the entire character of your child’s bedroom, playroom or nursery. Available in a wide selection of styles, colors and sizes. Color: Blue. Age Group: Infant.",
+        "keywords": ["Safavieh", "carpet"],
+        "copy": "Safavieh Kids Transitional Geometric Hand-Tufted Wool Navy (Blue)/ Ivory Area Rug (4' X 6') (SFK907N-4), Size 4' X 6'",
+        "image": {
+            "id": 8540024,
+            "url": "https://www.google.com/aclk?sa=l&ai=DChcSEwj4-cSE2eTaAhWEoOwKHYsYCs8YABAdGgJwag&sig=AOD64_3YIKKcSjbgU3o4JJ4G2cBh_Nk3Eg&ctype=5&q=&ved=0ahUKEwiez8GE2eTaAhXjy1QKHQueABYQwjwIlwE&adurl="
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Carpet",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
 	}
 ]]]></ee:set-payload>
             </ee:message>
@@ -1569,6 +1723,211 @@ output application/json
             }
         },
         "category": "Utilities",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+            </when>
+			<when expression="#[attributes.uriParams.product_id =='7890020']" >
+				<ee:transform doc:name="Product 7890020" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890020,
+        "price": {
+            "value": 130.89,
+            "currency": "USD"
+        },
+        "name": "Clay Alder Home Owsley Futon Mattress",
+        "description": "Clay Alder Home Owsley Full-size 8-inch Futon Mattress Give house guests a comfortable place to rest with this 8-inch futon mattress.",
+        "keywords": ["Futon", "Mattress"],
+        "copy": "Clay Alder Home Owsley Full-Size 8-Inch Futon Mattress (Khaki (Green))",
+        "image": {
+            "id": 8540020,
+            "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTHWjrNzzzE1tLM0dYQCIRjwY1-Et00jLPuaD6VjzH1HKiVeH9BGHH60USGE-I&usqp=CAE"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "mattress",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890021']" >
+				<ee:transform doc:name="Product 7890021" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890021,
+        "price": {
+            "value": 700,
+            "currency": "USD"
+        },
+        "name": "Bed With Built-in Workstation",
+        "description": "Make the most of your children's bedroom floor space with this all-inclusive bedroom set! This loft bed features a stable and sturdy upper twin bunk, a separate lower bed on movable casters, and a built-in workstation to double as a handy computer desk. Mattress, box springs and bedding (comforters, sheets, pillows, etc.) are NOT included.",
+        "keywords": ["bed", "twin", "workstation"],
+        "copy": "Furniture of America Carmenie Twin Over Twin Loft Bed With Built-in Workstation (Oak (Brown))",
+        "image": {
+            "id": 8540021,
+            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTT4RUgHVYhGF5gCj-8KzLh96rXB-k2I_YkEuUib09lOjQazrDnImqONtmBqSwhwVUOpTJkXsVB&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Bed",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890022']" >
+				<ee:transform doc:name="Product 7890022" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890022,
+        "price": {
+            "value": 25.00,
+            "currency": "USD"
+        },
+        "name": "Book Rack Storage Bookshelf",
+        "description": "Espresso Kids Book Rack Storage Bookshelf The space-saving Tot Tutors Kids Book Rack Storage Bookshelf with book-storage sling pockets displays book covers forward for easy recognition by young children. The 4 colorful, deep, sleeves hold books of almost any size for easy book viewing.",
+        "keywords": ["Bookshelf", "Rack"],
+        "copy": "Tot Tutors WO595 Espresso Kids Book Rack Storage Bookshelf",
+        "image": {
+            "id": 8540022,
+            "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTfOcaGAdB3cgqc7gp4xQxX8q6tSPgb6jFt0IXpaKNRIkf4yq8Od4xVFhRxaijAJCpNclrycC5c&usqp=CAY"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Bookshelf",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890023']" >
+				<ee:transform doc:name="Product 7890023" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890023,
+        "price": {
+            "value": 144.88,
+            "currency": "USD"
+        },
+        "name": "Chair Cubes",
+        "description": "Office Furniture > Chairs & Sofas Childrens Factory 910007 Chair Cube Set, Assorted - Polyethylene - 15\" Length x 15\" Width x 15\" Height Lightweight chairs conveniently provide multiple uses and can be used both indoors and outdoors. Use them as chairs with either a 6\" high seat or 9\" high seat. Or, flip them over to use them as a table or a seat for adults. Chairs are made from nontoxic, recyclable polyethylene for safe use by everyone.",
+        "keywords": [""],
+        "copy": "Chair Cubes - Set of Four",
+        "image": {
+            "id": 8540023,
+            "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSWNJfDDiZAR56GlwbrlWIEy6Ug20ThENLB9YfAmhrHgnKcwA6M4Tgpqp4M3Wgvz9pQlluSTWib&usqp=CAE"
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Chair",
+        "review": {
+            "reviews": [],
+            "averageRate": 0.0
+        }
+	}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.uriParams.product_id =='7890024']" >
+				<ee:transform doc:name="Product 7890024" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+        "id": 7890024,
+        "price": {
+            "value": 85.98,
+            "currency": "USD"
+        },
+        "name": "Safavieh Kids Transitional Geometric",
+        "description": "Save Money. These hand-tufted 100 percent pure wool rugs are designed in stimulating colors and patterns that will brighten and energize the entire character of your child’s bedroom, playroom or nursery. Available in a wide selection of styles, colors and sizes. Color: Blue. Age Group: Infant.",
+        "keywords": ["Safavieh", "carpet"],
+        "copy": "Safavieh Kids Transitional Geometric Hand-Tufted Wool Navy (Blue)/ Ivory Area Rug (4' X 6') (SFK907N-4), Size 4' X 6'",
+        "image": {
+            "id": 8540024,
+            "url": "https://www.google.com/aclk?sa=l&ai=DChcSEwj4-cSE2eTaAhWEoOwKHYsYCs8YABAdGgJwag&sig=AOD64_3YIKKcSjbgU3o4JJ4G2cBh_Nk3Eg&ctype=5&q=&ved=0ahUKEwiez8GE2eTaAhXjy1QKHQueABYQwjwIlwE&adurl="
+        },
+        "company": {
+            "id": 4607992,
+            "name": "Macy's",
+            "address" : {
+                "country": "USA",
+                "state": "CA",
+                "city": "San Francisco",
+                "street_address": "170 O'Farrell Street",
+                "zip": 94102
+            }
+        },
+        "category": "Carpet",
         "review": {
             "reviews": [],
             "averageRate": 0.0
