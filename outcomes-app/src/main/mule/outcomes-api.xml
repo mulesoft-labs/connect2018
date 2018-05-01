@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:java="http://www.mulesoft.org/schema/mule/java"
-	xmlns:product-finder="http://www.mulesoft.org/schema/mule/product-finder" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:product-finder="http://www.mulesoft.org/schema/mule/product-finder" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/product-finder http://www.mulesoft.org/schema/mule/product-finder/current/mule-product-finder.xsd
-http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
     <http:listener-config name="outcomes-api-httpsListenerConfig" doc:name="HTTP Listener config">
         <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS">
 			<tls:context >
@@ -16,6 +17,7 @@ http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/jav
 	
     <global-property doc:name="Global Property" doc:id="0be5c505-8094-4927-8e21-2d9e68918103" name="https.port" value="8082" />
 	<product-finder:config name="Product_finder_Config" doc:name="Product-finder Config" doc:id="ccc1d812-2f58-445f-a9dd-2ba836e6d450" property_host="product-finder.cloudhub.io" property_basePath="/api" />
+	<api-gateway:autodiscovery apiId="12383054" doc:name="API Autodiscovery" doc:id="ea9a5315-57ab-477a-abaf-da3b86a98331" flowRef="outcomes-api-main" />
 	<flow name="outcomes-api-main">
         <http:listener config-ref="outcomes-api-httpsListenerConfig" path="/api/*" doc:name="Listener">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -225,7 +227,7 @@ output application/json
     </flow>
     <flow name="get:\outcomes\(outcome_type):outcomes-api-config">
         <choice doc:name="Choice" doc:id="16a55b92-d391-494b-988c-f61bf2774ac8" >
-			<when expression="#[attributes.uriParams.outcome_type == 'tent camping']" >
+			<when expression="#[attributes.uriParams.outcome_type == 'tent+camping']" >
 				<ee:transform xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd 
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
@@ -333,7 +335,7 @@ output application/java
 output application/java
 ---
 {
-	"Content-Location": (attributes.headers.origin as String) ++ "/api/outcomes/outcome/612009"
+	"x-content-location": (attributes.headers.origin as String) ++ "/api/outcomes/outcome/" ++ (payload.outcome_id as String)
 }]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
@@ -342,7 +344,7 @@ output application/java
     <flow name="get:\outcomes\outcome\(outcome_id):outcomes-api-config">
         <logger level="INFO" message="get:\outcomes\outcome\(outcome_id):outcomes-api-config" doc:name="Logger"/>
 		<choice doc:name="Choice" doc:id="fc6837c5-cd6a-464c-90f1-c485ab6149dc">
-			<when expression="#[attributes.uriParams.outcome_id == 612009]">
+			<when expression="#[(attributes.uriParams.outcome_id as String) == '612009']">
 				<ee:transform doc:name="Setting up outcomes 612009 product list" doc:id="49e634dd-0e05-4356-89fb-9e74203f574c">
 			<ee:message>
 			</ee:message>
@@ -387,8 +389,69 @@ output application/java
 			</ee:variables>
 		</ee:transform>
 				<flow-ref doc:name="outcomes-apiSub_Flow" doc:id="d87f5b98-9819-4403-ab13-5e46ba62e120" name="outcomes-apiSub_Flow"/>
+				<ee:transform doc:name="Transform Message" doc:id="4a6e0e3d-c5f8-44b5-9414-480da395d42f">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.fullProductList]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="Transform Message" doc:id="bd6a9ca4-1967-44ed-96b5-3456ddf2b282" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "outcome_id": 612009,
+    "type": "camping",
+    "answers_keywords": [
+        {
+            "id": 2001,
+            "question_id": 1001,
+            "answer": "Rob Hill Campground"
+        },
+        {
+            "id": 2002,
+            "question_id": 1002,
+            "answer": "in two weeks"
+        },
+        {
+            "id": 2003,
+            "question_id": 1003,
+            "answer": "five"
+        },
+        {
+            "id": 2004,
+            "question_id": 1004,
+            "answer": "yes, 2 girls"
+        }
+    ],
+    "profile": "family outing",
+    "recommend_items": 
+    		vars.fullProductList map (product, index) -> {
+    			"id": product.id,
+            "price": product.price,
+            "name": product.name,
+            "description": product.description,
+            "image": product.image,
+            "category": product.category,
+            "link": product.link
+    			
+    		}
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="outboundHeaders" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"Content-Type": "application/json"
+}]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
 			</when>
-			<when expression="#[attributes.uriParams.outcome_id == 612010]">
+			<when expression="#[(attributes.uriParams.outcome_id as String) == '612010']">
 				<ee:transform doc:name="Setting up outcomes 612010 product list" doc:id="49e634dd-0e05-4356-89fb-9e74203f574c" >
 					<ee:message />
 					<ee:variables >
@@ -397,41 +460,90 @@ output application/java
 ---
 [
 	{
-            "productID": 7890001,
-            "link": "https://www.opticsplanet.com/eureka-cypress-15-deg-jr-sleeping-bag.html"
+            "productID": 7890020,
+            "link": "https://www.overstock.com/Home-Garden/Futons/2026/subcat.html?featuredproduct=20254395&featuredoption=7371399&kid=9553000357392&track=pspla&ci_src=17588969&ci_sku=13203855-000-004&cnc=US&cid=271143&type=pla&gclid=EAIaIQobChMIuYOTotfk2gIVkMJkCh0VRANuEAkYIyABEgJVKfD_BwE&gclsrc=aw.ds&dclid=CPXS3IfY5NoCFQTnZAodGFYE9Q"
         },
         {
-            "productID": 7890013,
-            "link": "https://www.bestbuy.com/site/mattel-uno-card-game-multi/4189414.p?skuId=4189414&ref=212&loc=1&gclid=CLGLpaWpsdoCFQXefgodwe8BQQ&gclsrc=ds"
+            "productID": 7890021,
+            "link": "https://www.google.com/aclk?sa=l&ai=DChcSEwiLotSvh-XaAhUQxGQKHTLcAFkYABAqGgJwag&sig=AOD64_2YxOmEwmfLOl54bepatmXue8tluA&ctype=5&q=&ved=0ahUKEwjotNGvh-XaAhUhrlQKHR_6AG8QpysIzwE&adurl="
         },
         {
-            "productID": 7890014,
-            "link": "https://www.walmart.com/ip/3-Gallon-Stackable-Water-Bottle/180676866?wmlspartner=wlpa&selectedSellerId=0&adid=22222222227069156862&wmlspartner=wmtlabs&wl0=&wl1=g&wl2=c&wl3=176561934607&wl4=pla-280895208199&wl5=9031944&wl6=&wl7=&wl8=&wl9=pla&wl10=8175035&wl11=online&wl12=180676866&wl13=&veh=sem"
+            "productID": 7890022,
+            "link": "https://www.google.com/aclk?sa=l&ai=DChcSEwi1jpuuh-XaAhUJxmQKHauIAUwYABAbGgJwag&sig=AOD64_0Dx3D6fhdiVhPlejrwV76cswkrvw&ctype=5&q=&ved=0ahUKEwjcmZiuh-XaAhUJilQKHQsAC9cQwzwIQg&adurl="
         },
         {
-            "productID": 7890015,
-            "link": "https://www.candywarehouse.com/campfire-mini-marshmallows-packs-12-piece-box/?gclid=CjwKCAjwwbHWBRBWEiwAMIV7E6BY_79vtXjPbF1wAhoaoZLEpiQlEncVmUUCTxadAS63x96-1K5g1hoC5lEQAvD_BwE"
+            "productID": 7890023,
+            "link": "https://www.google.com/aclk?sa=l&ai=DChcSEwijt9mth-XaAhUCxGQKHYyqD_0YABBLGgJwag&sig=AOD64_313CcwOLA3yRHWYVaP_aYAD6pZeg&ctype=5&q=&ved=0ahUKEwjCqdath-XaAhWFiVQKHQFCDsoQwzwIngM&adurl="
         },
         {
-            "productID": 7890016,
-            "link": "https://www.llbean.com/llb/shop/514485?originalProduct=57230&productId=939399&attrValue_0=Deep%20Forest&pla1=0&mr:device=c&mr:adType=plaonline&qs=3125182_google&lsft=qs:3125182_google,product:0GKD150000&gclid=CjwKCAjwwbHWBRBWEiwAMIV7E9lLzcCOvixfdCqBh0zOHAthdk4AolNsvO7p-OOMf0q9EDDDk2WH1xoC1mIQAvD_BwE&gclsrc=aw.ds&dclid=CNeElqK8sdoCFZJ2Ygodg7AEyA"
-        },
-        {
-            "productID": 7890017,
-            "link": "https://www.walmart.com/ip/Wilson-Traditional-Soccer-Ball/9854920?wmlspartner=wlpa&adid=22222222227029515237&wl0=&wl1=g&wl2=c&wl3=49182447512&wl4=pla-71924460414&wl5=9031944&wl6=&wl7=&wl8=&wl9=pla&wl10=8175035&wl11=online&wl12=9854920&wl13=&veh=sem"
-        },
-        {
-            "productID": 7890018,
-            "link": "https://www.target.com/p/repel-family-dry-aerosol-4-oz/-/A-14782293?ref=tgt_adv_XS000000&AFID=google_pla_df&CPNG=PLA_Sports+Shopping&adgroup=SC_Sports&LID=700000001170770pgs&network=g&device=c&location=9031944&gclid=CjwKCAjwwbHWBRBWEiwAMIV7E-SMX2Ioi-cdwnxjRMwRIXTyKnLSo9IGInsdYRmZRkOYceTMSKgVoRoCV3EQAvD_BwE&gclsrc=aw.ds"
-        },
-        {
-            "productID": 7890019,
-            "link": "http://www.acehardware.com/product/index.jsp?productId=71043076&KPID=22159723&cid=CAPLA:G:Shopping_-_Hearth_Products_&_Accs=&pla=pla_22159723&k_clickid=98dfbd6f-978b-417b-a575-e7467f145b88&gclid=CjwKCAjwwbHWBRBWEiwAMIV7E8En3BcXY2OWQ31IHQEqY3kJo7EcXMzCKW0WAPnyCcwNoqLq0t2AxBoCbiQQAvD_BwE"
+            "productID": 7890024,
+            "link": "https://www.google.com/aclk?sa=l&ai=DChcSEwjhxsnqiOXaAhUMxmQKHaheDdQYABAfGgJwag&sig=AOD64_2QzSfhbKI3TUBWBscdNc1oYmis0Q&ctype=5&q=&ved=0ahUKEwiWpcbqiOXaAhWLFHwKHd2cCkAQwzwIqAE&adurl="
         }
 ]]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 				<flow-ref doc:name="outcomes-apiSub_Flow" doc:id="aa8f7cd0-64b6-4eb8-ac99-8fcafa7741d7" name="outcomes-apiSub_Flow"/>
+				<ee:transform doc:name="Transform Message" doc:id="4a6e0e3d-c5f8-44b5-9414-480da395d42f">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.fullProductList]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="Transform Message" doc:id="bd6a9ca4-1967-44ed-96b5-3456ddf2b282" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "outcome_id": 612010,
+    "type": "furniture",
+    "answers_keywords": [
+        {
+            "id": 2005,
+            "question_id": 1005,
+            "answer": "yes"
+        },
+        {
+            "id": 2006,
+            "question_id": 1006,
+            "answer": "yes"
+        },
+        {
+            "id": 2007,
+            "question_id": 1007,
+            "answer": "nine"
+        },
+        {
+            "id": 2008,
+            "question_id": 1008,
+            "answer": "yes"
+        }
+    ],
+    "profile": "family outing",
+    "recommend_items": 
+    		vars.fullProductList map (product, index) -> {
+    			"id": product.id,
+            "price": product.price,
+            "name": product.name,
+            "description": product.description,
+            "image": product.image,
+            "category": product.category,
+            "link": product.link
+    			
+    		}
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="outboundHeaders" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"Content-Type": "application/json"
+}]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
 			</when>
 			<otherwise>
 				<ee:transform doc:name="Transform Message" doc:id="dea75902-ad16-4d90-96f8-0fae7f6a047d">
@@ -486,66 +598,5 @@ output application/java
                 <scripting:code>vars.fullProductList.add(payload)</scripting:code>
             </scripting:execute>
         </foreach>
-		<ee:transform doc:name="Transform Message" doc:id="4a6e0e3d-c5f8-44b5-9414-480da395d42f">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-vars.fullProductList]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<ee:transform doc:name="Transform Message" doc:id="bd6a9ca4-1967-44ed-96b5-3456ddf2b282">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-    "outcome_id": 612009,
-    "type": "camping",
-    "answers_keywords": [
-        {
-            "id": 2001,
-            "question_id": 1001,
-            "answer": "Rob Hill Campground"
-        },
-        {
-            "id": 2002,
-            "question_id": 1002,
-            "answer": "in two weeks"
-        },
-        {
-            "id": 2003,
-            "question_id": 1003,
-            "answer": "five"
-        },
-        {
-            "id": 2004,
-            "question_id": 1004,
-            "answer": "yes, 2 girls"
-        }
-    ],
-    "profile": "family outing",
-    "recommend_items": 
-    		vars.fullProductList map (product, index) -> {
-    			"id": product.id,
-            "price": product.price,
-            "name": product.name,
-            "description": product.description,
-            "image": product.image,
-            "category": product.category,
-            "link": product.link
-    			
-    		}
-}]]></ee:set-payload>
-			</ee:message>
-			<ee:variables>
-				<ee:set-variable variableName="outboundHeaders"><![CDATA[%dw 2.0
-output application/java
----
-{
-	"Content-Type": "application/json"
-}]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
 	</sub-flow>
 </mule>

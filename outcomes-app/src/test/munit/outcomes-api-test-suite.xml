@@ -49,7 +49,7 @@ output application/java
 ---
 {
 	uriParams: {
-		outcome_type: "tent camping"
+		outcome_type: "tent+camping"
 	}
 	
 }]]></ee:set-attributes>
@@ -74,7 +74,7 @@ output application/java
 ---
 {
 	uriParams: {
-		outcome_id: 612009
+		outcome_id: "612010"
 	}
 	
 }]]></ee:set-attributes>
