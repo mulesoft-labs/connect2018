@@ -22,7 +22,11 @@
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.4/shelf_item-update-example.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.4/shelf_status-example.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.4/shelves_status-example.raml"
+      ],
+      "exportedPackages": [
+      	"com.mulesoft.shelf"
       ]
+      
     }
   },
   "bundleDescriptorLoader": {

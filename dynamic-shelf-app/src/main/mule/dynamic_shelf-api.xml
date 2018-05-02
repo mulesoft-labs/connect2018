@@ -115,7 +115,7 @@ output application/json
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:console config-ref="dynamic_shelf-api-config" />
+        <apikit:console config-ref="dynamic_shelf-api-config" doc:name="APIkit Console"/>
         <error-handler>
             <on-error-propagate type="APIKIT:NOT_FOUND">
                 <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -182,47 +182,34 @@ vars.locations.add("")
 				<logger level="INFO" doc:name="Logger" doc:id="57eaade3-b8dc-4b15-8151-b71b5fd25a73" />
 			</otherwise>
         </choice>
-        <catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="fbff098b-6a3e-4bce-b2ad-c8faac8d923a" config-ref="Catalog_API_Config" product-id="#[vars.productId]" />
-        <choice doc:name="Choice" doc:id="4f991ce4-0a38-4be8-a1cf-b6c73a32985f">
-            <when expression="#[vars.operation == &quot;added&quot;]">
-                <ee:transform doc:name="Transform Message" doc:id="328e8cf8-6f80-4c78-b76b-5f33dd1a925f">
-                    <ee:message />
-                    <ee:variables>
-                        <ee:set-variable variableName="product"><![CDATA[%dw 2.0
+        <java:new doc:name="New" doc:id="89097777-49e2-438a-9821-374d1faa5293" class="com.mulesoft.shelf.Product" constructor="Product()" target="product"/>
+		<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="fbff098b-6a3e-4bce-b2ad-c8faac8d923a" config-ref="Catalog_API_Config" product-id="#[vars.productId]" />
+        <ee:transform doc:name="Transform Message" doc:id="67720c68-8ef4-4fc9-96e3-87cf5240804f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
 output application/java
 ---
-{
-	id: payload.id,
-	name: payload.name,
-	price: payload.price,
-	discountedPrice: payload.discountedPrice,
-	image: payload.image.url,
-	isCheckedOut: false
-}]]></ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </when>
-            <otherwise>
-                <ee:transform doc:name="Change the status of the product to checked out" doc:id="328e8cf8-6f80-4c78-b76b-5f33dd1a925f">
-                    <ee:message />
-                    <ee:variables>
-                        <ee:set-variable variableName="product"><![CDATA[%dw 2.0
-output application/java
----
-{
-	id: payload.id,
-	name: payload.name,
-	price: payload.price,
-	discountedPrice: payload.discountedPrice,
-	image: payload.image.url,
-	isCheckedOut: true
-}]]></ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </otherwise>
-        </choice>
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
         <scripting:execute doc:name="Add Product to location" doc:id="dd87bf6c-ace3-4e77-89b1-17ccf5c7cc4c" engine="groovy">
-            <scripting:code>vars.locations[vars.location] = vars.product</scripting:code>
+            <scripting:code>def product = vars.product
+def productString = new java.lang.String()
+product.setId(vars.productId)
+product.setName(payload.name)
+product.setPrice(payload.price.value)
+product.setDiscountedPrice(payload.discountedPrice.value)
+
+product.setImage(payload.image.url)
+if (vars.operation == &quot;added&quot;){
+	product.setCheckedOut(false)
+}
+else{
+	product.setCheckedOut(true)
+}
+
+productString = product
+vars.locations[vars.location] = productString</scripting:code>
         </scripting:execute>
         <os:store doc:name="Store" doc:id="7d9fdd1a-c12e-4514-8cec-a52f23f9592d" key="locations" objectStore="Object_store">
             <os:value><![CDATA[#[vars.locations]]]></os:value>
@@ -248,7 +235,7 @@ output application/java
             <os:default-value><![CDATA[#[
 			output application/json 
 			---
-			["","","","","","","",""]
+			["","","","","",""]
 ]]]></os:default-value>
         </os:retrieve>
         <os:retrieve doc:name="Retrieve userDetected" doc:id="5f228482-bfef-491e-b4be-6bb03f156608" key="userDetected" objectStore="Object_store" target="userDetected">
@@ -269,17 +256,14 @@ output application/json
             </ee:message>
         </ee:transform>
     </flow>
-    <flow name="dynamic_shelf-apiFlow1" doc:id="bc685501-84e9-4a9d-adad-17a74182e807">
-        <http:listener doc:name="Listener" doc:id="fe8252b4-dfbe-4ae3-bab3-149a003aabe3" config-ref="dynamic_shelf-api-httpListenerConfig" path="/userDetected" />
-        <os:store doc:name="Store" doc:id="8b6644db-bcb4-4d79-bb3b-ff31b2557820" key="userDetected" objectStore="Object_store">
-            <os:value><![CDATA[#[payload.userDetected]]]></os:value>
-        </os:store>
-    </flow>
     <flow name="dynamic_shelf-apiFlow" doc:id="8dfc8c51-89f5-4f05-9f2c-35b5bad53597">
         <http:listener doc:name="Listener" doc:id="ff200e68-9d10-45fd-b3de-f3db2a614209" config-ref="dynamic_shelf-api-httpListenerConfig" path="/clear" />
         <os:clear doc:name="Clear" doc:id="a72c1b7f-a8d5-4c3a-b17f-a1103c7e924f" objectStore="Object_store" />
     </flow>
     <flow name="put:\dynamic_shelf\userDetected:application\json:dynamic_shelf-api-config">
-        <logger level="INFO" message="put:\dynamic_shelf\userDetected:application\json:dynamic_shelf-api-config" />
+        <os:store doc:name="Store" doc:id="8b6644db-bcb4-4d79-bb3b-ff31b2557820" key="userDetected" objectStore="Object_store">
+            <os:value><![CDATA[#[payload.activated]]]></os:value>
+        </os:store>
+		<logger level="INFO" message="put:\dynamic_shelf\userDetected:application\json:dynamic_shelf-api-config" />
     </flow>
 </mule>
