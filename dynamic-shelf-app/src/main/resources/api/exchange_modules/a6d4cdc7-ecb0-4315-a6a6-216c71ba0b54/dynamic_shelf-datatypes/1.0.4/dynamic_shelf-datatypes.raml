@@ -22,6 +22,7 @@ types:
       name: string
       description: string
       price: util.MonetaryAmountData
+      discountedPrice?: util.MonetaryAmountData
       image: util.ImageData
   UpdateItem:
     properties:
@@ -35,4 +36,5 @@ types:
       fanOn: boolean
       saying: string
       droneDelivered: boolean
+      userRecognized: boolean
   
