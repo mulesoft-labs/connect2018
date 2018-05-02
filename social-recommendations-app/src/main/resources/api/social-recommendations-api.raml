@@ -1,5 +1,5 @@
 #%RAML 1.0
-baseUri: https://mocksvc.mulesoft.com/mocks/225bfbcf-920d-4179-8d06-f6d60596a7e0 # 
+version: v1
 title: social-recommendations-api
 mediaType: application/json
 
@@ -59,3 +59,9 @@ types:
         200:
           body:
             type: ChoiceResults[][]
+    /top:
+      get:
+        responses:
+          200:
+            body:
+              type: ChoiceResults
