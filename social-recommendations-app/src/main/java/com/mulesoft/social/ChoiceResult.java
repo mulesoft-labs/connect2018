@@ -2,6 +2,9 @@ package com.mulesoft.social;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 public class ChoiceResult implements Serializable{
@@ -9,8 +12,21 @@ public class ChoiceResult implements Serializable{
 	String artPiece;	
 	String paintColor;
 	Integer count;
-	ArrayList<String> latest = new ArrayList<String>();
 	
+	private Map<String,String> nameMap = new HashMap<String, String>();
+	List<String> last = new ArrayList<String>();
+	
+	public List<String> getLast() {
+		int size = this.last.size();
+		List<String> last3 = this.last;
+		if (size >= 3) {
+			last3 = this.last.subList(size - 3, size);
+		}
+		return last3;
+	}
+	public void setLast(List<String> lastThree) {
+		this.last = lastThree;
+	}
 	public String getArtPiece() {
 		return artPiece;
 	}
@@ -29,37 +45,29 @@ public class ChoiceResult implements Serializable{
 	public void setCount(Integer count) {
 		this.count = count;
 	}
-	public void increaseCounter() {
+	public synchronized void increaseCounter() {
 		this.count++;
 	}
-	public void decreaseCounter() {
+	public synchronized void decreaseCounter() {
 		this.count--;
 	}
-	public ArrayList<String> getLatest() {
-		return latest;
-	}
-	public void setLatest(ArrayList<String> latest) {
-		this.latest = latest;
-	}
 	
-	public void addName(String name) {
-		this.latest.add(name);
-	}
-	
-	public void removeName(String name) {
-		ArrayList<String> allNames = new ArrayList<String>();
-		for (String existingName: this.latest) {
-			if (!existingName.equals(name)) {
-				allNames.add(existingName);
-			}
+	public synchronized void addName(String clientId, String name) {
+		if (!this.nameMap.containsKey(clientId)) {
+			this.nameMap.put(clientId, name);
+			this.last.add(name);
 		}
-		this.latest = allNames;
 	}
 	
+	public synchronized void removeName(String clientId) {
+		String name = this.nameMap.get(clientId);
+		this.nameMap.remove(clientId);	
+		this.last.remove(name);
+	}
 	@Override
 	public String toString() {
-		return "ChoiceResults [artPiece=" + artPiece + ", paintColor=" + paintColor + ", count=" + count + ", latest="
-				+ latest + "]";
+		return "ChoiceResult [artPiece=" + artPiece + ", paintColor=" + paintColor + ", count=" + count + ", nameMap="
+				+ nameMap + ", last=" + last + "]";
 	}
 	
 }

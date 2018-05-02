@@ -1,10 +1,10 @@
 {
   "configs": [
-    "social-recommendations-api.xml"
+    "chat-api.xml"
   ],
   "secureProperties": [],
   "redeploymentEnabled": true,
-  "name": "social-recommendations-api",
+  "name": "chat-app",
   "minMuleVersion": "4.1.1",
   "requiredProduct": "MULE_EE",
   "classLoaderModelLoaderDescriptor": {
@@ -12,10 +12,7 @@
     "attributes": {
       "exportedResources": [
         "api/.gitignore",
-        "api/social-recommendations-api.raml"
-      ],
-      "exportedPackages": [
-        "com.mulesoft.social"
+        "api/chat-api.raml"
       ]
     }
   },

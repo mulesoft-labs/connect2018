@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
-http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
-http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
     <http:listener-config name="social-recommendations-api-httpsListenerConfig" doc:name="HTTP Listener config">
         <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS">
-			<tls:context >
-				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
-			</tls:context>
-		</http:listener-connection>
+            <tls:context>
+                <tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
+            </tls:context>
+        </http:listener-connection>
     </http:listener-config>
-    <apikit:config name="social-recommendations-api-config" raml="social-recommendations-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router"/>
-	<global-property doc:name="Global Property" doc:id="63d994eb-f3c6-4bbc-a4fa-8f389fb19946" name="https.port" value="8082" />
-	<os:object-store name="ObjectStore" doc:name="Object store" doc:id="42b2a3da-c0f9-450d-bdbf-eb2e97e6f8f6"/>
-	<flow name="social-recommendations-api-main">
+    <apikit:config name="social-recommendations-api-config" raml="social-recommendations-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" />
+    <global-property doc:name="Global Property" doc:id="63d994eb-f3c6-4bbc-a4fa-8f389fb19946" name="https.port" value="8082" />
+    <os:object-store name="ObjectStore" doc:name="Object store" doc:id="42b2a3da-c0f9-450d-bdbf-eb2e97e6f8f6" persistent="false" />
+    <api-gateway:autodiscovery apiId="11383496" doc:name="API Autodiscovery" doc:id="aac9b3a2-0f31-4e16-bd23-38e90aa7b827" flowRef="social-recommendations-api-main" />
+    <flow name="social-recommendations-api-main">
         <http:listener config-ref="social-recommendations-api-httpsListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
@@ -28,7 +24,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
         <apikit:router config-ref="social-recommendations-api-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -41,7 +37,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -54,7 +50,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -67,7 +63,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -80,7 +76,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -93,7 +89,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -120,8 +116,7 @@ output application/json
         <apikit:console config-ref="social-recommendations-api-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -136,158 +131,178 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\choices:application\json:social-recommendations-api-config">
-		<os:clear doc:name="Clear everything (AKA starts a new game)" doc:id="39c28f40-4b13-4c22-b4d3-ef0041203c7f" objectStore="ObjectStore"/>
-		<os:store doc:name="Store the new choices" doc:id="54dd4c3f-1070-4193-a430-173f9c88858d" key="choices" objectStore="ObjectStore"/>
-		<ee:transform doc:name="Transform Message" doc:id="86576c77-6d82-46f9-b33c-e16f1ff7f296" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+        <os:clear doc:name="Clear everything (AKA starts a new game)" doc:id="39c28f40-4b13-4c22-b4d3-ef0041203c7f" objectStore="ObjectStore" />
+        <os:store doc:name="Store the new choices" doc:id="54dd4c3f-1070-4193-a430-173f9c88858d" key="choices" objectStore="ObjectStore" />
+        <ee:transform doc:name="Transform Message" doc:id="86576c77-6d82-46f9-b33c-e16f1ff7f296">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 {
 }]]></ee:set-payload>
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="artPieces" ><![CDATA[%dw 2.0
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="artPieces"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.artPieces]]></ee:set-variable>
-				<ee:set-variable variableName="paintColors" ><![CDATA[%dw 2.0
+                <ee:set-variable variableName="paintColors"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.paintColors]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<scripting:execute engine="groovy" doc:name="Execute" doc:id="9ecdfba0-365d-4c25-a796-6e1824b34b36" target="choicesArray">
-			<scripting:code >def choicesArray = new com.mulesoft.social.ChoiceResult[vars.artPieces.size()][vars.paintColors.size()]</scripting:code>
-		</scripting:execute>
-		<foreach doc:name="For Each" doc:id="26f00203-008c-440c-9d2d-54a4062b157e" collection="#[vars.artPieces]">
-			<ee:transform doc:name="Transform Message" doc:id="a13f64af-ad67-4c35-b564-c80cd5a250ef">
-				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
+            </ee:variables>
+        </ee:transform>
+        <scripting:execute engine="groovy" doc:name="Execute" doc:id="9ecdfba0-365d-4c25-a796-6e1824b34b36" target="choicesArray">
+            <scripting:code>def choicesArray = new com.mulesoft.social.ChoiceResult[vars.artPieces.size()][vars.paintColors.size()]</scripting:code>
+        </scripting:execute>
+        <foreach doc:name="For Each" doc:id="26f00203-008c-440c-9d2d-54a4062b157e" collection="#[vars.artPieces]">
+            <ee:transform doc:name="Transform Message" doc:id="a13f64af-ad67-4c35-b564-c80cd5a250ef">
+                <ee:message>
+                    <ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 {
 }]]></ee:set-payload>
-				</ee:message>
-				<ee:variables>
-					<ee:set-variable variableName="artPiece"><![CDATA[%dw 2.0
+                </ee:message>
+                <ee:variables>
+                    <ee:set-variable variableName="artPiece"><![CDATA[%dw 2.0
 output application/java
 ---
 payload]]></ee:set-variable>
-					<ee:set-variable variableName="index"><![CDATA[%dw 2.0
+                    <ee:set-variable variableName="index"><![CDATA[%dw 2.0
 output application/java
 ---
 vars.counter]]></ee:set-variable>
-				</ee:variables>
-			</ee:transform>
-			<foreach doc:name="For Each" doc:id="36579c25-c1de-4aac-8119-117a0c3b0c88" collection="#[vars.paintColors]">
-				<ee:transform doc:name="Transform Message" doc:id="69e8ec02-1044-4357-a71c-fd6abd11ed33">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
+                </ee:variables>
+            </ee:transform>
+            <foreach doc:name="For Each" doc:id="36579c25-c1de-4aac-8119-117a0c3b0c88" collection="#[vars.paintColors]">
+                <ee:transform doc:name="Transform Message" doc:id="69e8ec02-1044-4357-a71c-fd6abd11ed33">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
 }]]></ee:set-payload>
-					</ee:message>
-					<ee:variables >
-						<ee:set-variable variableName="paintColor" ><![CDATA[%dw 2.0
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="paintColor"><![CDATA[%dw 2.0
 output application/java
 ---
 payload]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-				<java:new doc:name="New" doc:id="c0b7b8b8-c10f-4ff7-b31e-16de90f6502e" class="com.mulesoft.social.ChoiceResult" constructor="ChoiceResult()" target="choiceResult"/>
-				<scripting:execute doc:name="Execute" doc:id="109f5a41-6612-4e24-9829-bfc9a96ae19d" engine="groovy">
-					<scripting:code >vars.choiceResult.setArtPiece(vars.artPiece)
+                    </ee:variables>
+                </ee:transform>
+                <java:new doc:name="New" doc:id="c0b7b8b8-c10f-4ff7-b31e-16de90f6502e" class="com.mulesoft.social.ChoiceResult" constructor="ChoiceResult()" target="choiceResult" />
+                <scripting:execute doc:name="Execute" doc:id="109f5a41-6612-4e24-9829-bfc9a96ae19d" engine="groovy">
+                    <scripting:code>vars.choiceResult.setArtPiece(vars.artPiece)
 vars.choiceResult.setPaintColor(vars.paintColor)
 vars.choiceResult.setCount(0)
 vars.choicesArray[vars.index -1][vars.counter-1] = vars.choiceResult</scripting:code>
-				</scripting:execute>
-			</foreach>
-		</foreach>
-		<os:store doc:name="Store" doc:id="d34c9283-004a-4846-b90a-661e3c52bde5" key="choicesArray" objectStore="ObjectStore">
-			<os:value ><![CDATA[#[vars.choicesArray]]]></os:value>
-		</os:store>
+                </scripting:execute>
+            </foreach>
+        </foreach>
+        <os:store doc:name="Store" doc:id="d34c9283-004a-4846-b90a-661e3c52bde5" key="choicesArray" objectStore="ObjectStore">
+            <os:value><![CDATA[#[vars.choicesArray]]]></os:value>
+        </os:store>
     </flow>
     <flow name="put:\recommendations:application\json:social-recommendations-api-config">
-        <os:store doc:name="Store" doc:id="e5518ca9-c150-469c-8872-1f5304ca9a7a" key="recommendations" objectStore="ObjectStore"/>
+        <os:store doc:name="Store" doc:id="e5518ca9-c150-469c-8872-1f5304ca9a7a" key="recommendations" objectStore="ObjectStore" />
     </flow>
     <flow name="get:\choices:social-recommendations-api-config">
         <os:retrieve doc:name="Retrieve choices from OS" doc:id="69972c13-704c-4e93-aa2f-09f2fe619f45" key="choices" objectStore="ObjectStore" />
-		<ee:transform doc:name="Transform byteArray to Json" doc:id="d27594c0-cb8e-4035-bc23-ab1dda9edc7f">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+        <ee:transform doc:name="Transform byteArray to Json" doc:id="d27594c0-cb8e-4035-bc23-ab1dda9edc7f">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 payload]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
+            </ee:message>
+        </ee:transform>
     </flow>
     <flow name="get:\recommendations\summary:social-recommendations-api-config">
-		<os:retrieve doc:name="Retrieve" doc:id="3aacd1f7-f15a-475d-8f19-65c9989d5015" key="choicesArray" objectStore="ObjectStore" target="choices"/>
-		<ee:transform doc:name="Transform Message" doc:id="b606b647-ec05-4dd5-bc92-1b4b8e0c15b3" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+        <os:retrieve doc:name="Retrieve" doc:id="3aacd1f7-f15a-475d-8f19-65c9989d5015" key="choicesArray" objectStore="ObjectStore" target="choices" />
+        <ee:transform doc:name="Transform Message" doc:id="b606b647-ec05-4dd5-bc92-1b4b8e0c15b3">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 vars.choices]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
+            </ee:message>
+        </ee:transform>
     </flow>
     <flow name="post:\recommendations:social-recommendations-api-config">
-		<ee:transform doc:name="Transform Message" doc:id="f594df65-d592-4a4a-8189-f8c3c56e03c8">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+        <ee:transform doc:name="Transform Message" doc:id="f594df65-d592-4a4a-8189-f8c3c56e03c8">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 {
 }]]></ee:set-payload>
-			</ee:message>
-			<ee:variables>
-				<ee:set-variable variableName="name"><![CDATA[%dw 2.0
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="name"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.name]]></ee:set-variable>
-				<ee:set-variable variableName="index"><![CDATA[%dw 2.0
+                <ee:set-variable variableName="index"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.choice]]></ee:set-variable>
-				<ee:set-variable variableName="clientId"><![CDATA[%dw 2.0
+                <ee:set-variable variableName="clientId"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.clientId]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<os:retrieve doc:name="getChoicesArray" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="choicesArray" objectStore="ObjectStore" target="choices" />
-		<os:retrieve doc:name="Retrieve current recommendation for the clientId" doc:id="a958fed1-dd40-411d-bce2-5f848c93eca1" key="#[vars.clientId]" objectStore="ObjectStore" target="clientChoice">
+            </ee:variables>
+        </ee:transform>
+        <os:retrieve doc:name="getChoicesArray" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="choicesArray" objectStore="ObjectStore" target="choices" />
+        <os:retrieve doc:name="Retrieve current recommendation for the clientId" doc:id="a958fed1-dd40-411d-bce2-5f848c93eca1" key="#[vars.clientId]" objectStore="ObjectStore" target="clientChoice">
+            <os:default-value><![CDATA[#[
+			output application/java 
+			---
+			""
+]]]></os:default-value>
+        </os:retrieve>
+        <choice doc:name="Choice" doc:id="145b158b-78b4-45b9-9e76-331c431e512c">
+            <when expression="#[isEmpty(vars.clientChoice)]">
+                <logger level="INFO" doc:name="Logger" doc:id="c926a5e6-1a08-422f-9ea2-ce7cad483f9c" />
+            </when>
+            <otherwise>
+                <scripting:execute engine="groovy" doc:name="Decrease the counter of old recommendation" doc:id="2ad563e1-3d27-49de-b8c5-025bf7e6da86">
+                    <scripting:code>def choice = vars.choices[vars.clientChoice[0]][vars.clientChoice[1]]
+choice.decreaseCounter()
+choice.removeName(vars.clientId)</scripting:code>
+                </scripting:execute>
+            </otherwise>
+        </choice>
+        <scripting:execute doc:name="Increase the counter of the new recommendation" doc:id="2ad563e1-3d27-49de-b8c5-025bf7e6da86" engine="groovy">
+            <scripting:code>def choice = vars.choices[vars.index[0]][vars.index[1]]
+choice.increaseCounter()
+choice.addName(vars.clientId, vars.name)</scripting:code>
+        </scripting:execute>
+        <os:store doc:name="Store the current recommendation for the clientId " doc:id="e58ce00a-c8bf-4c5b-86a3-29ddeb6b1117" key="#[vars.clientId]" objectStore="ObjectStore">
+            <os:value><![CDATA[#[vars.index]]]></os:value>
+        </os:store>
+        <os:store doc:name="Store the recommendation Array back" doc:id="6a67e9c8-fde0-4625-ad6d-cb76aff4845f" key="choicesArray" objectStore="ObjectStore">
+            <os:value><![CDATA[#[vars.choices]]]></os:value>
+        </os:store>
+    </flow>
+    <flow name="get:\recommendations\summary\top:social-recommendations-api-config">
+        <os:retrieve doc:name="getChoicesArray" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="choicesArray" objectStore="ObjectStore" target="choices" >
 			<os:default-value ><![CDATA[#[
 			output application/java 
 			---
 			""
 ]]]></os:default-value>
 		</os:retrieve>
-		<choice doc:name="Choice" doc:id="145b158b-78b4-45b9-9e76-331c431e512c" >
-			<when expression="#[isEmpty(vars.clientChoice)]" >
-				<logger level="INFO" doc:name="Logger" doc:id="9fe502b0-2afb-469a-aab5-79bf081cd264" />
-			</when>
-			<otherwise >
-				<scripting:execute engine="groovy" doc:name="Decrease the counter of old recommendation" doc:id="2ad563e1-3d27-49de-b8c5-025bf7e6da86">
-					<scripting:code>def choice = vars.choices[vars.clientChoice[0]][vars.clientChoice[1]]
-choice.decreaseCounter()
-choice.removeName(vars.name)</scripting:code>
-				</scripting:execute>
-			</otherwise>
-		</choice>
-		<scripting:execute doc:name="Increase the counter of the new recommendation" doc:id="2ad563e1-3d27-49de-b8c5-025bf7e6da86" engine="groovy">
-			<scripting:code>def choice = vars.choices[vars.index[0]][vars.index[1]]
-choice.increaseCounter()
-choice.addName(vars.name)</scripting:code>
+		<scripting:execute engine="groovy" doc:name="Get the top recommendation" doc:id="2ad563e1-3d27-49de-b8c5-025bf7e6da86">
+			<scripting:code>com.mulesoft.social.Util.getTopRecommendation(vars.choices)</scripting:code>
 		</scripting:execute>
-		<os:store doc:name="Store the current recommendation for the clientId " doc:id="e58ce00a-c8bf-4c5b-86a3-29ddeb6b1117" key="#[vars.clientId]" objectStore="ObjectStore">
-					<os:value><![CDATA[#[vars.index]]]></os:value>
-				</os:store>
-		<os:store doc:name="Store the recommendation Array back" doc:id="6a67e9c8-fde0-4625-ad6d-cb76aff4845f" key="choicesArray" objectStore="ObjectStore" >
-			<os:value ><![CDATA[#[vars.choices]]]></os:value>
-		</os:store>
+		<ee:transform doc:name="Transform Message" doc:id="44850f9a-582c-4459-a9f4-cf9945574083" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
     </flow>
 </mule>

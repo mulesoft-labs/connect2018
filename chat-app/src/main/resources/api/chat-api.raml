@@ -1,0 +1,31 @@
+#%RAML 1.0
+version: v1
+title: chat-api
+
+types:
+  message:
+    properties:
+      username: string
+      text: string
+      
+/messages:
+  post:
+    description: Post a message
+    body:
+      application/json:
+        type: message
+    responses: 
+      200:
+        body:
+          application/json:
+            type: message
+  get: 
+    description: Gets the list of messages
+    queryParameters: 
+      userName: string
+    responses: 
+      200:
+        body:
+          application/json:
+            type: message[]
+        
