@@ -203,31 +203,71 @@ vars.choicesArray[vars.index -1][vars.counter-1] = vars.choiceResult</scripting:
         <os:store doc:name="Store" doc:id="d34c9283-004a-4846-b90a-661e3c52bde5" key="choicesArray" objectStore="ObjectStore">
             <os:value><![CDATA[#[vars.choicesArray]]]></os:value>
         </os:store>
+		<ee:transform doc:name="Transform Message" doc:id="2fe24cdf-575f-454e-9d2c-9c9335c523ac">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+""]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
+output application/java
+---
+204]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
     </flow>
     <flow name="put:\recommendations:application\json:social-recommendations-api-config">
-        <os:store doc:name="Store" doc:id="e5518ca9-c150-469c-8872-1f5304ca9a7a" key="recommendations" objectStore="ObjectStore" />
+		<logger level="INFO" doc:name="Logger" doc:id="27f5078d-f9b7-47e2-85d1-122f065c1e5e" message="put:\recommendations:application\json:social-recommendations-api-config"/>
     </flow>
     <flow name="get:\choices:social-recommendations-api-config">
-        <os:retrieve doc:name="Retrieve choices from OS" doc:id="69972c13-704c-4e93-aa2f-09f2fe619f45" key="choices" objectStore="ObjectStore" />
+        <os:retrieve doc:name="Retrieve choices from OS" doc:id="69972c13-704c-4e93-aa2f-09f2fe619f45" key="choices" objectStore="ObjectStore" >
+			<os:default-value ><![CDATA[ZERO]]></os:default-value>
+		</os:retrieve>
         <ee:transform doc:name="Transform byteArray to Json" doc:id="d27594c0-cb8e-4035-bc23-ab1dda9edc7f">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-payload]]></ee:set-payload>
+if (payload == "ZERO")
+	{}
+else
+	payload]]></ee:set-payload>
             </ee:message>
+			<ee:variables>
+                <ee:set-variable variableName="outboundHeaders"><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"Content-Type": "application/json"
+}]]></ee:set-variable>
+			</ee:variables>
         </ee:transform>
     </flow>
     <flow name="get:\recommendations\summary:social-recommendations-api-config">
-        <os:retrieve doc:name="Retrieve" doc:id="3aacd1f7-f15a-475d-8f19-65c9989d5015" key="choicesArray" objectStore="ObjectStore" target="choices" />
-        <ee:transform doc:name="Transform Message" doc:id="b606b647-ec05-4dd5-bc92-1b4b8e0c15b3">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
+        <os:retrieve doc:name="Retrieve" doc:id="3aacd1f7-f15a-475d-8f19-65c9989d5015" key="choicesArray" objectStore="ObjectStore">
+			<os:default-value ><![CDATA[ZERO]]></os:default-value>
+		</os:retrieve>
+		<ee:transform doc:name="Transform to Json" doc:id="d27594c0-cb8e-4035-bc23-ab1dda9edc7f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-vars.choices]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+if (payload == "ZERO")
+	{}
+else
+	payload]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="outboundHeaders" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"Content-Type": "application/json"
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
     </flow>
     <flow name="post:\recommendations:social-recommendations-api-config">
         <ee:transform doc:name="Transform Message" doc:id="f594df65-d592-4a4a-8189-f8c3c56e03c8">
@@ -253,56 +293,123 @@ output application/java
 payload.clientId]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
-        <os:retrieve doc:name="getChoicesArray" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="choicesArray" objectStore="ObjectStore" target="choices" />
-        <os:retrieve doc:name="Retrieve current recommendation for the clientId" doc:id="a958fed1-dd40-411d-bce2-5f848c93eca1" key="#[vars.clientId]" objectStore="ObjectStore" target="clientChoice">
+        <os:retrieve doc:name="getChoicesArray" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="choicesArray" objectStore="ObjectStore" target="choices" >
+			<os:default-value ><![CDATA[ZERO]]></os:default-value>
+		</os:retrieve>
+        <choice doc:name="Choice" doc:id="cd2e80f3-dc38-4902-b118-8e638d37f681" >
+			<when expression="#[vars.choices == 'ZERO']" >
+				<ee:transform doc:name="Transform to Json" doc:id="d27594c0-cb8e-4035-bc23-ab1dda9edc7f" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	msg: "Please, call PUT:/choices resource to set up the game before call this resource."
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="outboundHeaders" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"Content-Type": "application/json"
+}]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<os:retrieve doc:name="Retrieve current recommendation for the clientId" doc:id="a958fed1-dd40-411d-bce2-5f848c93eca1" key="#[vars.clientId]" objectStore="ObjectStore" target="clientChoice">
             <os:default-value><![CDATA[#[
 			output application/java 
 			---
 			""
 ]]]></os:default-value>
         </os:retrieve>
-        <choice doc:name="Choice" doc:id="145b158b-78b4-45b9-9e76-331c431e512c">
+				<choice doc:name="Choice" doc:id="145b158b-78b4-45b9-9e76-331c431e512c">
             <when expression="#[isEmpty(vars.clientChoice)]">
-                <logger level="INFO" doc:name="Logger" doc:id="c926a5e6-1a08-422f-9ea2-ce7cad483f9c" />
+						<logger level="INFO" doc:name="Logger" doc:id="478c2d72-8577-403a-bd56-843bba94bf44" />
             </when>
-            <otherwise>
+			<otherwise>
                 <scripting:execute engine="groovy" doc:name="Decrease the counter of old recommendation" doc:id="2ad563e1-3d27-49de-b8c5-025bf7e6da86">
                     <scripting:code>def choice = vars.choices[vars.clientChoice[0]][vars.clientChoice[1]]
 choice.decreaseCounter()
 choice.removeName(vars.clientId)</scripting:code>
                 </scripting:execute>
-            </otherwise>
-        </choice>
-        <scripting:execute doc:name="Increase the counter of the new recommendation" doc:id="2ad563e1-3d27-49de-b8c5-025bf7e6da86" engine="groovy">
+			</otherwise>
+		</choice>
+             <scripting:execute doc:name="Increase the counter of the new recommendation" doc:id="2ad563e1-3d27-49de-b8c5-025bf7e6da86" engine="groovy">
             <scripting:code>def choice = vars.choices[vars.index[0]][vars.index[1]]
 choice.increaseCounter()
 choice.addName(vars.clientId, vars.name)</scripting:code>
         </scripting:execute>
-        <os:store doc:name="Store the current recommendation for the clientId " doc:id="e58ce00a-c8bf-4c5b-86a3-29ddeb6b1117" key="#[vars.clientId]" objectStore="ObjectStore">
+				<os:store doc:name="Store the current recommendation for the clientId " doc:id="e58ce00a-c8bf-4c5b-86a3-29ddeb6b1117" key="#[vars.clientId]" objectStore="ObjectStore">
             <os:value><![CDATA[#[vars.index]]]></os:value>
         </os:store>
-        <os:store doc:name="Store the recommendation Array back" doc:id="6a67e9c8-fde0-4625-ad6d-cb76aff4845f" key="choicesArray" objectStore="ObjectStore">
+				<os:store doc:name="Store the recommendation Array back" doc:id="6a67e9c8-fde0-4625-ad6d-cb76aff4845f" key="choicesArray" objectStore="ObjectStore">
             <os:value><![CDATA[#[vars.choices]]]></os:value>
         </os:store>
+				<ee:transform doc:name="Transform Message" doc:id="2fe24cdf-575f-454e-9d2c-9c9335c523ac">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+""]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
+output application/java
+---
+201]]></ee:set-variable>
+				<ee:set-variable variableName="outboundHeaders"><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"Content-location": "https://social-recommendation-app.cloudhub.io/api/recommendations/summary"
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+            </otherwise>
+        </choice>
     </flow>
     <flow name="get:\recommendations\summary\top:social-recommendations-api-config">
-        <os:retrieve doc:name="getChoicesArray" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="choicesArray" objectStore="ObjectStore" target="choices" >
-			<os:default-value ><![CDATA[#[
-			output application/java 
-			---
-			""
-]]]></os:default-value>
+        <os:retrieve doc:name="getChoicesArray" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="choicesArray" objectStore="ObjectStore">
+			<os:default-value ><![CDATA[ZERO]]></os:default-value>
 		</os:retrieve>
-		<scripting:execute engine="groovy" doc:name="Get the top recommendation" doc:id="2ad563e1-3d27-49de-b8c5-025bf7e6da86">
-			<scripting:code>com.mulesoft.social.Util.getTopRecommendation(vars.choices)</scripting:code>
+		<choice doc:name="Choice" doc:id="d5fd968e-d0e8-4bae-81f5-c9df8e48587c" >
+			<when expression="#[payload == 'ZERO']">
+				<ee:transform doc:name="Transform Message" doc:id="8add58be-2156-40a2-9373-13aec8425ba6">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<scripting:execute engine="groovy" doc:name="Get the top recommendation" doc:id="2ad563e1-3d27-49de-b8c5-025bf7e6da86">
+			<scripting:code>com.mulesoft.social.Util.getTopRecommendation(payload)</scripting:code>
 		</scripting:execute>
-		<ee:transform doc:name="Transform Message" doc:id="44850f9a-582c-4459-a9f4-cf9945574083" >
+			</otherwise>
+		</choice>
+		<ee:transform doc:name="Transform to Json" doc:id="d27594c0-cb8e-4035-bc23-ab1dda9edc7f" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-payload]]></ee:set-payload>
+if (payload == "ZERO")
+	{}
+else
+	payload]]></ee:set-payload>
 			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="outboundHeaders" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"Content-Type": "application/json"
+}]]></ee:set-variable>
+			</ee:variables>
 		</ee:transform>
     </flow>
 </mule>

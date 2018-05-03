@@ -34,25 +34,63 @@ types:
       200:
         body:
           type: Choices
-  put:
-    body:
-      type: Choices
-    responses:
-      200:
-
-/recommendations:
-  post:
-    responses: 
-      200:
-        body:
-          type: Recommendation
+          example:
+            {
+              "artPieces": [
+                "fig1", "fig2", "fig3"
+              ],
+              "paintColors": [
+                "red", "green", "blue"
+              ]
+            }
   put:
     headers:
       Authorization:
     body:
-      type: Recommendation[]
+      type: Choices
+      example:
+        {
+          "artPieces": [
+            "fig1", "fig2", "fig3"
+          ],
+          "paintColors": [
+            "red", "green", "blue"
+          ]
+        }
     responses:
-      200:
+      204:
+
+/recommendations:
+  post:
+    body:
+      type: Recommendation
+      example: {
+          "clientId": "1",
+          "name": "Janet",
+          "choice": [0,2]
+        }
+    responses: 
+      201:
+        headers:
+          Content-location:
+            type: string
+            example: https://social-recommendation-app.cloudhub.io/api/recommendations/summary
+  put:
+    headers:
+      Authorization:
+    body:
+      type: Recommendation
+      example: {
+          "clientId": "1",
+          "name": "Janet",
+          "choice": [2,0]
+        }
+    responses:
+      204:
+        headers:
+          Content-location:
+            type: string
+            example: https://localhost:8082/api/recommendations/summary
   /summary:
     get:
       responses: 
