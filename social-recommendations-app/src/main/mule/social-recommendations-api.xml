@@ -152,6 +152,22 @@ output application/java
     <sub-flow name="putChoices-Sub_Flow" doc:id="aad6ded1-c240-4465-9cb9-2e80eb097c76" >
         <ee:transform doc:name="Transform Message" doc:id="68ea14ee-a82b-4851-a0e1-8bdf23087ed0" >
 			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	artPieces: payload.artPieces
+		default [
+	                "http://3.bp.blogspot.com/_6QdxFZPFLoY/S2-Ocuy_c-I/AAAAAAAAAiw/C1eeBZmr_20/S760/Figura23.jpg"
+	                ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvDeYw3OqpVQNpYG3_qq6JsbJuoQ683CbSYbSUfROoV_84pLdvA"
+	                ,"https://cdn.mensagenscomamor.com/content/images/p000005352.jpg?v=0"
+	             ]
+	,
+	paintColors: payload.paintColors
+		default [
+	                "red", "green", "blue"
+	            ]
+}]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
 				<ee:set-variable variableName="payloadbkp" ><![CDATA[%dw 2.0
@@ -267,16 +283,51 @@ output application/java
 		</choice>
     </flow>
     <sub-flow name="putRecomendations-Sub_Flow" doc:id="6d04c8db-2e68-45b7-92c6-f3c9c730b6f1" >
-		<set-variable value="" doc:name="clear choicesArray var" doc:id="a7cda135-3e90-4f05-a7b8-cf77252b842a" variableName="choicesArray"/>
-		<scripting:execute engine="groovy" doc:name="Clean choicesArray" doc:id="9ecdfba0-365d-4c25-a796-6e1824b34b36" target="choicesArray">
-			<scripting:code>choicesArray = new com.mulesoft.social.ChoiceResult[3][3]</scripting:code>
-		</scripting:execute>
+		<ee:transform doc:name="Transform Message" doc:id="3bcf287f-926c-482d-899e-40de30f4af43" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload.choices default {}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="recomendations" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.recommendations]]></ee:set-variable>
+				<ee:set-variable variableName="choices" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.choices]]></ee:set-variable>
+				<ee:set-variable variableName="payload_bkp_01" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="putChoices-Sub_Flow" doc:id="54695d28-5a7f-4b67-9573-4ba46dae023f" name="putChoices-Sub_Flow"/>
+		<ee:transform doc:name="Transform Message" doc:id="ef248f6b-cdea-4934-ae8c-6bd64135b869" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+vars.recomendations default {}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 		<foreach doc:name="For Each" doc:id="e3b49177-5dbc-4945-b290-77e25cd3d63b" collection="payload">
 			<flow-ref doc:name="post:\recommendations:social-recommendations-api-config" doc:id="296a9463-f75c-471f-8a26-7fb88cd10c45" name="post:\recommendations:social-recommendations-api-config"/>
 		</foreach>
 		<os:store doc:name="Store the new choices" doc:id="e5518ca9-c150-469c-8872-1f5304ca9a7a" key="choicesArray" objectStore="ObjectStore">
 			<os:value><![CDATA[#[vars.choicesArray]]]></os:value>
 		</os:store>
+		<ee:transform doc:name="Transform Message" doc:id="e933b495-9178-4f5c-90f6-becda67099fd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+vars.payload_bkp_01]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
     </sub-flow>
 	<flow name="get:\choices:social-recommendations-api-config">
         <os:retrieve doc:name="Retrieve choices from OS" doc:id="69972c13-704c-4e93-aa2f-09f2fe619f45" key="choices" objectStore="ObjectStore" >

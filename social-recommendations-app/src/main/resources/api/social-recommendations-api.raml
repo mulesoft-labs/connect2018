@@ -26,7 +26,10 @@ types:
         type: integer[]
         minItems: 2
         maxItems: 2
-
+  Reset:
+    properties:
+      recommendations?: Recommendation[]
+      choices?: Choices
 
 /choices:
   get:
@@ -95,12 +98,31 @@ types:
     headers:
       Authorization:
     body:
-      type: Recommendation[]
-      example: [{
-          "clientId": "1",
-          "name": "Janet",
-          "choice": [2,0]
-        }]
+      type: Reset
+      example: {
+    "recommendations":[
+        {
+            "clientId": "1",
+            "name": "Janet",
+            "choice": [
+                0,
+                0
+            ]
+        }
+    ],
+    "choices": {
+        "artPieces": [
+            "http://3.bp.blogspot.com/_6QdxFZPFLoY/S2-Ocuy_c-I/AAAAAAAAAiw/C1eeBZmr_20/S760/Figura23.jpg",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvDeYw3OqpVQNpYG3_qq6JsbJuoQ683CbSYbSUfROoV_84pLdvA",
+            "https://cdn.mensagenscomamor.com/content/images/p000005352.jpg?v=0"
+          ],
+          "paintColors": [
+            "white",
+            "green",
+            "black"
+          ]
+    } 
+}
     responses: 
       200:
         body:
