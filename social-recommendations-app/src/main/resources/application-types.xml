@@ -20,15 +20,6 @@
       </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
-  <types:enrichment select="#b606b647-ec05-4dd5-bc92-1b4b8e0c15b3">
-    <types:processor-declaration>
-      <types:input-event>
-        <types:message>
-          <types:payload type="ChoicesJson"/>
-        </types:message>
-      </types:input-event>
-    </types:processor-declaration>
-  </types:enrichment>
   <types:enrichment select="#f594df65-d592-4a4a-8189-f8c3c56e03c8">
     <types:processor-declaration>
       <types:input-event>
