@@ -131,7 +131,36 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\choices:application\json:social-recommendations-api-config">
-        <os:clear doc:name="Clear everything (AKA starts a new game)" doc:id="39c28f40-4b13-4c22-b4d3-ef0041203c7f" objectStore="ObjectStore" />
+		<choice doc:name="Choice" doc:id="1e3b4ca8-a5db-493d-80bb-c3c9e738608d" >
+			<when expression="#[attributes.headers.authorization == 'Connect2018']" >
+				<flow-ref doc:name="putChoices-Sub_Flow" doc:id="9eb0351d-0bc5-40c0-a0c2-26683fc8d66a" name="putChoices-Sub_Flow"/>
+			</when>
+			<otherwise>
+				<ee:transform doc:name="Forbiden" doc:id="a3102554-da03-45d1-b95c-62702d4df5f5" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+403]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</otherwise>
+		</choice>
+    </flow>
+    <sub-flow name="putChoices-Sub_Flow" doc:id="aad6ded1-c240-4465-9cb9-2e80eb097c76" >
+        <ee:transform doc:name="Transform Message" doc:id="68ea14ee-a82b-4851-a0e1-8bdf23087ed0" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="payloadbkp" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<os:clear doc:name="Clear everything (AKA starts a new game)" doc:id="39c28f40-4b13-4c22-b4d3-ef0041203c7f" objectStore="ObjectStore" />
         <os:store doc:name="Store the new choices" doc:id="54dd4c3f-1070-4193-a430-173f9c88858d" key="choices" objectStore="ObjectStore" />
         <ee:transform doc:name="Transform Message" doc:id="86576c77-6d82-46f9-b33c-e16f1ff7f296">
             <ee:message>
@@ -206,22 +235,50 @@ vars.choicesArray[vars.index -1][vars.counter-1] = vars.choiceResult</scripting:
 		<ee:transform doc:name="Transform Message" doc:id="2fe24cdf-575f-454e-9d2c-9c9335c523ac">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
-""]]></ee:set-payload>
+vars.payloadbkp]]></ee:set-payload>
             </ee:message>
             <ee:variables>
                 <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
-204]]></ee:set-variable>
+200]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
+    </sub-flow>
+	<flow name="put:\recommendations:application\json:social-recommendations-api-config">
+		<choice doc:name="Choice" doc:id="929037cd-30e9-4a2e-96ed-7a7fd9449b96" >
+			<when expression="#[attributes.headers.authorization == 'Connect2018']" >
+				<flow-ref doc:name="putRecomendations-Sub_Flow" doc:id="ecd6824b-e3e0-4593-b482-02d963cd1ef6" name="putRecomendations-Sub_Flow"/>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Forbiden" doc:id="81161568-8c40-4eb4-bf0d-ad569f6c697a" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+403]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</otherwise>
+		</choice>
     </flow>
-    <flow name="put:\recommendations:application\json:social-recommendations-api-config">
-		<logger level="INFO" doc:name="Logger" doc:id="27f5078d-f9b7-47e2-85d1-122f065c1e5e" message="put:\recommendations:application\json:social-recommendations-api-config"/>
-    </flow>
-    <flow name="get:\choices:social-recommendations-api-config">
+    <sub-flow name="putRecomendations-Sub_Flow" doc:id="6d04c8db-2e68-45b7-92c6-f3c9c730b6f1" >
+		<set-variable value="" doc:name="clear choicesArray var" doc:id="a7cda135-3e90-4f05-a7b8-cf77252b842a" variableName="choicesArray"/>
+		<scripting:execute engine="groovy" doc:name="Clean choicesArray" doc:id="9ecdfba0-365d-4c25-a796-6e1824b34b36" target="choicesArray">
+			<scripting:code>choicesArray = new com.mulesoft.social.ChoiceResult[3][3]</scripting:code>
+		</scripting:execute>
+		<foreach doc:name="For Each" doc:id="e3b49177-5dbc-4945-b290-77e25cd3d63b" collection="payload">
+			<flow-ref doc:name="post:\recommendations:social-recommendations-api-config" doc:id="296a9463-f75c-471f-8a26-7fb88cd10c45" name="post:\recommendations:social-recommendations-api-config"/>
+		</foreach>
+		<os:store doc:name="Store the new choices" doc:id="e5518ca9-c150-469c-8872-1f5304ca9a7a" key="choicesArray" objectStore="ObjectStore">
+			<os:value><![CDATA[#[vars.choicesArray]]]></os:value>
+		</os:store>
+    </sub-flow>
+	<flow name="get:\choices:social-recommendations-api-config">
         <os:retrieve doc:name="Retrieve choices from OS" doc:id="69972c13-704c-4e93-aa2f-09f2fe619f45" key="choices" objectStore="ObjectStore" >
 			<os:default-value ><![CDATA[ZERO]]></os:default-value>
 		</os:retrieve>
@@ -291,6 +348,10 @@ payload.choice]]></ee:set-variable>
 output application/java
 ---
 payload.clientId]]></ee:set-variable>
+				<ee:set-variable variableName="payloadbkp" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
         <os:retrieve doc:name="getChoicesArray" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="choicesArray" objectStore="ObjectStore" target="choices" >
@@ -351,21 +412,15 @@ choice.addName(vars.clientId, vars.name)</scripting:code>
 				<ee:transform doc:name="Transform Message" doc:id="2fe24cdf-575f-454e-9d2c-9c9335c523ac">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
-""]]></ee:set-payload>
+vars.payloadbkp]]></ee:set-payload>
 			</ee:message>
 			<ee:variables>
 				<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
-201]]></ee:set-variable>
-				<ee:set-variable variableName="outboundHeaders"><![CDATA[%dw 2.0
-output application/java
----
-{
-	"Content-location": "https://social-recommendation-app.cloudhub.io/api/recommendations/summary"
-}]]></ee:set-variable>
+200]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
             </otherwise>
@@ -375,6 +430,17 @@ output application/java
         <os:retrieve doc:name="getChoicesArray" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="choicesArray" objectStore="ObjectStore">
 			<os:default-value ><![CDATA[ZERO]]></os:default-value>
 		</os:retrieve>
+		<ee:transform doc:name="Transform Message" doc:id="4d1e4c25-afd1-4d16-bb5c-1ef84f16d5f4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+if (payload != 'ZERO')
+	payload
+else
+	payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 		<choice doc:name="Choice" doc:id="d5fd968e-d0e8-4bae-81f5-c9df8e48587c" >
 			<when expression="#[payload == 'ZERO']">
 				<ee:transform doc:name="Transform Message" doc:id="8add58be-2156-40a2-9373-13aec8425ba6">
@@ -397,7 +463,7 @@ payload]]></ee:set-payload>
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-if (payload == "ZERO")
+if (payload == "ZERO" or payload.count == 0)
 	{}
 else
 	payload]]></ee:set-payload>

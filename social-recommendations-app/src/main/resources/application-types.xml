@@ -10,6 +10,9 @@
     <types:type name="recommendationJson" format="json">
       <types:example format="json" location="examples/recommendation.json"/>
     </types:type>
+    <types:type name="javaChoicesResults" format="java">
+      <types:shape format="java" element="com.mulesoft.social.ChoiceResults"/>
+    </types:type>
   </types:catalog>
   <types:enrichment select="#c55422d1-42c9-4397-a83f-aa51aec903f2">
     <types:processor-declaration>
@@ -28,5 +31,8 @@
         </types:message>
       </types:input-event>
     </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#4d1e4c25-afd1-4d16-bb5c-1ef84f16d5f4">
+    <types:processor-declaration/>
   </types:enrichment>
 </types:mule>

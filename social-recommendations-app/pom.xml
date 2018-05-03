@@ -15,6 +15,10 @@
 
 		<app.runtime>4.1.1</app.runtime>
 		<mule.maven.plugin.version>3.1.1</mule.maven.plugin.version>
+		
+		
+	    <maven.compiler.source>1.8</maven.compiler.source>
+	    <maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<build>
@@ -32,6 +36,11 @@
 	</build>
 
 	<dependencies>
+        <!-- <dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>19.0</version>
+		</dependency>-->
         <dependency>
             <groupId>org.mule.connectors</groupId>
             <artifactId>mule-http-connector</artifactId>

@@ -37,7 +37,9 @@ types:
           example:
             {
               "artPieces": [
-                "fig1", "fig2", "fig3"
+                "http://3.bp.blogspot.com/_6QdxFZPFLoY/S2-Ocuy_c-I/AAAAAAAAAiw/C1eeBZmr_20/S760/Figura23.jpg"
+                ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvDeYw3OqpVQNpYG3_qq6JsbJuoQ683CbSYbSUfROoV_84pLdvA"
+                ,"https://cdn.mensagenscomamor.com/content/images/p000005352.jpg?v=0"
               ],
               "paintColors": [
                 "red", "green", "blue"
@@ -51,14 +53,25 @@ types:
       example:
         {
           "artPieces": [
-            "fig1", "fig2", "fig3"
+            "http://3.bp.blogspot.com/_6QdxFZPFLoY/S2-Ocuy_c-I/AAAAAAAAAiw/C1eeBZmr_20/S760/Figura23.jpg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvDeYw3OqpVQNpYG3_qq6JsbJuoQ683CbSYbSUfROoV_84pLdvA", "https://cdn.mensagenscomamor.com/content/images/p000005352.jpg?v=0"
           ],
           "paintColors": [
             "red", "green", "blue"
           ]
         }
     responses:
-      204:
+      200:
+        body:
+          type: Choices
+          example:
+            {
+              "artPieces": [
+                "http://3.bp.blogspot.com/_6QdxFZPFLoY/S2-Ocuy_c-I/AAAAAAAAAiw/C1eeBZmr_20/S760/Figura23.jpg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvDeYw3OqpVQNpYG3_qq6JsbJuoQ683CbSYbSUfROoV_84pLdvA", "https://cdn.mensagenscomamor.com/content/images/p000005352.jpg?v=0"
+              ],
+              "paintColors": [
+                "red", "green", "blue"
+              ]
+            }
 
 /recommendations:
   post:
@@ -70,27 +83,33 @@ types:
           "choice": [0,2]
         }
     responses: 
-      201:
-        headers:
-          Content-location:
-            type: string
-            example: https://social-recommendation-app.cloudhub.io/api/recommendations/summary
+      200:
+        body:
+          type: Recommendation
+          example: {
+            "clientId": "1",
+            "name": "Janet",
+            "choice": [0,2]
+          }
   put:
     headers:
       Authorization:
     body:
-      type: Recommendation
-      example: {
+      type: Recommendation[]
+      example: [{
           "clientId": "1",
           "name": "Janet",
           "choice": [2,0]
-        }
-    responses:
-      204:
-        headers:
-          Content-location:
-            type: string
-            example: https://localhost:8082/api/recommendations/summary
+        }]
+    responses: 
+      200:
+        body:
+          type: Recommendation[]
+          example: [{
+            "clientId": "1",
+            "name": "Janet",
+            "choice": [0,2]
+          }]
   /summary:
     get:
       responses: 
