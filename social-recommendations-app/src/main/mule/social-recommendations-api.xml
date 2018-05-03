@@ -21,7 +21,17 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="social-recommendations-api-config" />
+        <ee:transform doc:name="setting up vars to be accessed by all the flows" doc:id="e1d377ff-e092-4bfb-af06-7cb47b9e8bea" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="magicPASSWD" ><![CDATA[%dw 2.0
+output application/java
+---
+"astro and max"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<apikit:router config-ref="social-recommendations-api-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -132,7 +142,7 @@ output application/json
     </flow>
     <flow name="put:\choices:application\json:social-recommendations-api-config">
 		<choice doc:name="Choice" doc:id="1e3b4ca8-a5db-493d-80bb-c3c9e738608d" >
-			<when expression="#[attributes.headers.authorization == 'Connect2018']" >
+			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
 				<flow-ref doc:name="putChoices-Sub_Flow" doc:id="9eb0351d-0bc5-40c0-a0c2-26683fc8d66a" name="putChoices-Sub_Flow"/>
 			</when>
 			<otherwise>
@@ -265,7 +275,7 @@ output application/java
     </sub-flow>
 	<flow name="put:\recommendations:application\json:social-recommendations-api-config">
 		<choice doc:name="Choice" doc:id="929037cd-30e9-4a2e-96ed-7a7fd9449b96" >
-			<when expression="#[attributes.headers.authorization == 'Connect2018']" >
+			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
 				<flow-ref doc:name="putRecomendations-Sub_Flow" doc:id="ecd6824b-e3e0-4593-b482-02d963cd1ef6" name="putRecomendations-Sub_Flow"/>
 			</when>
 			<otherwise >
