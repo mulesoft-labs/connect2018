@@ -173,8 +173,8 @@ payload.itemId]]></ee:set-variable>
             <when expression="#[isEmpty(vars.locations)]">
                 <java:new doc:name="New" doc:id="633ae918-9ab5-4ce8-a046-c7e5315b11bf" class="java.util.ArrayList" constructor="ArrayList()" target="locations" />
                 <scripting:execute doc:name="Execute" doc:id="96ee9250-d726-4bb1-bb80-8d750ee2f8e0" engine="groovy">
-                    <scripting:code>for (i = 0; i &lt;8; i++) {
-vars.locations.add("")
+                    <scripting:code>for (i = 0; i &lt;6; i++) {
+vars.locations.add(&quot;&quot;)
 }</scripting:code>
                 </scripting:execute>
             </when>
