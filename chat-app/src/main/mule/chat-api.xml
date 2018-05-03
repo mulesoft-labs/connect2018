@@ -138,8 +138,17 @@ output application/json
     </flow>
     <flow name="get:\messages:chat-api-config">
         <os:retrieve doc:name="Retrieve" doc:id="68db1664-8ced-4f8d-9b95-357135a587f9" key="messages" objectStore="messages" target="messageList">
-			<os:default-value ><![CDATA[[]]]></os:default-value>
+			<os:default-value ><![CDATA[#[
+			output application/java 
+			---
+			""
+]]]></os:default-value>
 		</os:retrieve>
+		<choice doc:name="Choice" doc:id="879062a7-a741-486a-b202-11668259a72c">
+			<when expression="#[isEmpty(vars.messageList)]">
+				<java:new doc:name="New" doc:id="73f28d4e-c55c-43dd-95e3-775fce40f9fa" class="java.util.ArrayList" constructor="ArrayList()" target="messageList" />
+			</when>
+		</choice>
 		<ee:transform doc:name="Transform Message" doc:id="90bcbca4-d55d-49d8-9463-d6aabdf8a09b" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -153,16 +162,25 @@ messages: vars.messageList]]></ee:set-payload>
 		<ee:transform doc:name="Transform Message" doc:id="e7658fe3-f5f4-4c5e-8769-0b4c16fc30ee" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
+	destination: payload.destination,
+	text: payload.text,
+	username: payload.username,
+	timestamp: now()
 }]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
 				<ee:set-variable variableName="message" ><![CDATA[%dw 2.0
 output application/java
 ---
-payload]]></ee:set-variable>
+{
+	destination: payload.destination,
+	text: payload.text,
+	username: payload.username,
+	timestamp: now()
+}]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<os:retrieve doc:name="Retrieve" doc:id="2c5d0bcd-b7ba-4357-a953-814a6763c2ad" key="messages" objectStore="messages" target="messageList">
