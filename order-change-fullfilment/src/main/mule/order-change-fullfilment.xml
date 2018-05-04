@@ -79,14 +79,14 @@ output application/json
 }]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
-				<http:request method="POST" doc:name="Request" doc:id="b02aabe8-e323-4ddb-b5d2-8f78bf26e930" path="/messages" config-ref="ChatAPP">
+				<http:request method="POST" doc:name="Store message on ChatAPP" doc:id="b02aabe8-e323-4ddb-b5d2-8f78bf26e930" path="/messages" config-ref="ChatAPP">
 					<http:headers ><![CDATA[#[output applicaton/java
 ---
 {
 	"Authorization" : "astro and max"
 }]]]></http:headers>
 				</http:request>
-				<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json" target="originalResponse">
+				<http:request method="POST" doc:name="DialogFlow" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json" target="originalResponse">
 			<http:body><![CDATA[#[vars.originalMessage]]]></http:body>
 			<http:headers><![CDATA[#[output applicaton/java
 ---
@@ -639,7 +639,7 @@ output application/json
 {
  	"data": {
 		"type": "order-list",
-		"text": "Sure, this are your last orders, which one you would like to look at?",
+		"text": "Sure, these are your last orders, which one you would like to look at?",
 		"orders": vars.orderList map
 		(
 			$
