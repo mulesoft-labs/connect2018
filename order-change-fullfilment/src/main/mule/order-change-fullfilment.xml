@@ -34,6 +34,10 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 		</http:listener-connection>
 	</http:listener-config>
 	<global-property doc:name="Global Property" doc:id="2747b0e1-652e-4cb3-9b31-6ca6471b383b" name="https.port" value="8082" />
+	<http:request-config name="ChatAPP" doc:name="ChatAPP" doc:id="1cd3329b-f737-42ce-9a28-cd05d6239b0d" basePath="/api">
+		<http:request-connection host="chat-app.cloudhub.io" protocol="HTTPS"/>
+	</http:request-config>
+	
 	<flow name="order-change-fullfilmentFlow" doc:id="c659e6a9-f568-4ac4-a07a-3b06ce163cba" >
 		<http:listener doc:name="Listener" doc:id="589b4cfa-39e0-4ba7-9dc9-21cc45a51025" config-ref="HTTP_Listener_config" path="/chat"/>
 		<scripting:execute engine="groovy" doc:name="Execute read index.html file from resource classpath" doc:id="40cafedc-8f29-49d8-9c49-5da60829e60f">
@@ -43,19 +47,110 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 	</flow>
 	<flow name="send-UI-request-to-DialogFlow" doc:id="1f3dd482-787c-4da8-83f8-7a2f10b16698" >
 		<http:listener doc:name="HTTPS Listener" doc:id="4d15d5bc-7695-46f4-b407-56b41ce33c44" config-ref="HTTPS_Listener_config" path="/request"/>
-		<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json">
-			<http:headers ><![CDATA[#[output applicaton/java
+		<ee:transform doc:name="Transform Message" doc:id="8d70bf53-01ec-4af7-bce8-0ec48dd49cc4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="query" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.query]]></ee:set-variable>
+				<ee:set-variable variableName="originalMessage" ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<choice doc:name="Choice" doc:id="4a1d5952-5df3-4d2c-978f-4bce89963149" >
+			<when expression="#[vars.query != null]" >
+				<ee:transform doc:name="Transform Message" doc:id="0db806d4-32ca-4c2a-91c8-3f102c08987d" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	username: "uri",
+    text: vars.query,
+    destination: "bot1"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<http:request method="POST" doc:name="Request" doc:id="b02aabe8-e323-4ddb-b5d2-8f78bf26e930" path="/messages" config-ref="ChatAPP">
+					<http:headers ><![CDATA[#[output applicaton/java
+---
+{
+	"Authorization" : "astro and max"
+}]]]></http:headers>
+				</http:request>
+				<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json" target="originalResponse">
+			<http:body><![CDATA[#[vars.originalMessage]]]></http:body>
+			<http:headers><![CDATA[#[output applicaton/java
 ---
 {
 	"Authorization" : "Bearer 0b165f1b68644f4d857cb8433b1e0286",
 	"Content-Type" : "application/json"
 }]]]></http:headers>
-			<http:query-params ><![CDATA[#[output applicaton/java
+			<http:query-params><![CDATA[#[output applicaton/java
 ---
 {
 	"v" : "20150910"
 }]]]></http:query-params>
 		</http:request>
+				<ee:transform doc:name="Transform Message" doc:id="c94c45fd-7bba-44df-829d-bac4ead073c9">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	username: "bot",
+    text: vars.originalResponse,
+    destination: "uri"
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="originalResponse" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<http:request method="POST" doc:name="Request" doc:id="b02aabe8-e323-4ddb-b5d2-8f78bf26e930" path="/messages" config-ref="ChatAPP">
+					<http:headers ><![CDATA[#[output applicaton/java
+---
+{
+	"Authorization" : "astro and max"
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<otherwise >
+				<http:request method="POST" doc:name="Send the message to DialogFlow" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json" target="originalResponse">
+					<http:body><![CDATA[#[vars.originalMessage]]]></http:body>
+					<http:headers><![CDATA[#[output applicaton/java
+---
+{
+	"Authorization" : "Bearer 0b165f1b68644f4d857cb8433b1e0286",
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+					<http:query-params><![CDATA[#[output applicaton/java
+---
+{
+	"v" : "20150910"
+}]]]></http:query-params>
+				</http:request>
+			</otherwise>
+		</choice>
+		<ee:transform doc:name="Transform Message" doc:id="5ac651cc-8833-4c4b-a83e-8a41573a8eb0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+vars.originalResponse]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="d99ee9f2-ddf4-46a3-bf58-fa8a715721c9" message="#[payload]"/>
 	</flow>
 	
