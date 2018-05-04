@@ -191,6 +191,21 @@ payload.result.action]]></ee:set-variable>
 			<when expression='#[vars.action == "add-suggested-product"]'>
 				<flow-ref doc:name="add-suggested-product" doc:id="6a89b322-dcc3-4ec5-8c62-fc7094c54ecb" name="add-suggested-product" />
 			</when>
+			<when expression='#[vars.action == "end-conversation"]' >
+				<ee:transform doc:name="Transform Message" doc:id="5a6abbe3-2f02-4af8-ae62-f5ff727bf588" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+"data": {
+        "type": "text",
+        "text": "Thank you. Goodbye"  
+        }
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
 			<otherwise>
 				<ee:transform doc:name="Transform Message" doc:id="f69deeb9-6690-484f-afbd-9722bb880573">
 					<ee:message>
@@ -198,8 +213,10 @@ payload.result.action]]></ee:set-variable>
 output application/json
 ---
 {
-  "speech": "Nope",
-  "displayText": "Nope",
+"data": {
+        "type": "text",
+        "text": "Great, should I charge the same credit card as the original order for the extra \$186.24?"  
+        }
 }]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
