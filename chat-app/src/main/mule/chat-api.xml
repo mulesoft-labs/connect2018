@@ -265,7 +265,7 @@ payload.text]]></ee:set-variable>
 ]]]></os:default-value>
 		</os:retrieve>
 				<choice doc:name="Choice" doc:id="c7a0570f-db64-47c8-9aa4-4ec6f91c81c2">
-					<when expression='#[isEmpty(vars.messageList)]'>
+					<when expression='#[(isEmpty(vars.messageList)) or (vars.text == "Hi, I want to change my order")]'>
 						<ee:transform doc:name="Handshake with Dialogflow" doc:id="3007e804-3e9e-4299-a6be-25aa07093561">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
@@ -285,26 +285,6 @@ output application/json
 				</ee:transform>
 						<http:request method="POST" doc:name="Request" doc:id="4b795c8d-bda8-46e2-ba75-db975cadb816" path="/request" config-ref="order-change-fullfilment"/>
 			</when>
-					<when expression='#[vars.text == "Hi, I want to change my order"]' >
-						<ee:transform doc:name="Handshake with Dialogflow" doc:id="3007e804-3e9e-4299-a6be-25aa07093561">
-							<ee:message>
-								<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  "event": {
-    "name": "custom_welcome",
-    "data": {
-      "user_name": "uri"
-    }
-  },
-  "lang": "en",
-  "sessionId": "123"
-}]]></ee:set-payload>
-							</ee:message>
-						</ee:transform>
-						<http:request method="POST" doc:name="Request" doc:id="4b795c8d-bda8-46e2-ba75-db975cadb816" config-ref="order-change-fullfilment" path="/request" />
-					</when>
 		</choice>
 				<ee:transform doc:name="Transform Message" doc:id="828080b8-d3f6-4166-8085-a5de7bc00c51" >
 					<ee:message >
