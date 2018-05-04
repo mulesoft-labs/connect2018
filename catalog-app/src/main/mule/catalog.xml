@@ -1021,7 +1021,7 @@ output application/json
         "copy": "Base Camp Tent",
         "image": {
             "id": 8540025,
-            "url": "https://drive.google.com/open?id=1Yc6hRH0MbRsIECkZqQ3FC5B7q54XR64V"
+            "url": "https://drive.google.com/file/d/1Yc6hRH0MbRsIECkZqQ3FC5B7q54XR64V/preview"
         },
         "company": {
             "id": 4607992,
@@ -1052,7 +1052,7 @@ output application/json
         "copy": "Camo Trek Tent",
         "image": {
             "id": 8540026,
-            "url": "https://drive.google.com/open?id=1IzKriFi0ev6vZKzuWxoY6Mf0YN7wrpn8"
+            "url": "https://drive.google.com/file/d/1IzKriFi0ev6vZKzuWxoY6Mf0YN7wrpn8/preview"
         },
         "company": {
             "id": 4607992,
@@ -1087,7 +1087,7 @@ output application/json
         "copy": "Outlands Explorer Tent",
         "image": {
             "id": 8540027,
-            "url": "https://drive.google.com/open?id=1yF6FvOeKBNc6WlN7darZHX2p0CN-9cMo"
+            "url": "https://drive.google.com/file/d/1yF6FvOeKBNc6WlN7darZHX2p0CN-9cMo/preview"
         },
         "company": {
             "id": 4607992,
@@ -1122,7 +1122,7 @@ output application/json
         "copy": "Eureka Mountain Tent",
         "image": {
             "id": 8550027,
-            "url": "https://drive.google.com/open?id=1Jbw047BoEHq5eTHpqQeQBCrsHd90CW7h"
+            "url": "https://drive.google.com/file/d/1Jbw047BoEHq5eTHpqQeQBCrsHd90CW7h/preview"
         },
         "company": {
             "id": 4607992,
@@ -1157,7 +1157,7 @@ output application/json
         "copy": "Monster Lantern + Power",
         "image": {
             "id": 8540029,
-            "url": "https://drive.google.com/open?id=1M1384XbE70uP22YUDynAEMuM-FDbkvTm"
+            "url": "https://github.com/connect2018/product-images/blob/master/lantern_orange.png?raw=true"
         },
         "company": {
             "id": 4607992,
@@ -1194,7 +1194,7 @@ output application/json
     "copy": "Industrial Flashlight Lantern",
     "image": {
       "id": 8640029,
-      "url": "https://drive.google.com/open?id=1jIbYYBRTEF4MD25bHRig_FJ_cCHsqjAz"
+      "url": "https://github.com/connect2018/product-images/blob/master/lantern_yellow.png?raw=true"
     },
     "company": {
       "id": 4607992,
@@ -1231,7 +1231,7 @@ output application/json
         "copy": "Workhorse Camp Lantern",
         "image": {
             "id": 8540030,
-            "url": "https://drive.google.com/open?id=1VrCpz_qjxxaG5tECWIKKu9VPaj4GxzWj"
+            "url": "https://github.com/connect2018/product-images/blob/master/lantern_red.png?raw=true"
         },
         "company": {
             "id": 4607992,
@@ -1264,7 +1264,7 @@ output application/json
     "copy": "All Purpose Water Shoes",
     "image": {
       "id": 8540031,
-      "url": "https://drive.google.com/open?id=1mdBWxuVk2zoB1VZE71EYzRkuAQzJDvCD"
+      "url": "https://drive.google.com/file/d/1mdBWxuVk2zoB1VZE71EYzRkuAQzJDvCD/preview"
     },
     "company": {
       "id": 4607992,
@@ -1301,7 +1301,7 @@ output application/json
         "copy": "Outdoor Tech Powerbank",
         "image": {
             "id": 8540032,
-            "url": "https://drive.google.com/open?id=1UGYL8KzXthuYXNxbIhu936tQA2J-0lSd"
+            "url": "https://drive.google.com/file/d/1UGYL8KzXthuYXNxbIhu936tQA2J-0lSd/preview"
         },
         "company": {
             "id": 4607992,
@@ -1336,7 +1336,7 @@ output application/json
         "copy": "Green Life Solar Charger",
         "image": {
             "id": 8540033,
-            "url": "https://drive.google.com/open?id=1H6tQt9uhmXQZuSKSYJCfvWt-amxQnF66"
+            "url": "https://drive.google.com/file/d/1H6tQt9uhmXQZuSKSYJCfvWt-amxQnF66/preview"
         },
         "company": {
             "id": 4607992,
@@ -1374,7 +1374,7 @@ output application/json
         "copy": "Eureka Cypress Sleeping Bag",
         "image": {
             "id": 8540034,
-            "url": "https://drive.google.com/open?id=1GRFO6V1dUCr8Bkkzz9EJFmqaBw-L5FTq"
+            "url": "https://drive.google.com/file/d/1GRFO6V1dUCr8Bkkzz9EJFmqaBw-L5FTq/preview"
         },
     company: {
       id: 4907999,
@@ -2497,7 +2497,7 @@ output application/json
     "copy": "Base Camp Tent",
     "image": {
       "id": 8540025,
-      "url": "https://drive.google.com/open?id=1Yc6hRH0MbRsIECkZqQ3FC5B7q54XR64V"
+      "url": "https://drive.google.com/file/d/1Yc6hRH0MbRsIECkZqQ3FC5B7q54XR64V/preview"
     },
     "company": {
       "id": 4607992,
@@ -2543,7 +2543,7 @@ output application/json
     "copy": "Camo Trek Tent",
     "image": {
       "id": 8540026,
-      "url": "https://drive.google.com/open?id=1IzKriFi0ev6vZKzuWxoY6Mf0YN7wrpn8"
+      "url": "https://drive.google.com/file/d/1IzKriFi0ev6vZKzuWxoY6Mf0YN7wrpn8/preview"
     },
     "company": {
       "id": 4607992,
@@ -2585,7 +2585,7 @@ output application/json
     "copy": "Outlands Explorer Tent",
     "image": {
       "id": 8540027,
-      "url": "https://drive.google.com/open?id=1yF6FvOeKBNc6WlN7darZHX2p0CN-9cMo"
+      "url": "https://drive.google.com/file/d/1yF6FvOeKBNc6WlN7darZHX2p0CN-9cMo/preview"
     },
     "company": {
       "id": 4607992,
@@ -2635,7 +2635,7 @@ output application/json
     "copy": "Eureka Mountain Tent",
     "image": {
       "id": 8550027,
-      "url": "https://drive.google.com/open?id=1Jbw047BoEHq5eTHpqQeQBCrsHd90CW7h"
+      "url": "https://drive.google.com/file/d/1Jbw047BoEHq5eTHpqQeQBCrsHd90CW7h/preview"
     },
     "company": {
       "id": 4607992,
@@ -2684,7 +2684,7 @@ output application/json
     "copy": "Workhorse Camp Lantern",
     "image": {
       "id": 8540028,
-      "url": "https://drive.google.com/open?id=1VrCpz_qjxxaG5tECWIKKu9VPaj4GxzWj"
+      "url": "https://github.com/connect2018/product-images/blob/master/lantern_red.png?raw=true"
     },
     "company": {
       "id": 4607992,
@@ -2733,7 +2733,7 @@ output application/json
     "copy": "Monster Lantern + Power",
     "image": {
       "id": 8540029,
-      "url": "https://drive.google.com/open?id=1M1384XbE70uP22YUDynAEMuM-FDbkvTm"
+      "url": "https://github.com/connect2018/product-images/blob/master/lantern_orange.png?raw=true"
     },
     "company": {
       "id": 4607992,
@@ -2782,7 +2782,7 @@ output application/json
     "copy": "Industrial Flashlight Lantern",
     "image": {
       "id": 8640029,
-      "url": "https://drive.google.com/open?id=1jIbYYBRTEF4MD25bHRig_FJ_cCHsqjAz"
+      "url": "https://github.com/connect2018/product-images/blob/master/lantern_yellow.png?raw=true"
     },
     "company": {
       "id": 4607992,
@@ -2827,7 +2827,7 @@ output application/json
     "copy": "All Purpose Water Shoes",
     "image": {
       "id": 8540031,
-      "url": "https://drive.google.com/open?id=1mdBWxuVk2zoB1VZE71EYzRkuAQzJDvCD"
+      "url": "https://drive.google.com/file/d/1mdBWxuVk2zoB1VZE71EYzRkuAQzJDvCD/preview"
     },
     "company": {
       "id": 4607992,
@@ -2879,7 +2879,7 @@ output application/json
     "copy": "Outdoor Tech Powerbank",
     "image": {
       "id": 8540032,
-      "url": "https://drive.google.com/open?id=1UGYL8KzXthuYXNxbIhu936tQA2J-0lSd"
+      "url": "https://drive.google.com/file/d/1UGYL8KzXthuYXNxbIhu936tQA2J-0lSd/preview"
     },
     "company": {
       "id": 4607992,
@@ -2931,7 +2931,7 @@ output application/json
     "copy": "Green Life Solar Charger",
     "image": {
       "id": 8540033,
-      "url": "https://drive.google.com/open?id=1H6tQt9uhmXQZuSKSYJCfvWt-amxQnF66"
+      "url": "https://drive.google.com/file/d/1H6tQt9uhmXQZuSKSYJCfvWt-amxQnF66/preview"
     },
     "company": {
       "id": 4607992,
@@ -2981,7 +2981,7 @@ output application/json
     "copy": "Eureka Cypress Sleeping Bag",
     "image": {
       "id": 8540034,
-      "url": "https://drive.google.com/open?id=1GRFO6V1dUCr8Bkkzz9EJFmqaBw-L5FTq"
+      "url": "https://drive.google.com/file/d/1GRFO6V1dUCr8Bkkzz9EJFmqaBw-L5FTq/preview"
     },
     "company": {
       "id": 4907999,
