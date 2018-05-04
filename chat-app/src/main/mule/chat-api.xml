@@ -11,6 +11,10 @@
     <os:object-store name="messages" doc:name="Object store" doc:id="5626fa3e-a428-4adf-ae73-60dedc78b33a" persistent="false" />
     <api-gateway:autodiscovery apiId="12376968" doc:name="API Autodiscovery" doc:id="d7dfa3ed-bf07-4dcd-9a0a-797c9255e198" flowRef="chat-api-main" />
     <global-property doc:name="Global Property" doc:id="dfc090d7-4f60-4840-979b-a67a10870aae" name="https.port" value="8082" />
+    <http:request-config name="order-change-fullfilment" doc:name="HTTP Request configuration" doc:id="068263d4-cae6-4248-9665-922e0337707d" >
+		<http:request-connection protocol="HTTPS" host="order-change-fullfilment.cloudhub.io" />
+	</http:request-config>
+    
     <flow name="chat-api-main">
         <http:listener config-ref="chat-api-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -126,7 +130,9 @@ output application/json
         <apikit:console config-ref="chat-api-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -181,8 +187,8 @@ output application/java
 			</otherwise>
 		</choice>
     </flow>
-    <sub-flow name="postMessageiSub_Flow" doc:id="552bb802-35d7-4192-8cc5-5dcd5ed8e81c" >
-        <ee:transform doc:name="Transform Message" doc:id="e7658fe3-f5f4-4c5e-8769-0b4c16fc30ee">
+    	<sub-flow name="storeMessage" doc:id="4b068913-1564-490c-b94b-81077dc665d8" >
+		<ee:transform doc:name="Transform Message" doc:id="e7658fe3-f5f4-4c5e-8769-0b4c16fc30ee">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -206,25 +212,25 @@ output application/java
 }]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
-        <os:retrieve doc:name="Retrieve" doc:id="2c5d0bcd-b7ba-4357-a953-814a6763c2ad" key="messages" objectStore="messages" target="messageList">
+		<os:retrieve doc:name="Retrieve" doc:id="2c5d0bcd-b7ba-4357-a953-814a6763c2ad" key="messages" objectStore="messages" target="messageList">
             <os:default-value><![CDATA[#[
 			output application/java 
 			---
 			""
 ]]]></os:default-value>
         </os:retrieve>
-        <choice doc:name="Choice" doc:id="be1a14af-1f3b-4b94-b6ca-e03cb509e2ee">
+		<choice doc:name="Choice" doc:id="be1a14af-1f3b-4b94-b6ca-e03cb509e2ee">
             <when expression="#[isEmpty(vars.messageList)]">
                 <java:new doc:name="New" doc:id="73f28d4e-c55c-43dd-95e3-775fce40f9fa" class="java.util.ArrayList" constructor="ArrayList()" target="messageList" />
             </when>
         </choice>
-        <scripting:execute doc:name="Execute" doc:id="ecea1b2c-9568-4535-8973-6a30712c4258" engine="groovy">
+		<scripting:execute doc:name="Execute" doc:id="ecea1b2c-9568-4535-8973-6a30712c4258" engine="groovy">
             <scripting:code>vars.messageList.add(vars.message)</scripting:code>
         </scripting:execute>
-        <os:store doc:name="Store" doc:id="ce91d4c2-ae33-4fbb-8331-efa878fb94c2" key="messages" objectStore="messages">
+		<os:store doc:name="Store" doc:id="ce91d4c2-ae33-4fbb-8331-efa878fb94c2" key="messages" objectStore="messages">
             <os:value><![CDATA[#[vars.messageList]]]></os:value>
         </os:store>
-        <ee:transform doc:name="Transform Message" doc:id="1ae77a71-9086-476a-89b4-2a40885d0014">
+		<ee:transform doc:name="Transform Message" doc:id="1ae77a71-9086-476a-89b4-2a40885d0014">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -232,6 +238,92 @@ output application/json
 vars.message]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+	</sub-flow>
+    
+    <sub-flow name="postMessageiSub_Flow" doc:id="552bb802-35d7-4192-8cc5-5dcd5ed8e81c" >
+        <ee:transform doc:name="Transform Message" doc:id="e62472c9-d086-4fd3-a684-df87c1f4788a">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+					</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="text" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.text]]></ee:set-variable>
+			</ee:variables>
+				</ee:transform>
+		<choice doc:name="Choice" doc:id="66615e61-682d-4073-b508-637ee1d48f36" >
+			<when expression='#[payload.destination == "bot"]' >
+				<os:retrieve doc:name="Retrieve Messages" doc:id="2c5d0bcd-b7ba-4357-a953-814a6763c2ad" key="messages" objectStore="messages" target="messageList">
+			<os:default-value><![CDATA[#[
+			output application/java 
+			---
+			""
+]]]></os:default-value>
+		</os:retrieve>
+				<choice doc:name="Choice" doc:id="c7a0570f-db64-47c8-9aa4-4ec6f91c81c2">
+					<when expression='#[isEmpty(vars.messageList)]'>
+						<ee:transform doc:name="Handshake with Dialogflow" doc:id="3007e804-3e9e-4299-a6be-25aa07093561">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "event": {
+    "name": "custom_welcome",
+    "data": {
+      "user_name": "uri"
+    }
+  },
+  "lang": "en",
+  "sessionId": "123"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+						<http:request method="POST" doc:name="Request" doc:id="4b795c8d-bda8-46e2-ba75-db975cadb816" path="/request" config-ref="order-change-fullfilment"/>
+			</when>
+					<when expression='#[vars.text == "Hi, I want to change my order"]' >
+						<ee:transform doc:name="Handshake with Dialogflow" doc:id="3007e804-3e9e-4299-a6be-25aa07093561">
+							<ee:message>
+								<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "event": {
+    "name": "custom_welcome",
+    "data": {
+      "user_name": "uri"
+    }
+  },
+  "lang": "en",
+  "sessionId": "123"
+}]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+						<http:request method="POST" doc:name="Request" doc:id="4b795c8d-bda8-46e2-ba75-db975cadb816" config-ref="order-change-fullfilment" path="/request" />
+					</when>
+		</choice>
+				<ee:transform doc:name="Transform Message" doc:id="828080b8-d3f6-4166-8085-a5de7bc00c51" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "query": vars.text,
+  "lang": "en",
+  "sessionId": "123"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<http:request method="POST" doc:name="Request" doc:id="cdeec091-3616-4412-ab83-85660bcfacfc" config-ref="order-change-fullfilment" path="/request" />
+			</when>
+			<otherwise >
+				<flow-ref doc:name="storeMessage" doc:id="4a8e6488-e074-487a-b064-f6ce829e037a" name="storeMessage" />
+			</otherwise>
+		</choice>
     </sub-flow>
 	<flow name="put:\messages:application\json:chat-api-config">
 		<choice doc:name="Choice" doc:id="ebaf7c8b-a593-4422-b956-98b78bad77c0" >
