@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.mycompany</groupId>
-	<artifactId>customer-app</artifactId>
+	<artifactId>broad-categorizer</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>mule-application</packaging>
 
-	<name>customer-app</name>
+	<name>broad-categorizer</name>
 
     <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,8 +25,7 @@
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-				<classifier>mule-application</classifier>
-                </configuration>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

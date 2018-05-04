@@ -1,0 +1,28 @@
+#%RAML 1.0
+version: v1
+baseUri: https://mocksvc.mulesoft.com/mocks/0b3c2752-8e6c-45df-a354-4007be17eb95 # 
+title: broad-categorizer
+mediaType: application/json
+
+types:
+  broadCategory:
+    properties:
+      id:
+      description:
+
+/broadCategories:
+  get:
+    queryParameters: 
+      category:
+        example: tent
+    responses: 
+      200:
+        body: 
+          type: broadCategory[]
+          example:
+            - id: "1003"
+              description: lightweight backpacking tents
+            - id: "1024"
+              description: affordable family outing tents
+            - id: "1030"
+              description: high-end and specialty tents

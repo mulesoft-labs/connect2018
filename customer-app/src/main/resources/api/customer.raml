@@ -1,9 +1,9 @@
 #%RAML 1.0
-baseUri: https://mocksvc.mulesoft.com/mocks/890da03f-dada-4e76-abce-80b073c2e951 # 
+baseUri: https://mocksvc.mulesoft.com/mocks/56120290-bba3-4d52-84be-bbf297131085 # baseUri: https://mocksvc.mulesoft.com/mocks/df6d6008-2c98-4934-b415-5df1e6827b81 # baseUri: https://mocksvc.mulesoft.com/mocks/df6d6008-2c98-4934-b415-5df1e6827b81
 
 title: Customer API
 
-version: 1.0
+version: 1.1
 mediaType: application/json
 uses:
   customer: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-datatypes/1.0.4/customerTypes.raml
@@ -45,3 +45,17 @@ uses:
           body:
             type: customer.Customer
             example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-examples/1.0.6/CustomerExample.raml
+
+/buyingStyles:
+  get:
+    queryParameters: 
+      productCategory:
+        example: tents
+    responses: 
+      200:
+        body:
+          type: string[]
+          example:
+            - I'm a bargain hunter
+            - I seek out high-quality items
+            - I prefer the latest and greatest innovations

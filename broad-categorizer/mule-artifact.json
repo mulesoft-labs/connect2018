@@ -1,0 +1,23 @@
+{
+  "configs": [
+    "broad-categorizer.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "broad-categorizer",
+  "minMuleVersion": "4.1.1",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedResources": [
+        "api/.gitignore",
+        "api/broad-categorizer.raml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}
