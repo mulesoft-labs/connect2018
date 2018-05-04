@@ -1157,7 +1157,7 @@ output application/json
         "copy": "Monster Lantern + Power",
         "image": {
             "id": 8540029,
-            "url": "https://drive.google.com/open?id=1M1384XbE70uP22YUDynAEMuM-FDbkvTm"
+            "url": "https://lh5.googleusercontent.com/fqpuy7bZ89L22NHkR31iRmgBg1hTwexkalHxaIqwJpIwBdaDbfRv8JiMunXGWskn9IyQwzMf9aqrn2Ijtr-a=w1385-h715"
         },
         "company": {
             "id": 4607992,
@@ -1194,7 +1194,7 @@ output application/json
     "copy": "Industrial Flashlight Lantern",
     "image": {
       "id": 8640029,
-      "url": "https://drive.google.com/open?id=1jIbYYBRTEF4MD25bHRig_FJ_cCHsqjAz"
+      "url": "https://lh4.googleusercontent.com/LDKRkzeZB_bB2B3SU0ziJRTe-0eZJCsGuQXg7m0w_VC2-DZlv3K6cKB1Bw4vdEwmHgqHKTBnhpzU7JFDp_UA=w1385-h715"
     },
     "company": {
       "id": 4607992,
@@ -1231,7 +1231,7 @@ output application/json
         "copy": "Workhorse Camp Lantern",
         "image": {
             "id": 8540030,
-            "url": "https://drive.google.com/open?id=1VrCpz_qjxxaG5tECWIKKu9VPaj4GxzWj"
+            "url": "https://lh5.googleusercontent.com/0ixKLloiijMGAn8BRxbNXtNTTG6b53THxHMyMp3wJ_4HaUUt8JiJ524R4-Jd4D8R3S9fSChXROt61Uk19bEz=w1385-h715"
         },
         "company": {
             "id": 4607992,
@@ -2684,7 +2684,7 @@ output application/json
     "copy": "Workhorse Camp Lantern",
     "image": {
       "id": 8540028,
-      "url": "https://drive.google.com/open?id=1VrCpz_qjxxaG5tECWIKKu9VPaj4GxzWj"
+      "url": "https://lh5.googleusercontent.com/0ixKLloiijMGAn8BRxbNXtNTTG6b53THxHMyMp3wJ_4HaUUt8JiJ524R4-Jd4D8R3S9fSChXROt61Uk19bEz=w1385-h715"
     },
     "company": {
       "id": 4607992,
@@ -2733,7 +2733,7 @@ output application/json
     "copy": "Monster Lantern + Power",
     "image": {
       "id": 8540029,
-      "url": "https://drive.google.com/open?id=1M1384XbE70uP22YUDynAEMuM-FDbkvTm"
+      "url": "https://lh5.googleusercontent.com/fqpuy7bZ89L22NHkR31iRmgBg1hTwexkalHxaIqwJpIwBdaDbfRv8JiMunXGWskn9IyQwzMf9aqrn2Ijtr-a=w1385-h715"
     },
     "company": {
       "id": 4607992,
@@ -2782,7 +2782,7 @@ output application/json
     "copy": "Industrial Flashlight Lantern",
     "image": {
       "id": 8640029,
-      "url": "https://drive.google.com/open?id=1jIbYYBRTEF4MD25bHRig_FJ_cCHsqjAz"
+      "url": "https://lh4.googleusercontent.com/LDKRkzeZB_bB2B3SU0ziJRTe-0eZJCsGuQXg7m0w_VC2-DZlv3K6cKB1Bw4vdEwmHgqHKTBnhpzU7JFDp_UA=w1385-h715"
     },
     "company": {
       "id": 4607992,
@@ -3018,7 +3018,11 @@ output application/json
 				</ee:transform>
 			</when>
 			<otherwise>
-                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Product not found">
+                <ee:transform xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Product not found">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
