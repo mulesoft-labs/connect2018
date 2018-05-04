@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
     <http:listener-config name="catalog-httpsListenerConfig" doc:name="HTTP Listener config">
         <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS">
 			<tls:context >
@@ -1174,6 +1176,45 @@ output application/json
             "averageRate": 0.0
         }
 	},
+	{
+    "id": 56271,
+    "price": {
+      "value": 12.99,
+      "currency": "USD"
+    },
+    "discountedPrice": {
+      "value": 9.99,
+      "currency": "USD"
+    },
+    "name": "Industrial Flashlight Lantern",
+    "description": "* Rugged and water-resistant\n* Up to 110 Lumen\n* Lasts up to 4 hours",
+    "keywords": [
+      "lantern"
+    ],
+    "copy": "Industrial Flashlight Lantern",
+    "image": {
+      "id": 8640029,
+      "url": "https://drive.google.com/open?id=1jIbYYBRTEF4MD25bHRig_FJ_cCHsqjAz"
+    },
+    "company": {
+      "id": 4607992,
+      "name": "Macy's",
+      "address": {
+        "country": "USA",
+        "state": "CA",
+        "city": "San Francisco",
+        "street_address": "170 O'Farrell Street",
+        "zip": 94102
+      }
+    },
+    "category": "Lantern",
+    "review": {
+      "reviews": [
+        
+      ],
+      "averageRate": 0.0
+    }
+  },
     {
         "id": "09826",
         "price": {
@@ -1370,7 +1411,6 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="get:\catalog\products\(product_id):catalog-config">
-        <logger level="INFO" doc:name="Logger" doc:id="11a6baff-bc36-46bf-8c82-7018e57b4680" message="#[attributes.uriParams]" />
         <choice doc:name="Choice" doc:id="b42f2a6c-12af-4677-a3e9-eb5c42a43310">
             <when expression="#[attributes.uriParams.product_id == '7890001']">
                 <ee:transform doc:name="Product 7890001" doc:id="ac26e6d3-4a3f-4451-94cb-02113fc4853d">
@@ -2718,8 +2758,57 @@ output application/json
 					</ee:message>
 				</ee:transform>
 			</when>
+			<when expression="#[attributes.uriParams.product_id =='56271']" >
+				<ee:transform doc:name="Product 56271" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "id": 56271,
+    "price": {
+      "value": 12.99,
+      "currency": "USD"
+    },
+    "discountedPrice": {
+      "value": 9.99,
+      "currency": "USD"
+    },
+    "name": "Industrial Flashlight Lantern",
+    "description": "* Rugged and water-resistant\n* Up to 110 Lumen\n* Lasts up to 4 hours",
+    "keywords": [
+      "lantern"
+    ],
+    "copy": "Industrial Flashlight Lantern",
+    "image": {
+      "id": 8640029,
+      "url": "https://drive.google.com/open?id=1jIbYYBRTEF4MD25bHRig_FJ_cCHsqjAz"
+    },
+    "company": {
+      "id": 4607992,
+      "name": "Macy's",
+      "address": {
+        "country": "USA",
+        "state": "CA",
+        "city": "San Francisco",
+        "street_address": "170 O'Farrell Street",
+        "zip": 94102
+      }
+    },
+    "category": "Lantern",
+    "review": {
+      "reviews": [
+        
+      ],
+      "averageRate": 0.0
+    }
+  }
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
 			<when expression="#[attributes.uriParams.product_id =='87265']" >
-				<ee:transform doc:name="Product 87265" >
+				<ee:transform doc:name="Product 87265" doc:id="9b4adb8e-1294-46cc-b8c8-8a8120183b2a">
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -2943,190 +3032,48 @@ output application/json
     <flow name="get:\catalog\products\type\(product_type):catalog-config">
         <choice doc:name="Choice" doc:id="00f76858-5bd3-4290-b6dd-49bfb8c1317d">
             <when expression="#[attributes.uriParams.product_type == 'lantern']">
-                <ee:transform doc:name="Lantern List" doc:id="583d7512-e44f-4a9d-a457-46f3cead2946">
+				<java:new doc:name="lanterns productList" doc:id="55a9ed55-1cb7-4ca8-b2e5-4372ddf968ee" class="java.util.ArrayList" constructor="ArrayList()" target="productList" />
+				<ee:transform doc:name="Setting up arbritrage lantern list" doc:id="92ed4a7e-388e-44e4-b30b-2e3b70bbf1e6">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+[ "09826", "19632", "56271"]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<foreach doc:name="For Each" doc:id="e267b096-6142-4475-9a09-efb2843338c0" >
+					<ee:transform doc:name="Transform Message" doc:id="9223455b-1eb2-4ad6-a3a0-c7cfd318f612" >
+						<ee:message >
+							<ee:set-attributes ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	uriParams:
+		{
+			product_id : payload		
+		}
+}]]></ee:set-attributes>
+						</ee:message>
+					</ee:transform>
+					<flow-ref doc:name="get:\catalog\products\(product_id):catalog-config" doc:id="5ab36482-e7d2-4ffe-aec9-c09e4ec729fa" name="get:\catalog\products\(product_id):catalog-config"/>
+					<ee:transform doc:name="Transform Message" doc:id="8ca75ec5-f39d-4168-9306-19cfa54d01fd" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<scripting:execute engine="groovy" doc:name="Adding product to productList" doc:id="79cfbd55-e8e7-4816-885a-23947a82f787" >
+						<scripting:code >vars.productList.add(payload)</scripting:code>
+					</scripting:execute>
+				</foreach>
+				<ee:transform doc:name="Lantern List" doc:id="583d7512-e44f-4a9d-a457-46f3cead2946">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-[
-  {
-        "id": 7890006,
-        "price": {
-        "value": 74.99,
-        "currency": "USD"
-        },
-        "discountedPrice": {
-            "value": 70.88,
-            "currency": "USD"
-        },
-        "name": "Coleman Lantern",
-        "description": "Take the convenience of Three lights in one with you with the Coleman Trifecta LED Lantern. During an emergency, pop one of the three lights off the base for a personal flashlight. They recharge once theyre back on the base for hands-free light. The lantern runs cool so its always safe to touch, even when its been on for hours. Model # 2000013867 Features: Even distribution of light Choose your power, 4D batteries, or CPX 6 rechargeable Hi/Low for optimal light output 3 removable panels",
-        "keywords": [],
-        "copy": "Coleman CPX 6 Triago Lantern 61450663",
-        "image": {
-        "id": 8540006,
-        "url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQyMPBCmFkdvvSdN1AiCJCQ9-B7kIVriJd-Ich_bszorXEUUIaWtCN88Yb0kmLFCLw05gLylZ4&usqp=CAY"
-        },
-        "company": {
-        "id": 4907995,
-        "name": "CampSaver.com",
-        "address" : {
-            "country": "USA",
-            "state": "UTAH",
-            "city": "Nibley",
-            "street_address": "2280 Heritage Dr",
-            "zip": 84321
-            }
-        },
-        "category": "Lantern",
-        "review": {
-        "reviews": [
-            {
-            "reviewer_name": "cabelas.com",
-            "review": "I bought this lantern for camping, a fantastic idea that you can essentially break the lantern apart and everyone grab a piece. No more having the kids fight over the light. Long battery life, and I purchased the rechargeable battery pack as well. This is the second re-chargeable Coleman lantern I have purchased this year, and I have been VERY pleased with each purchase.",
-            "date": "2014-10-04",
-            "rate": 5
-            },{
-            "reviewer_name": "thesportsauthority.com",
-            "review": "Gave as gift. Recipient very pleased",
-            "date": "2016-02-05",
-            "rate": 4
-            }
-        ],
-        "averageRate": 4.2
-        }
-    },
-    {
-        "id": 7890007,
-        "price": {
-        "value": 71.99,
-        "currency": "USD"
-        },
-        "discountedPrice": {
-            "value": 52.88,
-            "currency": "USD"
-        },
-        "name": "Coleman Lantern",
-        "description": "Uses 8 D batteries, not included. Imported.",
-        "keywords": [],
-        "copy": "Coleman Quad LED Lantern",
-        "image": {
-        "id": 8540007,
-        "url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRNTfRuy1Ds8s7yJD_8PLCB2gIbPHF9H-rTBka9-Dkd0_uTD-6ZguxiB2A39wnFOHLOLWzsu_U&usqp=CAY"
-        },
-        "company": {
-            "id": 4907995,
-            "name": "CampSaver.com",
-            "address" : {
-                "country": "USA",
-                "state": "UTAH",
-                "city": "Nibley",
-                "street_address": "2280 Heritage Dr",
-                "zip": 84321
-            }
-        },
-        "category": "Lantern",
-        "review": {
-        "reviews": [
-            {
-            "reviewer_name": "walmart.com",
-            "review": "This Lantern is very good at handling power outages and other low lighting issues. Since it has 4 separate removable light units that can be carried or placed in different locations as needed. When you put them back onto the base nit, the lights recharge so they are ready for the next time you need them. OR you can simply use the entire lantern as a single unit. Lightweight and easy to handle, it is a very good light.",
-            "date": "2016-04-02",
-            "rate": 4
-            },{
-            "reviewer_name": "MidwayUSA",
-            "review": "outstanding lantern, started using this lantern when my son was a cub scout! The first set of batteries lasted for a year, the 8 d batteries in the base charge the NICADS in the four removable lanterns. When they no longer hold a charge it is telling you it is time to change the main batteries, but the lantern will continue to work for days after this! We were able to send one lantern with the boys in each tent, and recharge them the next day because you know they left the light on all night! he is now a boy scout and the lantern convinced out troop to go to LED lanterns from propane! make sure to push the grey release button removing and placing the lanterns in the main base. we now have two! Hatteras Kid",
-            "date": "2014-08-21",
-            "rate": 5
-            }
-        ],
-        "averageRate": 4.7
-        }
-        },
-        {
-        "id": 7890008,
-        "price": {
-        "value": 85.99,
-        "currency": "USD"
-        },
-        "discountedPrice": {
-            "value": 60.22,
-            "currency": "USD"
-        },
-        "name": "Sintechno Camping Portable Lantern",
-        "description": "Sintechno Inc This portable emergency / camp lantern uses 36 white SMD Super Bright LED's which can be recharged by both included solar panel and AC power adapter.",
-        "keywords": [],
-        "copy": "Sintechno 2-in-1 Solar Bright LED Emergency Camping Portable Lantern",
-        "image": {
-        "id": 8540008,
-        "url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcREYcHVgrBWpAew2bVIrZB4mu7rvhKm-ijxtkSmBvizfVW2NGC--h6jlCX-Gbc7S9rwihlJ7C9D&usqp=CAY"
-        },
-        "company": {
-            "id": 4907996,
-            "name": "Overstock.com",
-            "address" : {
-                "country": "USA",
-                "state": "UTAH",
-                "city": "Midvale",
-                "street_address": "799 Coliseum Way",
-                "zip": 84047
-            }
-        },
-        "category": "Lantern",
-        "review": {
-        "reviews": [],
-        "averageRate": 0.0
-        }
-        },
-        
-  {
-        "id": 7890009,
-        "price": {
-        "value": 89.79,
-        "currency": "USD"
-        },
-        "discountedPrice": {
-            "value": 82.88,
-            "currency": "USD"
-        },	
-        "name": "Coleman Lantern",
-        "description": "Light up your next outdoor gathering with a super-bright lantern! The versatile Premium Powerhouse runs on either Coleman Liquid fuel or unleaded gasoline and uses less fuel than lanterns powered by propane. Delivering an extra-bright 1107 lumens on high, the Coleman Premium Powerhouse Dual Fuel Lantern features an adjustable dimmer knob to allow the perfect amount of light for your campsite, barbecue and more!",
-        "keywords": [],
-        "copy": "Coleman Dual Fuel 2-Mantle Powerhouse Lantern 64566500",
-        "image": {
-        "id": 8540009,
-        "url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRrT8bmktPPrwX1z974P8DriLGtyegoXAX90JRrStaYCnIwC_g6Nng2gyucVrk8WNAN3TkkfBb2&usqp=CAY"
-        },
-        "company": {
-            "id": 4907995,
-            "name": "CampSaver.com",
-            "address" : {
-                "country": "USA",
-                "state": "UTAH",
-                "city": "Nibley",
-                "street_address": "2280 Heritage Dr",
-                "zip": 84321
-            }
-        },
-        "category": "Lantern",
-        "review": {
-            "reviews": [
-                {
-                "reviewer_name": "ebay.com",
-                "review": "There's a reason why Coleman has been making these 'boring' products for SIXTY YEARS. They are the MOST economical lanterns (and stoves), and the BRIGHTEST lanterns and HOTTEST stoves. When I want to light up a campsite with 6 tents full of YMCA adventure guides, I pump up this lantern, light it, and hoist it 8 feet in the air. Then I can put away my 12v 8xD 2-bulb flourescent lamp. A gallon of Coleman white-gas (naptha) fuel has lasted us for 3 years of camping (about 12 campouts or 24 days/nights total - cooking and using this lantern.) This lamp gives enough light to throw a football or frisbee a decent distance (30 ft) at night. Best of all : EVERYONE ELSE WILL BE JEALOUS !!!",
-                "date": "2016-04-23",
-                "rate": 5
-                },{
-                "reviewer_name": "walmart.com",
-                "review": "This lantern is almost twice as bright as any I have owned. And the fact that it can run on unleaded gas from the corner gas station, makes it an awesome lantern. The convenience of using gas is a great plus. It makes it quick and easy. The lantern is sturdy and well built. The Coleman design has not changed a lot over time but if it aint broke, don't fix it. It comes with a small filtered funnel to aid in filling as well as two mantles to get you started. I got this powerhouse on sale and is has been well worth it.",
-                "date": "2015-08-09",
-                "rate": 4.9
-                }
-            ],
-            "averageRate": 4.9
-        }      
-     }
-]]]></ee:set-payload>
+vars.productList ]]></ee:set-payload>
                     </ee:message>
                 </ee:transform>
             </when>
