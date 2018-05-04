@@ -1,5 +1,5 @@
 #%RAML 1.0 
-baseUri: https://mocksvc.mulesoft.com/mocks/f3320813-7d4c-443e-b1ef-14b7a15e3ec4 # 
+baseUri: https://mocksvc.mulesoft.com/mocks/976b040b-97fb-4d0e-b98b-0ab2154f7f97 # baseUri: https://mocksvc.mulesoft.com/mocks/f3320813-7d4c-443e-b1ef-14b7a15e3ec4 # 
 
 title: Ordering API
 
@@ -13,11 +13,14 @@ uses:
 
 
 resourceTypes:
-  collection: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.2/collection.raml
-  member: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.2/member.raml
+  collection: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.3/collection.raml
+  member: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-resourcetypes/1.0.3/member.raml
 
 /ordering:
   /orders:
+    get:
+      queryParameters: 
+        customerId? : string
     type:
       collection:
         response-type: order.NewOrder
@@ -42,9 +45,3 @@ resourceTypes:
             body:
               type: order.Order
               example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-examples/1.0.11/OrderPatchResponseExample.raml
-    /customer/{customer_id}:
-      type:
-        collection:
-          response-type: order.NewOrder
-          request-type: order.Order
-          response-example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/ordering-examples/1.0.11/OrderCollectionExample.raml
