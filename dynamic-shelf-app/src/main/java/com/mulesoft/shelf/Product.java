@@ -8,6 +8,7 @@ public class Product implements Serializable{
 	Integer id;
 	String name;
 	Double price;
+	String description;
 	Double discountedPrice;
 	public Double getDiscountedPrice() {
 		return discountedPrice;
@@ -47,11 +48,15 @@ public class Product implements Serializable{
 	public void setCheckedOut(Boolean checkedOut) {
 		this.checkedOut = checkedOut;
 	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", image=" + image + ", checkedOut="
-				+ checkedOut + "]";
+		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", description=" + description
+				+ ", discountedPrice=" + discountedPrice + ", image=" + image + ", checkedOut=" + checkedOut + "]";
 	}
-	
-	
 }
