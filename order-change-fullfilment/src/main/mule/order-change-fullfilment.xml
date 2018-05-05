@@ -79,14 +79,14 @@ output application/json
 }]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
-				<http:request method="POST" doc:name="Request" doc:id="b02aabe8-e323-4ddb-b5d2-8f78bf26e930" path="/messages" config-ref="ChatAPP">
+				<http:request method="POST" doc:name="Store message on ChatAPP" doc:id="b02aabe8-e323-4ddb-b5d2-8f78bf26e930" path="/messages" config-ref="ChatAPP">
 					<http:headers ><![CDATA[#[output applicaton/java
 ---
 {
 	"Authorization" : "astro and max"
 }]]]></http:headers>
 				</http:request>
-				<http:request method="POST" doc:name="Request" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json" target="originalResponse">
+				<http:request method="POST" doc:name="DialogFlow" doc:id="73ea48bb-a89c-4a79-9453-d4f48abaeb27" config-ref="DialogFlowAPI" path="/query" outputMimeType="application/json" target="originalResponse">
 			<http:body><![CDATA[#[vars.originalMessage]]]></http:body>
 			<http:headers><![CDATA[#[output applicaton/java
 ---
@@ -191,6 +191,21 @@ payload.result.action]]></ee:set-variable>
 			<when expression='#[vars.action == "add-suggested-product"]'>
 				<flow-ref doc:name="add-suggested-product" doc:id="6a89b322-dcc3-4ec5-8c62-fc7094c54ecb" name="add-suggested-product" />
 			</when>
+			<when expression='#[vars.action == "end-conversation"]' >
+				<ee:transform doc:name="Transform Message" doc:id="5a6abbe3-2f02-4af8-ae62-f5ff727bf588" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+"data": {
+        "type": "text",
+        "text": "Thank you. Goodbye"  
+        }
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
 			<otherwise>
 				<ee:transform doc:name="Transform Message" doc:id="f69deeb9-6690-484f-afbd-9722bb880573">
 					<ee:message>
@@ -198,8 +213,10 @@ payload.result.action]]></ee:set-variable>
 output application/json
 ---
 {
-  "speech": "Nope",
-  "displayText": "Nope",
+"data": {
+        "type": "text",
+        "text": "Great, should I charge the same credit card as the original order for the extra \$186.24?"  
+        }
 }]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
@@ -639,7 +656,7 @@ output application/json
 {
  	"data": {
 		"type": "order-list",
-		"text": "Sure, this are your last orders, which one you would like to look at?",
+		"text": "Sure, these are your last orders, which one you would like to look at?",
 		"orders": vars.orderList map
 		(
 			$

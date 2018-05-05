@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
-http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
-http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
     <http:listener-config name="catalog-httpsListenerConfig" doc:name="HTTP Listener config">
         <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS">
-			<tls:context >
-				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
-			</tls:context>
-		</http:listener-connection>
+            <tls:context>
+                <tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
+            </tls:context>
+        </http:listener-connection>
     </http:listener-config>
     <apikit:config name="catalog-config" raml="catalog.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <global-property doc:name="Global Property" doc:id="cd95a23d-4e19-4b02-bf18-d3e826980fef" name="https.port" value="8082" />
-	<flow name="catalog-main">
+    <flow name="catalog-main">
         <http:listener config-ref="catalog-httpsListenerConfig" path="/api/*" doc:name="Listener">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
@@ -1800,10 +1797,10 @@ output application/json
                     </ee:message>
                 </ee:transform>
             </when>
-            <when expression="#[attributes.uriParams.product_id == '7890010']" >
-				<ee:transform doc:name="Product 7890010" doc:id="4c9a2eb8-2fb3-4e77-9806-67c26edbc89a" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+            <when expression="#[attributes.uriParams.product_id == '7890010']">
+                <ee:transform doc:name="Product 7890010" doc:id="4c9a2eb8-2fb3-4e77-9806-67c26edbc89a">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -1841,13 +1838,13 @@ output application/json
             "averageRate": 0.0
         }
     }]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id == '7890011']" >
-				<ee:transform doc:name="Product 7890011" doc:id="969b878c-5daf-46af-bb7b-91e2ffd37f69" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id == '7890011']">
+                <ee:transform doc:name="Product 7890011" doc:id="969b878c-5daf-46af-bb7b-91e2ffd37f69">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -1885,13 +1882,13 @@ output application/json
             "averageRate": 0.0
         }
     }]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890012']" >
-				<ee:transform doc:name="Product 7890012" doc:id="ac73fe9b-7bb5-46d4-a3ab-c5656380d21a" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890012']">
+                <ee:transform doc:name="Product 7890012" doc:id="ac73fe9b-7bb5-46d4-a3ab-c5656380d21a">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -1929,13 +1926,13 @@ output application/json
             "averageRate": 0.0
         }
 }]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890013']" >
-				<ee:transform doc:name="Product 7890013" doc:id="703c4088-f691-42f3-9522-3b07a3bc929c">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890013']">
+                <ee:transform doc:name="Product 7890013" doc:id="703c4088-f691-42f3-9522-3b07a3bc929c">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -1972,15 +1969,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890014']" >
-				<ee:transform doc:name="Product 7890014" doc:id="55c3cba4-42a3-4176-9bc2-d606da716155">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890014']">
+                <ee:transform doc:name="Product 7890014" doc:id="55c3cba4-42a3-4176-9bc2-d606da716155">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2017,15 +2013,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890015']" >
-				<ee:transform doc:name="Product 7890015" doc:id="e596376c-397d-4aaa-b210-3f6aee5136b2">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890015']">
+                <ee:transform doc:name="Product 7890015" doc:id="e596376c-397d-4aaa-b210-3f6aee5136b2">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2062,15 +2057,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890016']" >
-				<ee:transform doc:name="Product 7890016" doc:id="a233d489-7fc2-4003-8f1d-f26f38ec203b">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890016']">
+                <ee:transform doc:name="Product 7890016" doc:id="a233d489-7fc2-4003-8f1d-f26f38ec203b">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2107,15 +2101,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890017']" >
-				<ee:transform doc:name="Product 7890017" doc:id="c6273c1b-a80b-4030-b2ef-76df163a664c">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890017']">
+                <ee:transform doc:name="Product 7890017" doc:id="c6273c1b-a80b-4030-b2ef-76df163a664c">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2152,15 +2145,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890018']" >
-				<ee:transform doc:name="Product 7890018" doc:id="a5ecb611-15ac-442f-9936-8bf4f7926ad6">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890018']">
+                <ee:transform doc:name="Product 7890018" doc:id="a5ecb611-15ac-442f-9936-8bf4f7926ad6">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2197,15 +2189,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890019']" >
-				<ee:transform doc:name="Product 7890019" doc:id="60e51e78-6408-44ad-a748-170c7d4d7255">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890019']">
+                <ee:transform doc:name="Product 7890019" doc:id="60e51e78-6408-44ad-a748-170c7d4d7255">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2242,15 +2233,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
             </when>
-			<when expression="#[attributes.uriParams.product_id =='7890020']" >
-				<ee:transform doc:name="Product 7890020" doc:id="4e878c1b-6e30-48a2-adbf-de81fceaa2e4">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+            <when expression="#[attributes.uriParams.product_id =='7890020']">
+                <ee:transform doc:name="Product 7890020" doc:id="4e878c1b-6e30-48a2-adbf-de81fceaa2e4">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2287,15 +2277,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890021']" >
-				<ee:transform doc:name="Product 7890021" doc:id="8828b18a-c14a-42ec-a80a-5b8c96a08c1a">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890021']">
+                <ee:transform doc:name="Product 7890021" doc:id="8828b18a-c14a-42ec-a80a-5b8c96a08c1a">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2332,15 +2321,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890022']" >
-				<ee:transform doc:name="Product 7890022" doc:id="2202d82d-4dd6-4a63-a764-b555a092c894">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890022']">
+                <ee:transform doc:name="Product 7890022" doc:id="2202d82d-4dd6-4a63-a764-b555a092c894">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2377,15 +2365,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890023']" >
-				<ee:transform doc:name="Product 7890023" doc:id="da59bf96-334a-4aba-a6ed-3fc760808cbd">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890023']">
+                <ee:transform doc:name="Product 7890023" doc:id="da59bf96-334a-4aba-a6ed-3fc760808cbd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2422,15 +2409,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='7890024']" >
-				<ee:transform doc:name="Product 7890024" doc:id="3005a639-e3c1-4fd7-a290-e62703aabfdc">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='7890024']">
+                <ee:transform doc:name="Product 7890024" doc:id="3005a639-e3c1-4fd7-a290-e62703aabfdc">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2467,15 +2453,14 @@ output application/json
             "reviews": [],
             "averageRate": 0.0
         }
-	}
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='76241']" >
-				<ee:transform doc:name="Product 76241" doc:id="41302d7e-2a32-435a-9aca-7ef6f715f3c7">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+	}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='76241']">
+                <ee:transform doc:name="Product 76241" doc:id="41302d7e-2a32-435a-9aca-7ef6f715f3c7">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2517,15 +2502,14 @@ output application/json
       ],
       "averageRate": 0.0
     }
-  }
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='89031']" >
-				<ee:transform doc:name="Product 89031" doc:id="41302d7e-2a32-435a-9aca-7ef6f715f3c7">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+  }]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='89031']">
+                <ee:transform doc:name="Product 89031" doc:id="41302d7e-2a32-435a-9aca-7ef6f715f3c7">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2557,13 +2541,13 @@ output application/json
       }
     }
 }]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='87623']" >
-				<ee:transform doc:name="Product 87623" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='87623']">
+                <ee:transform doc:name="Product 87623">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2605,15 +2589,14 @@ output application/json
       ],
       "averageRate": 0.0
     }
-  }
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='25458']" >
-				<ee:transform doc:name="Product 25458" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+  }]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='25458']">
+                <ee:transform doc:name="Product 25458">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2655,15 +2638,14 @@ output application/json
       ],
       "averageRate": 0.0
     }
-  }
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='09826']" >
-				<ee:transform doc:name="Product 09826" doc:id="7dc8880b-41ef-42e8-b728-7380c5d61548">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+  }]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='09826']">
+                <ee:transform doc:name="Product 09826" doc:id="7dc8880b-41ef-42e8-b728-7380c5d61548">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2704,15 +2686,14 @@ output application/json
       ],
       "averageRate": 0.0
     }
-  }
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='19632']" >
-				<ee:transform doc:name="Product 19632" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+  }]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='19632']">
+                <ee:transform doc:name="Product 19632">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2753,15 +2734,14 @@ output application/json
       ],
       "averageRate": 0.0
     }
-  }
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='56271']" >
-				<ee:transform doc:name="Product 56271" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+  }]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='56271']">
+                <ee:transform doc:name="Product 56271">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2802,15 +2782,14 @@ output application/json
       ],
       "averageRate": 0.0
     }
-  }
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='87265']" >
-				<ee:transform doc:name="Product 87265" doc:id="9b4adb8e-1294-46cc-b8c8-8a8120183b2a">
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+  }]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='87265']">
+                <ee:transform doc:name="Product 87265" doc:id="9b4adb8e-1294-46cc-b8c8-8a8120183b2a">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2847,15 +2826,14 @@ output application/json
       ],
       "averageRate": 0.0
     }
-  }
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='86623']" >
-				<ee:transform doc:name="Product 86623" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+  }]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='86623']">
+                <ee:transform doc:name="Product 86623">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2899,15 +2877,14 @@ output application/json
       ],
       "averageRate": 0.0
     }
-  }
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='10028']" >
-				<ee:transform doc:name="Product 10028" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+  }]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='10028']">
+                <ee:transform doc:name="Product 10028">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -2951,15 +2928,14 @@ output application/json
       ],
       "averageRate": 0.0
     }
-  }
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.product_id =='71201']" >
-				<ee:transform doc:name="Product 71201" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+  }]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.uriParams.product_id =='71201']">
+                <ee:transform doc:name="Product 71201">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -3012,17 +2988,12 @@ output application/json
       ],
       "averageRate": 3
     }
-  }
-]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</when>
-			<otherwise>
-                <ee:transform xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
-http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Product not found">
+  }]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <otherwise>
+                <ee:transform xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd  http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="fb36a39f-554c-4841-bdd1-84e0fcdec6f6" doc:name="Product not found">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -3036,19 +3007,19 @@ output application/json
     <flow name="get:\catalog\products\type\(product_type):catalog-config">
         <choice doc:name="Choice" doc:id="00f76858-5bd3-4290-b6dd-49bfb8c1317d">
             <when expression="#[attributes.uriParams.product_type == 'lantern']">
-				<java:new doc:name="lanterns productList" doc:id="55a9ed55-1cb7-4ca8-b2e5-4372ddf968ee" class="java.util.ArrayList" constructor="ArrayList()" target="productList" />
-				<ee:transform doc:name="Setting up arbritrage lantern list" doc:id="92ed4a7e-388e-44e4-b30b-2e3b70bbf1e6">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
+                <java:new doc:name="lanterns productList" doc:id="55a9ed55-1cb7-4ca8-b2e5-4372ddf968ee" class="java.util.ArrayList" constructor="ArrayList()" target="productList" />
+                <ee:transform doc:name="Setting up arbritrage lantern list" doc:id="92ed4a7e-388e-44e4-b30b-2e3b70bbf1e6">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 [ "09826", "19632", "56271"]]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-				<foreach doc:name="For Each" doc:id="e267b096-6142-4475-9a09-efb2843338c0" >
-					<ee:transform doc:name="Transform Message" doc:id="9223455b-1eb2-4ad6-a3a0-c7cfd318f612" >
-						<ee:message >
-							<ee:set-attributes ><![CDATA[%dw 2.0
+                    </ee:message>
+                </ee:transform>
+                <foreach doc:name="For Each" doc:id="e267b096-6142-4475-9a09-efb2843338c0">
+                    <ee:transform doc:name="Transform Message" doc:id="9223455b-1eb2-4ad6-a3a0-c7cfd318f612">
+                        <ee:message>
+                            <ee:set-attributes><![CDATA[%dw 2.0
 output application/java
 ---
 {
@@ -3057,27 +3028,27 @@ output application/java
 			product_id : payload		
 		}
 }]]></ee:set-attributes>
-						</ee:message>
-					</ee:transform>
-					<flow-ref doc:name="get:\catalog\products\(product_id):catalog-config" doc:id="5ab36482-e7d2-4ffe-aec9-c09e4ec729fa" name="get:\catalog\products\(product_id):catalog-config"/>
-					<ee:transform doc:name="Transform Message" doc:id="8ca75ec5-f39d-4168-9306-19cfa54d01fd" >
-						<ee:message >
-							<ee:set-payload ><![CDATA[%dw 2.0
+                        </ee:message>
+                    </ee:transform>
+                    <flow-ref doc:name="get:\catalog\products\(product_id):catalog-config" doc:id="5ab36482-e7d2-4ffe-aec9-c09e4ec729fa" name="get:\catalog\products\(product_id):catalog-config" />
+                    <ee:transform doc:name="Transform Message" doc:id="8ca75ec5-f39d-4168-9306-19cfa54d01fd">
+                        <ee:message>
+                            <ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 payload]]></ee:set-payload>
-						</ee:message>
-					</ee:transform>
-					<scripting:execute engine="groovy" doc:name="Adding product to productList" doc:id="79cfbd55-e8e7-4816-885a-23947a82f787" >
-						<scripting:code >vars.productList.add(payload)</scripting:code>
-					</scripting:execute>
-				</foreach>
-				<ee:transform doc:name="Lantern List" doc:id="583d7512-e44f-4a9d-a457-46f3cead2946">
+                        </ee:message>
+                    </ee:transform>
+                    <scripting:execute engine="groovy" doc:name="Adding product to productList" doc:id="79cfbd55-e8e7-4816-885a-23947a82f787">
+                        <scripting:code>vars.productList.add(payload)</scripting:code>
+                    </scripting:execute>
+                </foreach>
+                <ee:transform doc:name="Lantern List" doc:id="583d7512-e44f-4a9d-a457-46f3cead2946">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-vars.productList ]]></ee:set-payload>
+vars.productList]]></ee:set-payload>
                     </ee:message>
                 </ee:transform>
             </when>
@@ -3406,7 +3377,7 @@ output application/json
             </otherwise>
         </choice>
     </flow>
-	<flow name="post:\catalog\products:application\json:catalog-config">
+    <flow name="post:\catalog\products:application\json:catalog-config">
         <ee:transform doc:name="Transform Message" doc:id="c2b724ac-b2f0-4acb-a1db-67f841fa5a91">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -3447,5 +3418,8 @@ output application/json
  }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+    </flow>
+    <flow name="delete:\catalog\products\(product_id):catalog-config">
+        <logger level="INFO" message="delete:\catalog\products\(product_id):catalog-config" />
     </flow>
 </mule>
