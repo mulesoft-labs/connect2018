@@ -1,48 +1,49 @@
 #%RAML 1.0
 title: Outcomes API
 
-version: 2.0
+version: 3.0
 mediaType: application/json
 
 uses:
   outcomes: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-datatypes/2.0.0/outcomes-datatypes.raml
+  traits: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/traits.raml
 
 /outcomes:
   get:
     queryParameters: 
       keywords:
         type: string[]
-    description: Returns a outcomes.NewOutcomesResponse
+    description: Returns list of possible outcomes
     responses:
       200:
         body:
           type: outcomes.NewOutcomesResponse
           example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/new-outcomes-response-examples.raml
-  /{outcome_type}:
+  post:
+    is: [ traits.secure ]
+    description: Creating a outcomes.OutcomesRequest
+    body:
+      type: outcomes.OutcomesRequest
+      example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/outcomes-request-example.raml
+    responses:
+      201:
+        headers:
+          x-content-location:
+            example: https://outcomes-app.cloudhub.io/api/outcomes/1234
+        body:
+          properties:
+            outcome_id:
+              example: '1234'
+            location:
+              example: https://outcomes-app.cloudhub.io/api/outcomes/1234
+  /{outcome_id}:
     get:
-      description: Returns a outcomes.NewOutcomesResponse
+      description: Retrieve a created outcome by id
       responses:
         200:
           body:
-            type: outcomes.NewOutcomesResponse
-            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/new-outcomes-response-examples.raml
-  /outcome:
-    post:
-      description: Creating a outcomes.OutcomesRequest
-      body:
-        type: outcomes.OutcomesRequest
-        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/outcomes-request-example.raml
-      responses:
-        201:
-          headers:
-            x-content-location:
-              type: string
-              example: https://outcomes-app.cloudhub.io/api/outcomes/outcome/1234
-    /{outcome_id}:
-      get:
-        description: Retrieve a created outcome
-        responses:
-          200:
-            body:
-              type: outcomes.OutcomesResponse
-              example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/outcomes-response-example.raml
+            type: outcomes.OutcomesResponse
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/outcomes-response-example.raml
+    delete:
+      description: Delete this outcome
+      is: [ traits.secure ]

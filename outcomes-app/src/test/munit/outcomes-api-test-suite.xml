@@ -31,32 +31,7 @@ output application/java
 				<ee:variables >
 				</ee:variables>
 			</ee:transform>
-			<flow-ref doc:name="Flow-ref to get:\outcomes:outcomes-api-config" doc:id="0049d8d5-1014-4855-989f-fb691c617067" name="get:\outcomes:outcomes-api-config"/>
-			<logger level="INFO" doc:name="Logger" doc:id="04be543a-011a-47c7-b353-70df39f906b6" message="#[payload]" />
-		</munit:execution>
-	</munit:test>
-	<munit:test name="outcomes-api-test-suite-get:\outcomes\(outcome_type):outcomes-api-configTest" description="Test" doc:id="9543de2b-422c-4f8e-98e8-0fb2721c2dee" >
-		<munit:execution >
-			<ee:transform doc:name="Transform Message" doc:id="5c0c2f70-0be5-4d79-8198-30fb36a92ed9">
-				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
-output application/java
----
-{
-}]]></ee:set-payload>
-					<ee:set-attributes><![CDATA[%dw 2.0
-output application/java
----
-{
-	uriParams: {
-		outcome_type: "tent+camping"
-	}
-	
-}]]></ee:set-attributes>
-				</ee:message>
-				<ee:variables />
-			</ee:transform>
-			<flow-ref doc:name="get:\outcomes\(outcome_type):outcomes-api-config" doc:id="8bb67c73-15b3-42cf-8faf-0a25b3c71562" name="get:\outcomes\(outcome_type):outcomes-api-config"/>
+			<flow-ref doc:name="get:\outcomes:outcomes-api-config" doc:id="0049d8d5-1014-4855-989f-fb691c617067" name="get:\outcomes:outcomes-api-config"/>
 			<logger level="INFO" doc:name="Logger" doc:id="04be543a-011a-47c7-b353-70df39f906b6" message="#[payload]" />
 		</munit:execution>
 	</munit:test>
@@ -81,7 +56,7 @@ output application/java
 				</ee:message>
 				<ee:variables />
 			</ee:transform>
-			<flow-ref doc:name="get:\outcomes\outcome\(outcome_id):outcomes-api-config" doc:id="bcdd4916-5a1a-48a4-8d82-f5f44943767a" name="get:\outcomes\outcome\(outcome_id):outcomes-api-config"/>
+			<flow-ref doc:name="get:\outcomes\(outcome_id):outcomes-api-config" doc:id="bcdd4916-5a1a-48a4-8d82-f5f44943767a" name="get:\outcomes\(outcome_id):outcomes-api-config"/>
 			<logger level="INFO" doc:name="Logger" doc:id="04be543a-011a-47c7-b353-70df39f906b6" message="#[payload]" />
 		</munit:execution>
 	</munit:test>

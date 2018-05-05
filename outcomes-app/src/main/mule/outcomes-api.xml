@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
-	xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:product-finder="http://www.mulesoft.org/schema/mule/product-finder" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/product-finder http://www.mulesoft.org/schema/mule/product-finder/current/mule-product-finder.xsd
-http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:product-finder="http://www.mulesoft.org/schema/mule/product-finder" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/product-finder http://www.mulesoft.org/schema/mule/product-finder/current/mule-product-finder.xsd http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
     <http:listener-config name="outcomes-api-httpsListenerConfig" doc:name="HTTP Listener config">
         <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS">
-			<tls:context >
-				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
-			</tls:context>
-		</http:listener-connection>
+            <tls:context>
+                <tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
+            </tls:context>
+        </http:listener-connection>
     </http:listener-config>
     <apikit:config name="outcomes-api-config" raml="outcomes-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-	
     <global-property doc:name="Global Property" doc:id="0be5c505-8094-4927-8e21-2d9e68918103" name="https.port" value="8082" />
-	<product-finder:config name="Product_finder_Config" doc:name="Product-finder Config" doc:id="ccc1d812-2f58-445f-a9dd-2ba836e6d450" property_host="product-finder.cloudhub.io" property_basePath="/api" />
-	<api-gateway:autodiscovery apiId="12383054" doc:name="API Autodiscovery" doc:id="ea9a5315-57ab-477a-abaf-da3b86a98331" flowRef="outcomes-api-main" />
-	<flow name="outcomes-api-main">
+    <product-finder:config name="Product_finder_Config" doc:name="Product-finder Config" doc:id="ccc1d812-2f58-445f-a9dd-2ba836e6d450" property_host="product-finder.cloudhub.io" property_basePath="/api" />
+    <api-gateway:autodiscovery apiId="12383054" doc:name="API Autodiscovery" doc:id="ea9a5315-57ab-477a-abaf-da3b86a98331" flowRef="outcomes-api-main" />
+    <flow name="outcomes-api-main">
         <http:listener config-ref="outcomes-api-httpsListenerConfig" path="/api/*" doc:name="Listener">
             <http:response statusCode="#[vars.httpStatus default 200]">
-            		<http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body><![CDATA[#[payload]]]></http:body>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="outcomes-api-config" />
-        <error-handler>
+        <ee:transform doc:name="setting up vars to be accessed by all the flows" doc:id="e1d377ff-e092-4bfb-af06-7cb47b9e8bea">
+			<ee:message />
+			<ee:variables>
+				<ee:set-variable variableName="magicPASSWD"><![CDATA[%dw 2.0
+output application/java
+---
+"astro and max"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<apikit:router config-ref="outcomes-api-config" doc:name="APIkit Router"/>
+		<error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -43,7 +46,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -56,7 +59,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -69,7 +72,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -82,7 +85,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -95,7 +98,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -122,7 +125,7 @@ output application/json
         <apikit:console config-ref="outcomes-api-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -137,11 +140,11 @@ output application/json
         </error-handler>
     </flow>
     <flow name="get:\outcomes:outcomes-api-config">
-        <choice doc:name="Choice" doc:id="e0133d7f-7861-4b39-a821-27f156ee1b56" >
-			<when expression="#[attributes.queryParams.keywords contains 'camping']" >
-				<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="972174c2-8614-4f29-8b3e-b985392411c6" doc:name="Outcome 612009">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
+        <choice doc:name="Choice" doc:id="e0133d7f-7861-4b39-a821-27f156ee1b56">
+            <when expression="#[attributes.queryParams.keywords contains 'camping']">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="972174c2-8614-4f29-8b3e-b985392411c6" doc:name="Outcome 612009">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -173,13 +176,13 @@ output application/json
     }
   ]
 }]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-			</when>
-			<when expression="#[attributes.queryParams.keywords contains 'furniture']" >
-				<ee:transform doc:name="Outcome 612010" doc:id="972174c2-8614-4f29-8b3e-b985392411c6" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <when expression="#[attributes.queryParams.keywords contains 'furniture']">
+                <ee:transform doc:name="Outcome 612010" doc:id="972174c2-8614-4f29-8b3e-b985392411c6" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -209,122 +212,33 @@ output application/json
     }
   ]
 }]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-			</when>
-			<otherwise >
-				<ee:transform doc:name="Transform Message" doc:id="60c89795-19df-4fec-b3ce-28e59f0923d6" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+                    </ee:message>
+                </ee:transform>
+            </when>
+            <otherwise>
+                <ee:transform doc:name="Transform Message" doc:id="60c89795-19df-4fec-b3ce-28e59f0923d6">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
 }]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</otherwise>
-		</choice>
+                    </ee:message>
+                </ee:transform>
+            </otherwise>
+        </choice>
     </flow>
-    <flow name="get:\outcomes\(outcome_type):outcomes-api-config">
-        <choice doc:name="Choice" doc:id="16a55b92-d391-494b-988c-f61bf2774ac8" >
-			<when expression="#[attributes.uriParams.outcome_type == 'tent+camping']" >
-				<ee:transform xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd 
-http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="c01491ac-7a73-4093-93dc-b8898cbcad14" doc:name="Outcome 612009">
+    <sub-flow name="postOutcomesSub_Flow" doc:id="d4939e7e-56d5-4ebc-ad0c-a79a0f54b737" >
+		<logger level="INFO" message="post:\outcomes\outcome:application\json:outcomes-api-config" doc:name="Logger " />
+		<ee:transform doc:name="Transform Message" doc:id="75234c79-9fa1-4b54-90a3-6493fe453a33">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  id: 612009,
-  "type": "tent camping",
-  keywords: [
-    "camping", 
-    "outdoor", 
-    "tent", 
-    "sleeping bag", 
-    "lantern"
-  ],
-  questions: [
-    {
-      question: "Where are you going?",
-      id: 1001
-    }, 
-    {
-      question: "When are you going?",
-      id: 1002
-    }, 
-    {
-      question: "How many people on your group?",
-      id: 1003
-    }, 
-    {
-      question: "Any kids on the group?",
-      id: 1004
-    }
-  ]
+	outcome_id: payload.outcome_id default "612009",
+	location: (attributes.headers.origin as String) ++ "/api/outcomes/" ++ (payload.outcome_id default "612009")
 }]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-			</when>
-			<when expression="#[attributes.uriParams.outcome_type == 'furniture']" >
-				<ee:transform doc:name="Outcome 612010" doc:id="972174c2-8614-4f29-8b3e-b985392411c6" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 612010,
-  "type": "furniture",
-  keywords: [
-    "furniture",    
-    "kids",
-    "bedroom"
-  ],
-  questions: [
-    {
-      question: "Are you looking for furniture?",
-      id: 1005
-    }, 
-    {
-      question: "Ok, The furniture it's for a bedroom?",
-      id: 1006
-    }, 
-    {
-      question: "What's the age?",
-      id: 1007
-    }, 
-    {
-      question: "Is it a boy?",
-      id: 1008
-    }
-  ]
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-			</when>
-			<otherwise >
-				<ee:transform doc:name="Transform Message" doc:id="961f9759-aa44-41c4-8b00-66852a9c6cac" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-{
-}]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</otherwise>
-		</choice>
-    </flow>
-    <flow name="post:\outcomes\outcome:application\json:outcomes-api-config">
-        <ee:transform doc:name="Transform Message" doc:id="75234c79-9fa1-4b54-90a3-6493fe453a33">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/java
----
-""]]></ee:set-payload>
             </ee:message>
             <ee:variables>
                 <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
@@ -335,21 +249,37 @@ output application/java
 output application/java
 ---
 {
-	"x-content-location": (attributes.headers.origin as String) ++ "/api/outcomes/outcome/" ++ (payload.outcome_id as String)
+	"x-content-location": (attributes.headers.origin as String) ++ "/api/outcomes/" ++ (payload.outcome_id default "612009")
 }]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
-        <logger level="INFO" message="post:\outcomes\outcome:application\json:outcomes-api-config" doc:name="Logger"/>
+	</sub-flow>
+	<flow name="post:\outcomes:application\json:outcomes-api-config">
+		<choice doc:name="Choice" doc:id="160e57cb-b7d3-4d9c-83f8-f4d7426ebd9e" >
+			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
+				<flow-ref doc:name="postOutcomesSub_Flow" doc:id="974908e5-42af-4ef5-a503-4a7489e5ed85" name="postOutcomesSub_Flow"/>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Forbiden" doc:id="a3102554-da03-45d1-b95c-62702d4df5f5" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+403]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</otherwise>
+		</choice>
     </flow>
-    <flow name="get:\outcomes\outcome\(outcome_id):outcomes-api-config">
-        <logger level="INFO" message="get:\outcomes\outcome\(outcome_id):outcomes-api-config" doc:name="Logger"/>
-		<choice doc:name="Choice" doc:id="fc6837c5-cd6a-464c-90f1-c485ab6149dc">
-			<when expression="#[(attributes.uriParams.outcome_id as String) == '612009']">
-				<ee:transform doc:name="Setting up outcomes 612009 product list" doc:id="49e634dd-0e05-4356-89fb-9e74203f574c">
-			<ee:message>
-			</ee:message>
-			<ee:variables>
-				<ee:set-variable variableName="productIDs"><![CDATA[%dw 2.0
+    <flow name="get:\outcomes\(outcome_id):outcomes-api-config">
+        <logger level="INFO" message="get:\outcomes\outcome\(outcome_id):outcomes-api-config" doc:name="Logger" />
+        <choice doc:name="Choice" doc:id="fc6837c5-cd6a-464c-90f1-c485ab6149dc">
+            <when expression="#[(attributes.uriParams.outcome_id as String) == '612009']">
+                <ee:transform doc:name="Setting up outcomes 612009 product list" doc:id="49e634dd-0e05-4356-89fb-9e74203f574c">
+                    <ee:message />
+                    <ee:variables>
+                        <ee:set-variable variableName="productIDs"><![CDATA[%dw 2.0
 output application/java
 ---
 [
@@ -386,20 +316,20 @@ output application/java
             "link": "http://www.acehardware.com/product/index.jsp?productId=71043076&KPID=22159723&cid=CAPLA:G:Shopping_-_Hearth_Products_&_Accs=&pla=pla_22159723&k_clickid=98dfbd6f-978b-417b-a575-e7467f145b88&gclid=CjwKCAjwwbHWBRBWEiwAMIV7E8En3BcXY2OWQ31IHQEqY3kJo7EcXMzCKW0WAPnyCcwNoqLq0t2AxBoCbiQQAvD_BwE"
         }
 ]]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-				<flow-ref doc:name="outcomes-apiSub_Flow" doc:id="d87f5b98-9819-4403-ab13-5e46ba62e120" name="outcomes-apiSub_Flow"/>
-				<ee:transform doc:name="Transform Message" doc:id="4a6e0e3d-c5f8-44b5-9414-480da395d42f">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
+                    </ee:variables>
+                </ee:transform>
+                <flow-ref doc:name="outcomes-apiSub_Flow" doc:id="d87f5b98-9819-4403-ab13-5e46ba62e120" name="outcomes-apiSub_Flow" />
+                <ee:transform doc:name="Transform Message" doc:id="4a6e0e3d-c5f8-44b5-9414-480da395d42f">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 vars.fullProductList]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-				<ee:transform doc:name="Transform Message" doc:id="bd6a9ca4-1967-44ed-96b5-3456ddf2b282" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+                    </ee:message>
+                </ee:transform>
+                <ee:transform doc:name="Transform Message" doc:id="bd6a9ca4-1967-44ed-96b5-3456ddf2b282">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 var categories = vars.fullProductList.category
 ---
@@ -446,22 +376,22 @@ var categories = vars.fullProductList.category
 	    }
     }
 }]]></ee:set-payload>
-					</ee:message>
-					<ee:variables >
-						<ee:set-variable variableName="outboundHeaders" ><![CDATA[%dw 2.0
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="outboundHeaders"><![CDATA[%dw 2.0
 output application/java
 ---
 {
 	"Content-Type": "application/json"
 }]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</when>
-			<when expression="#[(attributes.uriParams.outcome_id as String) == '612010']">
-				<ee:transform doc:name="Setting up outcomes 612010 product list" doc:id="49e634dd-0e05-4356-89fb-9e74203f574c" >
-					<ee:message />
-					<ee:variables >
-						<ee:set-variable variableName="productIDs" ><![CDATA[%dw 2.0
+                    </ee:variables>
+                </ee:transform>
+            </when>
+            <when expression="#[(attributes.uriParams.outcome_id as String) == '612010']">
+                <ee:transform doc:name="Setting up outcomes 612010 product list" doc:id="49e634dd-0e05-4356-89fb-9e74203f574c">
+                    <ee:message />
+                    <ee:variables>
+                        <ee:set-variable variableName="productIDs"><![CDATA[%dw 2.0
 output application/java
 ---
 [
@@ -486,20 +416,20 @@ output application/java
             "link": "https://www.google.com/aclk?sa=l&ai=DChcSEwjhxsnqiOXaAhUMxmQKHaheDdQYABAfGgJwag&sig=AOD64_2QzSfhbKI3TUBWBscdNc1oYmis0Q&ctype=5&q=&ved=0ahUKEwiWpcbqiOXaAhWLFHwKHd2cCkAQwzwIqAE&adurl="
         }
 ]]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-				<flow-ref doc:name="outcomes-apiSub_Flow" doc:id="aa8f7cd0-64b6-4eb8-ac99-8fcafa7741d7" name="outcomes-apiSub_Flow"/>
-				<ee:transform doc:name="Transform Message" doc:id="4a6e0e3d-c5f8-44b5-9414-480da395d42f">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
+                    </ee:variables>
+                </ee:transform>
+                <flow-ref doc:name="outcomes-apiSub_Flow" doc:id="aa8f7cd0-64b6-4eb8-ac99-8fcafa7741d7" name="outcomes-apiSub_Flow" />
+                <ee:transform doc:name="Transform Message" doc:id="4a6e0e3d-c5f8-44b5-9414-480da395d42f">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 vars.fullProductList]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-				<ee:transform doc:name="Transform Message" doc:id="bd6a9ca4-1967-44ed-96b5-3456ddf2b282" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+                    </ee:message>
+                </ee:transform>
+                <ee:transform doc:name="Transform Message" doc:id="bd6a9ca4-1967-44ed-96b5-3456ddf2b282">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 var categories = vars.fullProductList.category
 ---
@@ -546,51 +476,71 @@ var categories = vars.fullProductList.category
 	    }
     }
 }]]></ee:set-payload>
-					</ee:message>
-					<ee:variables >
-						<ee:set-variable variableName="outboundHeaders" ><![CDATA[%dw 2.0
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="outboundHeaders"><![CDATA[%dw 2.0
 output application/java
 ---
 {
 	"Content-Type": "application/json"
 }]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</when>
-			<otherwise>
-				<ee:transform doc:name="Transform Message" doc:id="dea75902-ad16-4d90-96f8-0fae7f6a047d">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
+                    </ee:variables>
+                </ee:transform>
+            </when>
+            <otherwise>
+                <ee:transform doc:name="Transform Message" doc:id="dea75902-ad16-4d90-96f8-0fae7f6a047d">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
 }]]></ee:set-payload>
-					</ee:message>
+                    </ee:message>
+                </ee:transform>
+            </otherwise>
+        </choice>
+    </flow>
+    <flow name="delete:\outcomes\(outcome_id):outcomes-api-config">
+		<choice doc:name="Choice" doc:id="df42bcb1-f737-4966-b449-b425fa24419a" >
+			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
+				<flow-ref doc:name="deleteOutComesSub_Flow" doc:id="9957ad9a-1816-4583-b778-5bc7cfe7ebe9" name="deleteOutComesSub_Flow"/>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Forbiden" doc:id="a3102554-da03-45d1-b95c-62702d4df5f5" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+403]]></ee:set-variable>
+					</ee:variables>
 				</ee:transform>
 			</otherwise>
 		</choice>
     </flow>
-	<sub-flow name="outcomes-apiSub_Flow" doc:id="26370f07-7c9c-45ec-bfa8-bfd1722d0418" >
-		<java:new doc:name="New fullProductList {as an ArrayList}" class="java.util.ArrayList" constructor="ArrayList()" target="fullProductList" doc:id="e119d918-9c13-4d57-b815-95e1a0ef3e3f"/>
-		<foreach doc:name="For Each" collection="#[vars.productIDs]">
-			<ee:transform doc:name="Outcome Product" doc:id="0a7f8662-46a9-412d-8738-2fd53dd395a7">
-				<ee:message>
-				</ee:message>
-				<ee:variables>
-					<ee:set-variable variableName="productID"><![CDATA[%dw 2.0
+    <sub-flow name="deleteOutComesSub_Flow" doc:id="94f9cdde-9cfb-4005-af63-b35ed2f9804e" >
+		<logger level="INFO" message="delete:\outcomes\(outcome_id):outcomes-api-config" doc:name="Logger" />
+	</sub-flow>
+	<sub-flow name="outcomes-apiSub_Flow" doc:id="26370f07-7c9c-45ec-bfa8-bfd1722d0418">
+        <java:new doc:name="New fullProductList {as an ArrayList}" class="java.util.ArrayList" constructor="ArrayList()" target="fullProductList" doc:id="e119d918-9c13-4d57-b815-95e1a0ef3e3f" />
+        <foreach doc:name="For Each" collection="#[vars.productIDs]">
+            <ee:transform doc:name="Outcome Product" doc:id="0a7f8662-46a9-412d-8738-2fd53dd395a7">
+                <ee:message />
+                <ee:variables>
+                    <ee:set-variable variableName="productID"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.productID]]></ee:set-variable>
-					<ee:set-variable variableName="link"><![CDATA[%dw 2.0
+                    <ee:set-variable variableName="link"><![CDATA[%dw 2.0
 output application/java
 ---
 payload.link]]></ee:set-variable>
-				</ee:variables>
-			</ee:transform>
-			<product-finder:get-product-by-product-id doc:name="Get product by product id" doc:id="d0ec45d6-6aee-46ed-b583-591d21c8f35a" product-id="#[vars.productID]" config-ref="Product_finder_Config" />
-			<ee:transform doc:name="Product Outcome" doc:id="be3cd198-f105-49d0-a4bd-a10ba4af5212">
-				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
+                </ee:variables>
+            </ee:transform>
+            <product-finder:get-product-by-product-id doc:name="Get product by product id" doc:id="d0ec45d6-6aee-46ed-b583-591d21c8f35a" product-id="#[vars.productID]" config-ref="Product_finder_Config" />
+            <ee:transform doc:name="Product Outcome" doc:id="be3cd198-f105-49d0-a4bd-a10ba4af5212">
+                <ee:message>
+                    <ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 {
@@ -604,11 +554,11 @@ output application/java
 	location: payload.location,
 	link: vars.link
 }]]></ee:set-payload>
-				</ee:message>
-			</ee:transform>
-			<scripting:execute engine="groovy" doc:name="Execute">
-                <scripting:code>vars.fullProductList.add(payload)</scripting:code>
-            </scripting:execute>
+                </ee:message>
+            </ee:transform>
+            <scripting:execute doc:name="Execute" doc:id="610924ac-1803-4571-ae38-4c8454be0828" engine="Groovy">
+				<scripting:code >vars.fullProductList.add(payload)</scripting:code>
+			</scripting:execute>
         </foreach>
-	</sub-flow>
+    </sub-flow>
 </mule>
