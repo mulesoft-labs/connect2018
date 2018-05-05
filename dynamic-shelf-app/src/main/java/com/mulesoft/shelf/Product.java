@@ -21,6 +21,9 @@ public class Product implements Serializable{
 	public Integer getId() {
 		return id;
 	}
+	public void setId(String id) {
+		this.id = Integer.valueOf(id);
+	}
 	public void setId(Integer id) {
 		this.id = id;
 	}

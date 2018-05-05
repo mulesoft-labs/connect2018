@@ -21,13 +21,13 @@
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/secure.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/sortable.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/traits.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-datatypes/1.0.7/dynamic_shelf-datatypes.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/activated-example.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/fan-control-example.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/saying-example.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/shelf_item-update-example.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/shelf_status-example.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/shelves_status-example.raml"
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-datatypes/1.0.8/dynamic_shelf-datatypes.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/activated-example.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/fan-control-example.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/saying-example.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/shelf_item-update-example.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/shelf_status-example.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/shelves_status-example.raml"
       ],
       "exportedPackages": [
         "com.mulesoft.shelf"

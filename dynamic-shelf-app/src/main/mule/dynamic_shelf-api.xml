@@ -275,13 +275,22 @@ vars.locations.add(&quot;&quot;)
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
-payload]]></ee:set-payload>
+{
+	id: payload.id as String,
+	name: payload.name,
+	description: payload.description,
+	price: payload.price,
+	discountedPrice: {
+		price: payload.discountedPrice.price default null
+	},
+	image: payload.image
+}]]></ee:set-payload>
             </ee:message>
         </ee:transform>
         <scripting:execute doc:name="Add Product to location" doc:id="dd87bf6c-ace3-4e77-89b1-17ccf5c7cc4c" engine="groovy">
             <scripting:code>def product = vars.product
 def productString = new java.lang.String()
-product.setId(vars.productId)
+product.setId(payload.id)
 product.setName(payload.name)
 product.setDescription(payload.description)
 product.setPrice(payload.price.value)

@@ -4,7 +4,7 @@ title: Dynamic Shelf API
 
 
 uses: 
-  shelves: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-datatypes/1.0.7/dynamic_shelf-datatypes.raml
+  shelves: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-datatypes/1.0.8/dynamic_shelf-datatypes.raml
   traits: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/traits.raml
 
 mediaType: application/json
@@ -17,14 +17,14 @@ mediaType: application/json
         200:
           body:
             type: shelves.ShelvesStatus
-            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/shelves_status-example.raml
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/shelves_status-example.raml
   /itemUpdates:
     post:
       description: update shelf item
       is: [ traits.secure ]
       body:
         type: shelves.UpdateItem
-        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/shelf_item-update-example.raml
+        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/shelf_item-update-example.raml
       responses:
         204:
   /items:
@@ -39,7 +39,7 @@ mediaType: application/json
       is: [ traits.secure ]
       body:
         type: shelves.Saying
-        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/saying-example.raml
+        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/saying-example.raml
       responses:
         204:
   /fanOn:
@@ -48,7 +48,7 @@ mediaType: application/json
       is: [ traits.secure ]
       body:
         type: shelves.FanControl
-        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/fan-control-example.raml
+        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/fan-control-example.raml
       responses:
         204:
   /droneDelivered:
@@ -57,7 +57,7 @@ mediaType: application/json
       description:
       body:
         type: shelves.Activated
-        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/activated-example.raml
+        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/activated-example.raml
       responses:
         204:
   /userDetected: 
@@ -66,7 +66,7 @@ mediaType: application/json
       description:
       body:
         type: shelves.Activated
-        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/activated-example.raml
+        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/activated-example.raml
       responses:
         204:
   /display: 
@@ -75,6 +75,6 @@ mediaType: application/json
       description:
       body:
         type: shelves.Activated
-        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/activated-example.raml
+        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.7/activated-example.raml
       responses:
         204:
