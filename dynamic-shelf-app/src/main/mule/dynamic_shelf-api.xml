@@ -281,8 +281,8 @@ output application/java
 	description: payload.description,
 	price: payload.price,
 	discountedPrice: {
-		price: payload.discountedPrice.price default null
-	},
+		value: payload.discountedPrice.value
+	} default null,
 	image: payload.image
 }]]></ee:set-payload>
             </ee:message>
