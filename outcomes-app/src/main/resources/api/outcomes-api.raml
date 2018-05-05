@@ -1,11 +1,11 @@
 #%RAML 1.0
 title: Outcomes API
 
-version: 1.0
+version: 2.0
 mediaType: application/json
 
 uses:
-  outcomes: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-datatypes/1.0.5/outcomes-datatypes.raml
+  outcomes: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-datatypes/2.0.0/outcomes-datatypes.raml
 
 /outcomes:
   get:
@@ -17,7 +17,7 @@ uses:
       200:
         body:
           type: outcomes.NewOutcomesResponse
-          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/new-outcomes-response-examples.raml
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/new-outcomes-response-examples.raml
   /{outcome_type}:
     get:
       description: Returns a outcomes.NewOutcomesResponse
@@ -25,13 +25,13 @@ uses:
         200:
           body:
             type: outcomes.NewOutcomesResponse
-            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/new-outcomes-response-examples.raml
+            example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/new-outcomes-response-examples.raml
   /outcome:
     post:
       description: Creating a outcomes.OutcomesRequest
       body:
         type: outcomes.OutcomesRequest
-        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/outcomes-request-example.raml
+        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/outcomes-request-example.raml
       responses:
         201:
           headers:
@@ -45,4 +45,4 @@ uses:
           200:
             body:
               type: outcomes.OutcomesResponse
-              example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/outcomes-response-example.raml
+              example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/outcomes-response-example.raml

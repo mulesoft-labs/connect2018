@@ -74,7 +74,7 @@ output application/java
 ---
 {
 	uriParams: {
-		outcome_id: "612010"
+		outcome_id: "612009"
 	}
 	
 }]]></ee:set-attributes>

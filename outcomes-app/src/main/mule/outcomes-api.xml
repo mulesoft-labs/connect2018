@@ -401,6 +401,7 @@ vars.fullProductList]]></ee:set-payload>
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
+var categories = vars.fullProductList.category
 ---
 {
     "outcome_id": 612009,
@@ -409,7 +410,7 @@ output application/json
         {
             "id": 2001,
             "question_id": 1001,
-            "answer": "Rob Hill Campground"
+            "answer": "Russian River"
         },
         {
             "id": 2002,
@@ -419,26 +420,31 @@ output application/json
         {
             "id": 2003,
             "question_id": 1003,
-            "answer": "five"
+            "answer": "three"
         },
         {
             "id": 2004,
             "question_id": 1004,
-            "answer": "yes, 2 girls"
+            "answer": "yes, 1 boy"
         }
     ],
     "profile": "family outing",
-    "recommend_items": 
-    		vars.fullProductList map (product, index) -> {
-    			"id": product.id,
-            "price": product.price,
-            "name": product.name,
-            "description": product.description,
-            "image": product.image,
-            "category": product.category,
-            "link": product.link
-    			
-    		}
+    "categories": vars.fullProductList filter (
+    		categories contains $.category
+    ) map (product, index) -> {
+    		description: product.category,
+		recommended_items: vars.fullProductList filter (
+	    		product.category == $.category
+	    		and product.id == $.id
+	    ) map (pProduct, iIndex) -> {
+	    		id: pProduct.id,
+          	name: pProduct.name,
+          	description: pProduct.description,
+          	image: pProduct.image,
+          	price: pProduct.price,
+          	link: pProduct.link
+	    }
+    }
 }]]></ee:set-payload>
 					</ee:message>
 					<ee:variables >
@@ -495,6 +501,7 @@ vars.fullProductList]]></ee:set-payload>
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
+var categories = vars.fullProductList.category
 ---
 {
     "outcome_id": 612010,
@@ -522,17 +529,22 @@ output application/json
         }
     ],
     "profile": "family outing",
-    "recommend_items": 
-    		vars.fullProductList map (product, index) -> {
-    			"id": product.id,
-            "price": product.price,
-            "name": product.name,
-            "description": product.description,
-            "image": product.image,
-            "category": product.category,
-            "link": product.link
-    			
-    		}
+    "categories": vars.fullProductList filter (
+    		categories contains $.category
+    ) map (product, index) -> {
+    		description: product.category,
+		recommended_items: vars.fullProductList filter (
+	    		product.category == $.category
+	    		and product.id == $.id
+	    ) map (pProduct, iIndex) -> {
+	    		id: pProduct.id,
+          	name: pProduct.name,
+          	description: pProduct.description,
+          	image: pProduct.image,
+          	price: pProduct.price,
+          	link: pProduct.link
+	    }
+    }
 }]]></ee:set-payload>
 					</ee:message>
 					<ee:variables >

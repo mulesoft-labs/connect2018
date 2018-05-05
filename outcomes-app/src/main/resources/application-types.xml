@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="productList" format="json">
+      <types:example format="json" location="example/productList_example.json"/>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#bd6a9ca4-1967-44ed-96b5-3456ddf2b282">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:variables>
+          <types:variable name="fullProductList" type="productList"/>
+        </types:variables>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

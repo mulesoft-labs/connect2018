@@ -34,19 +34,22 @@ types:
     properties:
       value: number
       currency: string
-  RecommendItem:
+  RecommendedItem:
     properties:
       id: number
       name: string
       description: string
       image: Image
       price: Price
-      category: string
       link: string
+  Category:
+    properties:
+      description: string
+      recommended_items: RecommendedItem[]
   OutcomesResponse:
     properties:
       outcome_id: number
       type: string
       answers_keywords: AnswerKeyword[]
       profile: string
-      recommend_items: RecommendItem[]
+      categories: Category[]

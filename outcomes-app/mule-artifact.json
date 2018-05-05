@@ -18,10 +18,10 @@
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/pageable.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/sortable.raml",
         "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.0.0/traits.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-datatypes/1.0.5/outcomes-datatypes.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/new-outcomes-response-examples.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/outcomes-request-example.raml",
-        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/1.0.9/outcomes-response-example.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-datatypes/2.0.0/outcomes-datatypes.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/new-outcomes-response-examples.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/outcomes-request-example.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/outcomes-examples/2.0.0/outcomes-response-example.raml",
         "api/outcomes-api.raml"
       ]
     }
