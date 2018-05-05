@@ -13,7 +13,10 @@
     <api-gateway:autodiscovery apiId="12136280" doc:name="API Autodiscovery" doc:id="2663210a-2bec-42a9-aac5-99dc882264a3" flowRef="dynamic_shelf-api-main" />
     <catalog-api:config name="Catalog_API_Config" doc:name="Catalog API Config" doc:id="8ddeb7fd-7c61-4137-b327-7abb14488666" property_host="catalog-app.cloudhub.io" property_basePath="/api" />
     <product-finder:config name="Product_finder_Config" doc:name="Product-finder Config" doc:id="5f9b204e-c7e1-422f-9326-515a08b6018b" property_host="product-finder.cloudhub.io" property_basePath="/api" />
-    <flow name="dynamic_shelf-api-main">
+    <http:request-config name="PARTICLE_IO_Config" doc:name="HTTP Request configuration" doc:id="50a7d02f-f8e8-40ff-9426-4a01e7a73c1f" basePath="/v1" >
+		<http:request-connection protocol="HTTPS" host="api.particle.io" port="443" />
+	</http:request-config>
+	<flow name="dynamic_shelf-api-main">
         <http:listener config-ref="dynamic_shelf-api-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
@@ -168,7 +171,7 @@ output application/java
     <flow name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config">
         <choice doc:name="Choice">
             <when expression="#[attributes.headers.authorization == vars.magicPASSWD]">
-                <flow-ref doc:name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config" name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config" />
+                <flow-ref doc:name="putDynamicShelfFanOnSub_Flow" name="putDynamicShelfFanOnSub_Flow" />
             </when>
             <otherwise>
                 <ee:transform doc:name="Forbiden" doc:id="e5d894bd-8726-4d18-994c-36446e9a6263">
@@ -184,10 +187,48 @@ output application/java
         </choice>
     </flow>
     <sub-flow name="putDynamicShelfFanOnSub_Flow" doc:id="465b5d5f-a02b-4a2a-aba9-47ce025b99ef">
-        <os:store doc:name="Store fanOn" doc:id="1ee2dc3a-7e80-4d17-a569-2655d1721841" key="fanOn" objectStore="Object_store">
-            <os:value><![CDATA[#[payload.activated]]]></os:value>
+        <ee:transform doc:name="Transform Message" doc:id="d8ca51ff-ba61-4770-8b2b-cb813fdf8b2a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+if (payload.activated == true) {
+	params: "1"
+} else {
+	params: "0"
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="activated" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.activated]]></ee:set-variable>
+				<ee:set-variable variableName="fanNumber" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.fanNumber]]></ee:set-variable>
+				<ee:set-variable variableName="deviceName" ><![CDATA[%dw 2.0
+output application/java
+---
+"IOTHolo" ++ (payload.fanNumber as String)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<os:store doc:name="Store fanOn" doc:id="1ee2dc3a-7e80-4d17-a569-2655d1721841" key="fanOn" objectStore="Object_store">
+            <os:value><![CDATA[#[vars.activated]]]></os:value>
         </os:store>
-        <logger level="INFO" message="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config" />
+        <http:request method="POST" doc:name="Call Particle.IO" doc:id="8a7e1882-5ba1-473d-8f9a-850357c11fdf" config-ref="PARTICLE_IO_Config" path="/devices/{deviceName}/holodisplay">
+			<http:headers ><![CDATA[#[output applicaton/java
+---
+{
+	"authorization" : "Bearer d5d3600dbd73d9acfb984110d6d7414a503bddca"
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output applicaton/java
+---
+{
+	deviceName : vars.deviceName
+}]]]></http:uri-params>
+		</http:request>
+		<logger level="INFO" message="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config" doc:name="Logger"/>
     </sub-flow>
     <sub-flow name="postDynamicShelfItemUpdatesSub_Flow" doc:id="bede2672-8364-4e21-806f-e46b90bed415">
         <ee:transform doc:name="Transform Message" doc:id="9bfcb5b4-9a16-42ed-8f6b-3e44849044d9">
