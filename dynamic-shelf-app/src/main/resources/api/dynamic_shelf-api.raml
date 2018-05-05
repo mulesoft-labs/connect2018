@@ -1,41 +1,42 @@
 #%RAML 1.0
 version: v1
+title: Dynamic Shelf API
+
 
 uses: 
   shelves: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-datatypes/1.0.7/dynamic_shelf-datatypes.raml
-
-title: Dynamic Shelf API
+  traits: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/traits.raml
 
 mediaType: application/json
-
-traits:
-  secured:
-    headers: 
-      Authorization:
-        example: put secret value here
 
 /dynamic_shelf:
   /status:
     get:
-      description: retrieve all the itens
+      description: retrieve all the items another statuses
       responses:
         200:
           body:
             type: shelves.ShelvesStatus
             example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/shelves_status-example.raml
   /itemUpdates:
-    put:
+    post:
       description: update shelf item
-      is: [ secured ]
+      is: [ traits.secure ]
       body:
         type: shelves.UpdateItem
         example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/shelf_item-update-example.raml
       responses:
         204:
+  /items:
+    delete:
+      description: Deletes all the items on the shelves.
+      is: [ traits.secure ]
+      responses:
+        200:
   /saying:
     put:
       description:
-      is: [ secured ]
+      is: [ traits.secure ]
       body:
         type: shelves.Saying
         example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/saying-example.raml
@@ -44,7 +45,7 @@ traits:
   /fanOn:
     put:
       description:
-      is: [ secured ]
+      is: [ traits.secure ]
       body:
         type: shelves.FanControl
         example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/fan-control-example.raml
@@ -52,7 +53,7 @@ traits:
         204:
   /droneDelivered:
     put:
-      is: [ secured ]
+      is: [ traits.secure ]
       description:
       body:
         type: shelves.Activated
@@ -61,7 +62,16 @@ traits:
         204:
   /userDetected: 
     put:
-      is: [ secured ]
+      is: [ traits.secure ]
+      description:
+      body:
+        type: shelves.Activated
+        example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/dynamic_shelf-examples/1.0.6/activated-example.raml
+      responses:
+        204:
+  /display: 
+    put:
+      is: [ traits.secure ]
       description:
       body:
         type: shelves.Activated

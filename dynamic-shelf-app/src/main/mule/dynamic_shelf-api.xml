@@ -24,16 +24,16 @@
             </http:error-response>
         </http:listener>
         <ee:transform doc:name="setting up vars to be accessed by all the flows" doc:id="e1d377ff-e092-4bfb-af06-7cb47b9e8bea">
-			<ee:message />
-			<ee:variables>
-				<ee:set-variable variableName="magicPASSWD"><![CDATA[%dw 2.0
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="magicPASSWD"><![CDATA[%dw 2.0
 output application/java
 ---
 "astro and max"]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<apikit:router config-ref="dynamic_shelf-api-config" doc:name="APIkit Router"/>
-		<error-handler>
+            </ee:variables>
+        </ee:transform>
+        <apikit:router config-ref="dynamic_shelf-api-config" doc:name="APIkit Router" />
+        <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
@@ -124,7 +124,7 @@ output application/json
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:console config-ref="dynamic_shelf-api-config" doc:name="APIkit Console"/>
+        <apikit:console config-ref="dynamic_shelf-api-config" doc:name="APIkit Console" />
         <error-handler>
             <on-error-propagate type="APIKIT:NOT_FOUND">
                 <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -142,72 +142,54 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\dynamic_shelf\droneDelivered:application\json:dynamic_shelf-api-config">
-		<choice doc:name="Choice"  >
-			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
-				<flow-ref doc:name="putDynamicShelfDroneDeliveredSub_Flow"  name="putDynamicShelfDroneDeliveredSub_Flow"/>
-			</when>
-			<otherwise >
-				<ee:transform doc:name="Copy_of_Forbiden"  >
-					<ee:message />
-					<ee:variables >
-						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+        <choice doc:name="Choice">
+            <when expression="#[attributes.headers.authorization == vars.magicPASSWD]">
+                <flow-ref doc:name="putDynamicShelfDroneDeliveredSub_Flow" name="putDynamicShelfDroneDeliveredSub_Flow" />
+            </when>
+            <otherwise>
+                <ee:transform doc:name="Forbiden" doc:id="672ee0ca-c09c-4afb-a259-19f061a2ac99">
+                    <ee:message />
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 403]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</otherwise>
-		</choice>
+                    </ee:variables>
+                </ee:transform>
+            </otherwise>
+        </choice>
     </flow>
-    <sub-flow name="putDynamicShelfDroneDeliveredSub_Flow" doc:id="eef244cf-059c-4bde-898b-33064742f3ae" >
+    <sub-flow name="putDynamicShelfDroneDeliveredSub_Flow" doc:id="eef244cf-059c-4bde-898b-33064742f3ae">
         <os:store doc:name="Store droneDelivered" doc:id="83b65f70-a7ac-43ee-ae2d-d90bc3f529a7" key="droneDelivered" objectStore="Object_store">
             <os:value><![CDATA[#[payload.activated]]]></os:value>
         </os:store>
-        <logger level="INFO" message="put:\dynamic_shelf\droneDelivered:application\json:dynamic_shelf-api-config" doc:name="Logger"/>
+        <logger level="INFO" message="put:\dynamic_shelf\droneDelivered:application\json:dynamic_shelf-api-config" doc:name="Logger" />
     </sub-flow>
-	<flow name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config">
-		<choice doc:name="Choice"  >
-			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
-				<flow-ref doc:name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config" name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config"/>
-			</when>
-			<otherwise >
-				<ee:transform doc:name="Copy_of_Forbiden"  >
-					<ee:message />
-					<ee:variables >
-						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+    <flow name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config">
+        <choice doc:name="Choice">
+            <when expression="#[attributes.headers.authorization == vars.magicPASSWD]">
+                <flow-ref doc:name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config" name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config" />
+            </when>
+            <otherwise>
+                <ee:transform doc:name="Forbiden" doc:id="e5d894bd-8726-4d18-994c-36446e9a6263">
+                    <ee:message />
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 403]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</otherwise>
-		</choice>
+                    </ee:variables>
+                </ee:transform>
+            </otherwise>
+        </choice>
     </flow>
-    <sub-flow name="putDynamicShelfFanOnSub_Flow" doc:id="465b5d5f-a02b-4a2a-aba9-47ce025b99ef" >
+    <sub-flow name="putDynamicShelfFanOnSub_Flow" doc:id="465b5d5f-a02b-4a2a-aba9-47ce025b99ef">
         <os:store doc:name="Store fanOn" doc:id="1ee2dc3a-7e80-4d17-a569-2655d1721841" key="fanOn" objectStore="Object_store">
             <os:value><![CDATA[#[payload.activated]]]></os:value>
         </os:store>
         <logger level="INFO" message="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config" />
     </sub-flow>
-	<flow name="put:\dynamic_shelf\itemUpdates:application\json:dynamic_shelf-api-config">
-		<choice doc:name="Choice" >
-			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
-				<flow-ref doc:name="putDynamicShelfItemUpdatesSub_Flow" name="putDynamicShelfItemUpdatesSub_Flow"/>
-			</when>
-			<otherwise >
-				<ee:transform doc:name="Copy_of_Forbiden" >
-					<ee:message />
-					<ee:variables >
-						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
-output application/java
----
-403]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</otherwise>
-		</choice>
-    </flow>
-    <sub-flow name="putDynamicShelfItemUpdatesSub_Flow" doc:id="bede2672-8364-4e21-806f-e46b90bed415" >
+    <sub-flow name="postDynamicShelfItemUpdatesSub_Flow" doc:id="bede2672-8364-4e21-806f-e46b90bed415">
         <ee:transform doc:name="Transform Message" doc:id="9bfcb5b4-9a16-42ed-8f6b-3e44849044d9">
             <ee:message />
             <ee:variables>
@@ -241,26 +223,26 @@ vars.locations.add(&quot;&quot;)
 }</scripting:code>
                 </scripting:execute>
             </when>
-			<otherwise >
-				<logger level="INFO" doc:name="Logger" doc:id="57eaade3-b8dc-4b15-8151-b71b5fd25a73" />
-			</otherwise>
+            <otherwise>
+                <logger level="INFO" doc:name="Logger" doc:id="57eaade3-b8dc-4b15-8151-b71b5fd25a73" />
+            </otherwise>
         </choice>
-        <java:new doc:name="New" doc:id="89097777-49e2-438a-9821-374d1faa5293" class="com.mulesoft.shelf.Product" constructor="Product()" target="product"/>
-		<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="fbff098b-6a3e-4bce-b2ad-c8faac8d923a" config-ref="Catalog_API_Config" product-id="#[vars.productId]" />
-        <ee:transform doc:name="Transform Message" doc:id="67720c68-8ef4-4fc9-96e3-87cf5240804f" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+        <java:new doc:name="New" doc:id="89097777-49e2-438a-9821-374d1faa5293" class="com.mulesoft.shelf.Product" constructor="Product()" target="product" />
+        <catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="fbff098b-6a3e-4bce-b2ad-c8faac8d923a" config-ref="Catalog_API_Config" product-id="#[vars.productId]" />
+        <ee:transform doc:name="Transform Message" doc:id="67720c68-8ef4-4fc9-96e3-87cf5240804f">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 payload]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
+            </ee:message>
+        </ee:transform>
         <scripting:execute doc:name="Add Product to location" doc:id="dd87bf6c-ace3-4e77-89b1-17ccf5c7cc4c" engine="groovy">
             <scripting:code>def product = vars.product
 def productString = new java.lang.String()
 product.setId(vars.productId)
 product.setName(payload.name)
-product.setDescription(product.description)
+product.setDescription(payload.description)
 product.setPrice(payload.price.value)
 product.setDiscountedPrice(payload.discountedPrice.value)
 
@@ -279,31 +261,31 @@ vars.locations[vars.location] = productString</scripting:code>
             <os:value><![CDATA[#[vars.locations]]]></os:value>
         </os:store>
     </sub-flow>
-	<flow name="put:\dynamic_shelf\saying:application\json:dynamic_shelf-api-config">
-		<choice doc:name="Choice"  >
-			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
-				<flow-ref doc:name="putDynamicShelfSayingSub_Flow"  name="putDynamicShelfSayingSub_Flow"/>
-			</when>
-			<otherwise >
-				<ee:transform doc:name="Copy_of_Forbiden"  >
-					<ee:message />
-					<ee:variables >
-						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+    <flow name="put:\dynamic_shelf\saying:application\json:dynamic_shelf-api-config">
+        <choice doc:name="Choice">
+            <when expression="#[attributes.headers.authorization == vars.magicPASSWD]">
+                <flow-ref doc:name="putDynamicShelfSayingSub_Flow" name="putDynamicShelfSayingSub_Flow" />
+            </when>
+            <otherwise>
+                <ee:transform doc:name="Forbiden" doc:id="5eaaa658-9e04-4b49-b5ca-c3e6db583198">
+                    <ee:message />
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 403]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</otherwise>
-		</choice>
+                    </ee:variables>
+                </ee:transform>
+            </otherwise>
+        </choice>
     </flow>
-    <sub-flow name="putDynamicShelfSayingSub_Flow" doc:id="444b3f49-e534-4bd9-a8b3-592c423252c0" >
+    <sub-flow name="putDynamicShelfSayingSub_Flow" doc:id="444b3f49-e534-4bd9-a8b3-592c423252c0">
         <os:store doc:name="Store saying" doc:id="c8c7bc0d-b3d3-40fc-b2c6-fa460a906dbc" key="saying" objectStore="Object_store">
             <os:value><![CDATA[#[payload.text]]]></os:value>
         </os:store>
         <logger level="INFO" message="put:\dynamic_shelf\saying:application\json:dynamic_shelf-api-config" />
     </sub-flow>
-	<flow name="get:\dynamic_shelf\status:dynamic_shelf-api-config">
+    <flow name="get:\dynamic_shelf\status:dynamic_shelf-api-config">
         <os:retrieve doc:name="Retrieving Saying" doc:id="79a1b6f0-6317-4907-9c1c-8e1ff4e9ecfc" key="saying" target="saying" objectStore="Object_store">
 			<os:default-value ><![CDATA[ ]]></os:default-value>
         </os:retrieve>
@@ -338,17 +320,31 @@ output application/json
             </ee:message>
         </ee:transform>
     </flow>
-    <flow name="dynamic_shelf-apiFlow" doc:id="8dfc8c51-89f5-4f05-9f2c-35b5bad53597">
-        <http:listener doc:name="Listener" doc:id="ff200e68-9d10-45fd-b3de-f3db2a614209" config-ref="dynamic_shelf-api-httpListenerConfig" path="/clear" />
-        <os:clear doc:name="Clear" doc:id="a72c1b7f-a8d5-4c3a-b17f-a1103c7e924f" objectStore="Object_store" />
-    </flow>
     <flow name="put:\dynamic_shelf\userDetected:application\json:dynamic_shelf-api-config">
-		<choice doc:name="Choice"  >
+        <choice doc:name="Choice">
+            <when expression="#[attributes.headers.authorization == vars.magicPASSWD]">
+                <flow-ref doc:name="putDynamicShelfUserDetectedSub_Flow" name="putDynamicShelfUserDetectedSub_Flow" />
+            </when>
+            <otherwise>
+                <ee:transform doc:name="Forbiden" doc:id="fd236541-ac60-47e0-9bd3-c32d5db23ac5">
+                    <ee:message />
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
+output application/java
+---
+403]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </otherwise>
+        </choice>
+    </flow>
+    <flow name="put:\dynamic_shelf\display:application\json:dynamic_shelf-api-config">
+        <choice doc:name="Choice" doc:id="114cb032-8be2-4b74-b640-4e96259144d4" >
 			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
-				<flow-ref doc:name="putDynamicShelfUserDetectedSub_Flow"  name="putDynamicShelfUserDetectedSub_Flow"/>
+				<flow-ref doc:name="putDynamicShelfDisplaySub_Flow" doc:id="4a7dcafd-3635-49e7-910b-571e523a3b91" name="putDynamicShelfDisplaySub_Flow"/>
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Copy_of_Forbiden"  >
+				<ee:transform doc:name="Forbiden" >
 					<ee:message />
 					<ee:variables >
 						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
@@ -360,10 +356,53 @@ output application/java
 			</otherwise>
 		</choice>
     </flow>
-	<sub-flow name="putDynamicShelfUserDetectedSub_Flow" doc:id="02d5156e-e477-4e73-8963-451bcd076106" >
+    <sub-flow name="putDynamicShelfDisplaySub_Flow" doc:id="8a18d0e1-761b-47dd-a9ef-aab4d9066dc8" >
+		<logger level="INFO" message="put:\dynamic_shelf\display:application\json:dynamic_shelf-api-config" doc:name="Logger" />
+	</sub-flow>
+	<flow name="delete:\dynamic_shelf\items:dynamic_shelf-api-config">
+		<choice doc:name="Choice" doc:id="b08442a2-d7c0-4ca1-90fd-c931f63ad93d" >
+			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
+				<flow-ref doc:name="deleteItensSubiFlow" doc:id="cb8e7be1-6a32-42b6-aa0b-a5fc66c82358" name="deleteItensSubiFlow"/>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Forbiden" doc:id="fd236541-ac60-47e0-9bd3-c32d5db23ac5" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+403]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</otherwise>
+		</choice>
+    </flow>
+    <sub-flow name="deleteItensSubiFlow" doc:id="bd44c039-8446-4552-af02-339bc91365a2" >
+		<os:clear doc:name="Clear" doc:id="a72c1b7f-a8d5-4c3a-b17f-a1103c7e924f" objectStore="Object_store" />
+		<logger level="INFO" message="delete:\dynamic_shelf\items:dynamic_shelf-api-config" doc:name="Logger" />
+	</sub-flow>
+	<flow name="post:\dynamic_shelf\itemUpdates:application\json:dynamic_shelf-api-config">
+        <choice doc:name="Choice">
+            <when expression="#[attributes.headers.authorization == vars.magicPASSWD]">
+                <flow-ref doc:name="postDynamicShelfItemUpdatesSub_Flow" name="postDynamicShelfItemUpdatesSub_Flow" />
+            </when>
+            <otherwise>
+                <ee:transform doc:name="Forbiden" >
+                    <ee:message />
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
+output application/java
+---
+403]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </otherwise>
+        </choice>
+    </flow>
+    <sub-flow name="putDynamicShelfUserDetectedSub_Flow" doc:id="02d5156e-e477-4e73-8963-451bcd076106">
         <os:store doc:name="Store" doc:id="8b6644db-bcb4-4d79-bb3b-ff31b2557820" key="userDetected" objectStore="Object_store">
             <os:value><![CDATA[#[payload.activated]]]></os:value>
         </os:store>
-		<logger level="INFO" message="put:\dynamic_shelf\userDetected:application\json:dynamic_shelf-api-config" />
-	</sub-flow>
+        <logger level="INFO" message="put:\dynamic_shelf\userDetected:application\json:dynamic_shelf-api-config" />
+    </sub-flow>
 </mule>

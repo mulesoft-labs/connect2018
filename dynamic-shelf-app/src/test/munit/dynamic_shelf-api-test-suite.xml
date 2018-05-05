@@ -58,7 +58,7 @@ output application/json
 }]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
-			<flow-ref doc:name="Flow-ref to put:\dynamic_shelf\itemUpdates:application\json:dynamic_shelf-api-config" doc:id="937b4bea-b0b0-4421-b463-9fbe7246bc57" name="put:\dynamic_shelf\itemUpdates:application\json:dynamic_shelf-api-config"/>
+			<flow-ref doc:name="Flow-ref to post:\dynamic_shelf\itemUpdates:application\json:dynamic_shelf-api-config" doc:id="937b4bea-b0b0-4421-b463-9fbe7246bc57" name="post:\dynamic_shelf\itemUpdates:application\json:dynamic_shelf-api-config"/>
 			<logger level="INFO" doc:name="Logger" doc:id="f3cccdc9-5635-4984-8b80-ef3585a6dfc4" message="&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;" />
 			<logger level="INFO" doc:name="Logger" doc:id="0f3e543f-8708-42b5-904f-2659bb21736f" message="#[payload]" />
 		</munit:execution>
