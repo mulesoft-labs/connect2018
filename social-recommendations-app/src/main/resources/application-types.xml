@@ -23,15 +23,6 @@
       </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
-  <types:enrichment select="#f594df65-d592-4a4a-8189-f8c3c56e03c8">
-    <types:processor-declaration>
-      <types:input-event>
-        <types:message>
-          <types:payload type="recommendationJson"/>
-        </types:message>
-      </types:input-event>
-    </types:processor-declaration>
-  </types:enrichment>
   <types:enrichment select="#4d1e4c25-afd1-4d16-bb5c-1ef84f16d5f4">
     <types:processor-declaration/>
   </types:enrichment>

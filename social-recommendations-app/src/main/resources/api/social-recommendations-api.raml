@@ -1,7 +1,12 @@
 #%RAML 1.0
-version: v1
+baseUri: https://mocksvc.mulesoft.com/mocks/d18849b8-cb25-4c55-b988-b187280c0cec # 
+
+version: v4.1
 title: social-recommendations-api
 mediaType: application/json
+
+uses:
+  traits: exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/traits.raml
 
 types:
   ArtPiece:
@@ -26,112 +31,38 @@ types:
         type: integer[]
         minItems: 2
         maxItems: 2
-  Reset:
+  Personalized:
     properties:
-      recommendations?: Recommendation[]
-      choices?: Choices
+      personalized:
+        type: boolean
+        example: false
 
+        
 /choices:
   get:
     responses:
       200:
         body:
           type: Choices
-          example:
-            {
-              "artPieces": [
-                "http://3.bp.blogspot.com/_6QdxFZPFLoY/S2-Ocuy_c-I/AAAAAAAAAiw/C1eeBZmr_20/S760/Figura23.jpg"
-                ,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvDeYw3OqpVQNpYG3_qq6JsbJuoQ683CbSYbSUfROoV_84pLdvA"
-                ,"https://cdn.mensagenscomamor.com/content/images/p000005352.jpg?v=0"
-              ],
-              "paintColors": [
-                "red", "green", "blue"
-              ]
-            }
   put:
-    headers:
-      Authorization:
+    is: [ traits.secure ]
     body:
       type: Choices
-      example:
-        {
-          "artPieces": [
-            "http://3.bp.blogspot.com/_6QdxFZPFLoY/S2-Ocuy_c-I/AAAAAAAAAiw/C1eeBZmr_20/S760/Figura23.jpg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvDeYw3OqpVQNpYG3_qq6JsbJuoQ683CbSYbSUfROoV_84pLdvA", "https://cdn.mensagenscomamor.com/content/images/p000005352.jpg?v=0"
-          ],
-          "paintColors": [
-            "red", "green", "blue"
-          ]
-        }
     responses:
       200:
-        body:
-          type: Choices
-          example:
-            {
-              "artPieces": [
-                "http://3.bp.blogspot.com/_6QdxFZPFLoY/S2-Ocuy_c-I/AAAAAAAAAiw/C1eeBZmr_20/S760/Figura23.jpg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvDeYw3OqpVQNpYG3_qq6JsbJuoQ683CbSYbSUfROoV_84pLdvA", "https://cdn.mensagenscomamor.com/content/images/p000005352.jpg?v=0"
-              ],
-              "paintColors": [
-                "red", "green", "blue"
-              ]
-            }
 
 /recommendations:
   post:
-    body:
-      type: Recommendation
-      example: {
-          "clientId": "1",
-          "name": "Janet",
-          "choice": [0,2]
-        }
     responses: 
       200:
         body:
           type: Recommendation
-          example: {
-            "clientId": "1",
-            "name": "Janet",
-            "choice": [0,2]
-          }
   put:
-    headers:
-      Authorization:
+    is: [ traits.secure ]
     body:
-      type: Reset
-      example: {
-    "recommendations":[
-        {
-            "clientId": "1",
-            "name": "Janet",
-            "choice": [
-                0,
-                0
-            ]
-        }
-    ],
-    "choices": {
-        "artPieces": [
-            "http://3.bp.blogspot.com/_6QdxFZPFLoY/S2-Ocuy_c-I/AAAAAAAAAiw/C1eeBZmr_20/S760/Figura23.jpg",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvDeYw3OqpVQNpYG3_qq6JsbJuoQ683CbSYbSUfROoV_84pLdvA",
-            "https://cdn.mensagenscomamor.com/content/images/p000005352.jpg?v=0"
-          ],
-          "paintColors": [
-            "white",
-            "green",
-            "black"
-          ]
-    } 
-}
-    responses: 
+      type: Recommendation[]
+    responses:
       200:
-        body:
-          type: Recommendation[]
-          example: [{
-            "clientId": "1",
-            "name": "Janet",
-            "choice": [0,2]
-          }]
   /summary:
     get:
       responses: 
@@ -144,3 +75,14 @@ types:
           200:
             body:
               type: ChoiceResults
+
+/status:
+  get:
+    responses:
+      200:
+        body: Personalized
+  put:
+    is: [ traits.secure ]
+    body: Personalized
+    responses: 
+      200:

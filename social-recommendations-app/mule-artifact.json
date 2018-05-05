@@ -12,6 +12,11 @@
     "attributes": {
       "exportedResources": [
         "api/.gitignore",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/content-cacheable.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/pageable.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/secure.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/sortable.raml",
+        "api/exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/traits.raml",
         "api/social-recommendations-api.raml"
       ],
       "exportedPackages": [
