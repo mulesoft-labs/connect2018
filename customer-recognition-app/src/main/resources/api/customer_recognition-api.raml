@@ -1,0 +1,70 @@
+#%RAML 1.0
+
+title: Customer recognition API
+
+version: v2
+mediaType: application/json
+uses:
+  traits: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/traits.raml
+  customer: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer-datatypes/1.0.4/customerTypes.raml
+  util: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-datatypes/1.0.0/utilTypes.raml
+  location: exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-datatypes/1.0.0/locationTypes.raml
+types:
+  LastFaceDetected:
+    properties: 
+      lastFaceDetected:
+        type: AttachedImageByteArrayID
+  AttachedImageByteArrayID:
+    properties:
+      attachedImageByteArrayID: number
+  RecognizedCustomer:
+    properties:
+      customerRecognized: boolean
+      lastFaceDetected: AttachedImageByteArrayID
+      name?: string
+      image?: string
+      lastAvatarID?: number
+      newAvatarID?: number
+      avartar:
+       type: util.ImageData
+       required: false
+      login?: string
+      fullName?: string
+      email?: string
+      address?: location.AddressData
+      gender?: string
+      birthday?: date-only
+      id?: number
+
+/faceCandidates:
+  post:
+    is: [ traits.secure ]
+    description: submit face image to try to be recognized as customer
+    body:
+      type: LastFaceDetected
+      example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer_recognition-examples/1.0.1/customer_face_candidate_request.raml
+    responses:
+      404:
+        body:          
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer_recognition-examples/1.0.1/customer_face_candidate_response.raml
+      201:
+        headers:
+          Content-Location:
+            type: string
+            example: https://customer_recognition-app.cloudhub.io/api/recognizedConsumer/5640099
+/recognizedConsumer/{customer_id}:
+  get:
+    description: retrieve the data of a recognized customer
+    responses:
+      200:
+        body:
+          type: RecognizedCustomer
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer_recognition-examples/1.0.1/customer_face_candidate_success_response.raml
+/recognitionRequests:
+  get:
+    description: retrieve all the customer recognitions
+    responses:
+      200:
+        body:
+          type: RecognizedCustomer[]
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/customer_recognition-examples/1.0.1/customer_recognition_requests_response.raml            
