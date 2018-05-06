@@ -1,0 +1,45 @@
+#%RAML 1.0 Library
+
+types:
+  imageType:
+    properties:
+      image: string
+    example:
+      image: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/face-recognition-examples/1.0.1/base64-image1
+  recognizedImage:
+    properties:
+      firstName:
+      lastName:
+      title:
+      imageUrl:
+      rank:
+        type: integer
+        minimum: 1
+      score:
+        type: number
+        minimum: 70
+        maximum: 100
+    example:
+      firstName: John
+      lastName: Doe
+      title: Chief Connect Officer
+      imageUrl: https://s3.amazon.com/bucket23456/123141343214124r423312123
+      rank: 1
+      score: 99.9977
+  imageData:
+    properties:
+      owner:
+      lastActivity:
+      ETag:
+      StorageClass:
+      ServerSideEncryption:
+      Size: integer
+      Link:
+    example:
+      owner: tim.piastrelli
+      lastActivity: Apr 5, 2017 2:38:39 PM
+      ETag: d283802df302182f21c9d04307c05eb6
+      StorageClass: Standard
+      ServerSideEncryption: None
+      Size: 316842
+      Link: https://s3-us-west-2.amazonaws.com/connectdemo2014-uridemo-bucket/brandon.jpg

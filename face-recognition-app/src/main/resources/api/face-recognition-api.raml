@@ -1,0 +1,106 @@
+#%RAML 1.0
+title: face-recognition-api
+
+version: 1.0
+mediaType: application/json
+
+uses:
+  myTypes: /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/face-recognition-datatypes/1.0.1/face-recognition-datatypes.raml
+
+/loadedImage:
+  get:
+    description: Retrieve image metadata loaded from posted image/base64.
+    responses:
+      200:
+        body:
+          type: myTypes.recognizedImage[]
+/loadImage:
+  post:
+    description: |
+      Load an image to the AWS image recognition API
+    body:
+    responses:
+      200:
+        description: |
+          Succesfully posted image/base64 attachment. Location header contains compare result
+        body:
+          type: myTypes.recognizedImage[]
+/bucket:
+  /storedImages:
+    get:
+      description: Retrive all images from the S3 bucket. Pass in bucket name, client_id, and client_secret in headers.
+      responses:
+        200:
+          body:
+            type: myTypes.imageData[]
+    /{imageId}:
+      uriParameters:
+        imageId:
+          type: string
+          example: 21234-jladf-ajer-432al-kjdf12
+      get:
+        description: Retrieve and individual image
+        responses:
+          200:
+            body:
+              type: myTypes.imageData
+  /newImage:
+    post:
+      description: |
+        Add new image data to the S3 bucket. Pass in the metadata as well.
+      body:
+        type: myTypes.imageType
+      responses:
+        200:
+          description: |
+           Successfully added images to the s3 bucket.
+          body:
+            type: myTypes.imageData
+/collections:
+  get:
+    description: Retrieve the existing collections
+    responses:
+      200:
+        body:
+          example:
+              {
+                  "collectionLists":["collection1","collection2"]
+              }
+  /{collectionId}:
+    get:
+      description: Get individual collection from the AWS Rekognition API
+      body:
+        application/json:
+          example: !include /exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/face-recognition-examples/1.0.1/collection.json
+  post:
+    description: |
+      Create a collection
+    body:
+    responses:
+      201:
+        description: |
+          Faceindex created
+        body:
+          application/json:
+            example: | 
+              ""
+/faceIndex:
+  post:
+    description: |
+      Create a new face index in a specific collection
+    body:
+    responses:
+      200:
+        description: |
+          Faceindex created
+        body:
+          application/json:
+            example: |
+              ""
+  get:
+    description: |
+      Retrieve indexes
+    responses:
+      200:
+        description: |
+          Succesfully retrieved resource

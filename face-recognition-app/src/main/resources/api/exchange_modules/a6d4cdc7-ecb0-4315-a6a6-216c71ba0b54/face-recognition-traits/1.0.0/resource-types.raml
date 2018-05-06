@@ -1,0 +1,32 @@
+#%RAML 1.0 Library
+
+resourceTypes:
+  collection:
+    description: Collection of available <<resourcePathName>>.
+    get:
+      description: Get a list of <<resourcePathName>>.
+      responses:
+        200:
+          body:
+            application/json:
+              type: <<resourcePathName|!singularize>>[]
+              example: <<collection>>
+    post:
+      description: |
+        Add a new <<resourcePathName|!singularize>>.
+      queryParameters:
+        access_token:
+          description: The access token provided by the authentication application
+          example: AABBCCDD
+          required: true
+          type: string
+      body:
+        application/json:
+          type: <<resourcePathName|!singularize>>
+          example: <<member>>
+      responses:
+        200:
+          body:
+            application/json:
+              type: <<resourcePathName|!singularize>>
+              example: <<member>>
