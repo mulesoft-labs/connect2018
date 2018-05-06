@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
-    <http:listener-config name="customer_recognition-api-httpsListenerConfig" doc:name="HTTP Listener config">
-        <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS">
-			<tls:context >
-				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
-			</tls:context>
-		</http:listener-connection>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd ">
+    <http:listener-config name="customer_recognition-api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
     <apikit:config name="customer_recognition-api-config" raml="customer_recognition-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-    <global-property doc:name="Global Property" doc:id="23da02aa-b5e6-4362-8bb1-610d6a5380a7" name="https.port" value="8082" />
-	<api-gateway:autodiscovery apiId="12623565" doc:name="API Autodiscovery" doc:id="c8e6211e-9dbf-44b7-b5c1-aa654131cba7" flowRef="customer_recognition-api-main" />
-	<flow name="customer_recognition-api-main">
-        <http:listener config-ref="customer_recognition-api-httpsListenerConfig" path="/api/*">
+    <flow name="customer_recognition-api-main">
+        <http:listener config-ref="customer_recognition-api-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body><![CDATA[#[payload]]]></http:body>
-                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="customer_recognition-api-config" />
@@ -105,13 +97,13 @@ output application/json
         </error-handler>
     </flow>
     <flow name="customer_recognition-api-console">
-        <http:listener config-ref="customer_recognition-api-httpsListenerConfig" path="/console/*">
+        <http:listener config-ref="customer_recognition-api-httpListenerConfig" path="/console/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body><![CDATA[#[payload]]]></http:body>
-                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:error-response>
         </http:listener>
         <apikit:console config-ref="customer_recognition-api-config" />
@@ -130,78 +122,6 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
         </error-handler>
-    </flow>
-    <flow name="get:\recognitionRequests:customer_recognition-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    lastFaceDetected: {
-      attachedImageByteArrayID: 1123444
-    },
-    customerRecognized: false
-  }, 
-  {
-    lastFaceDetected: {
-      attachedImageByteArrayID: 1123445
-    },
-    customerRecognized: true,
-    id: 5640099,
-    name: "Uri",
-    image: "https://pathToUpdatedCustomerImage.io/1123445",
-    lastAvatarID: 4323,
-    newAvatarID: 1123445,
-    login: "uri.sarid",
-    fullName: "Uri Sarid",
-    email: "uri.sarid@mulesoft.com",
-    gender: "male",
-    birthday: "1984-12-14",
-    address: {
-      country: "USA",
-      state: "CA",
-      city: "San Francisco",
-      street_address: "77 Geary St",
-      zip: 94108
-    }
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-    </flow>
-    <flow name="get:\recognizedConsumer\(customer_id):customer_recognition-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  customerRecognized: true,
-  id: 5640099,
-  lastFaceDetected: {
-    attachedImageByteArrayID: 1123445
-  },
-  name: "Uri",
-  image: "https://pathToUpdatedCustomerImage.io/1123445",
-  lastAvatarID: 4323,
-  newAvatarID: 1123445,
-  login: "uri.sarid",
-  fullName: "Uri Sarid",
-  email: "uri.sarid@mulesoft.com",
-  gender: "male",
-  birthday: "1984-12-14",
-  address: {
-    country: "USA",
-    state: "CA",
-    city: "San Francisco",
-    street_address: "77 Geary St",
-    zip: 94108
-  }
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
     </flow>
     <flow name="post:\faceCandidates:application\json:customer_recognition-api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
