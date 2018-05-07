@@ -1,6 +1,5 @@
 #%RAML 1.0
 baseUri: https://mocksvc.mulesoft.com/mocks/d18849b8-cb25-4c55-b988-b187280c0cec # 
-
 version: v4.1
 title: social-recommendations-api
 mediaType: application/json
@@ -36,31 +35,60 @@ types:
       personalized:
         type: boolean
         example: false
-
         
 /choices:
   get:
+    description: Get the choices available to recommenders
     responses:
       200:
         body:
           type: Choices
+          example:
+            artPieces:
+            - "https://afremov.com/images/product/image_20.jpeg"
+            - "https://afremov.com/images/product/image_584.jpeg"
+            - "https://afremov.com/images/product/LOVE-BY-THE-PALETTE.jpg"
+            paintColors:
+            - "#FFFFFF"
+            - "#AAAAAA"
+            - "#CACACA"
   put:
+    description: Set the choices available to recommenders
     is: [ traits.secure ]
     body:
       type: Choices
+      example:
+        artPieces:
+        - "https://afremov.com/images/product/image_20.jpeg"
+        - "https://afremov.com/images/product/image_584.jpeg"
+        - "https://afremov.com/images/product/LOVE-BY-THE-PALETTE.jpg"
+        paintColors:
+        - "#FFFFFF"
+        - "#AAAAAA"
+        - "#CACACA"
+          
     responses:
       200:
 
 /recommendations:
   post:
+    description: Submit a recommendation (vote)
     responses: 
       200:
         body:
           type: Recommendation
+          example:
+            clientId: cc1e0107-a292-4dd5-9479-f9d700fdc464
+            name: Henry
+            choice: [ 1, 0 ]
   put:
+    description: |
+      Override all recommendations by setting the results 
+      according to this payload
     is: [ traits.secure ]
     body:
       type: Recommendation[]
+      example: []
     responses:
       200:
   /summary:
@@ -78,10 +106,15 @@ types:
 
 /status:
   get:
+    description: Get the overall status (personalized or not, for now)
     responses:
       200:
-        body: Personalized
+        body: 
+          type: Personalized
+          example:
+            personalized: true
   put:
+    description: Set the overall status (personalized or not, for now)
     is: [ traits.secure ]
     body: Personalized
     responses: 

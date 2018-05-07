@@ -184,8 +184,33 @@ output application/java
 payload]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
-        <os:clear doc:name="Clear everything (AKA starts a new game)" doc:id="39c28f40-4b13-4c22-b4d3-ef0041203c7f" objectStore="ObjectStore" />
+        
+        <os:retrieve doc:name="Retrieve personalized info" key="personalized" objectStore="ObjectStore" target="personalized">
+			<os:default-value ><![CDATA[ZERO]]></os:default-value>
+		</os:retrieve>
+        
+        <ee:transform doc:name="Transform Message" doc:id="08840303-e2e3-400b-a31c-536fe2d8e6c3" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="personalized" ><![CDATA[%dw 2.0
+output application/java
+---
+if (vars.personalized == 'ZERO')
+	{
+		personalized: false
+	}
+else
+	vars.personalized
+]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<os:clear doc:name="Clear everything (AKA starts a new game)" doc:id="39c28f40-4b13-4c22-b4d3-ef0041203c7f" objectStore="ObjectStore" />
+        
         <os:store doc:name="Store the new choices" doc:id="54dd4c3f-1070-4193-a430-173f9c88858d" key="choices" objectStore="ObjectStore" />
+		<os:store doc:name="Storing personalized info" key="personalized" objectStore="ObjectStore">
+			<os:value ><![CDATA[#[vars.personalized]]]></os:value>
+		</os:store>
         <ee:transform doc:name="Transform Message" doc:id="86576c77-6d82-46f9-b33c-e16f1ff7f296">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -198,11 +223,11 @@ output application/java
                 <ee:set-variable variableName="artPieces"><![CDATA[%dw 2.0
 output application/java
 ---
-payload.artPieces]]></ee:set-variable>
+payload.artPieces default ["", "", ""]]]></ee:set-variable>
                 <ee:set-variable variableName="paintColors"><![CDATA[%dw 2.0
 output application/java
 ---
-payload.paintColors]]></ee:set-variable>
+payload.paintColors default ["", "", ""]]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
         <scripting:execute engine="groovy" doc:name="Execute" doc:id="9ecdfba0-365d-4c25-a796-6e1824b34b36" target="choicesArray">
@@ -385,22 +410,7 @@ output application/java
         </ee:transform>
     </flow>
     <flow name="post:\recommendations:social-recommendations-api-config">
-		<choice doc:name="Choice" doc:id="9d2cf748-bb62-4736-893d-b4176eda0edd" >
-			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
-				<flow-ref doc:name="postRecommendationsSub_Flow" doc:id="ab25d3aa-6a22-4f2a-abcf-483cbf31e970" name="postRecommendationsSub_Flow"/>
-			</when>
-			<otherwise >
-				<ee:transform doc:name="Forbiden" doc:id="81161568-8c40-4eb4-bf0d-ad569f6c697a" >
-					<ee:message />
-					<ee:variables >
-						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
-output application/java
----
-403]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</otherwise>
-		</choice>
+		<flow-ref doc:name="postRecommendationsSub_Flow" doc:id="d6f993b9-1428-49ad-baa2-e0b492d5caad" name="postRecommendationsSub_Flow"/>
     </flow>
     <sub-flow name="postRecommendationsSub_Flow" doc:id="12d19a4b-400c-4054-886a-7e1f0b4d4bc1" >
     		<ee:transform doc:name="Transform Message" doc:id="f594df65-d592-4a4a-8189-f8c3c56e03c8">
