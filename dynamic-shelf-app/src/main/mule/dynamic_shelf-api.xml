@@ -355,7 +355,15 @@ output application/java
         <os:retrieve doc:name="Retrieve userDetected" doc:id="5f228482-bfef-491e-b4be-6bb03f156608" key="userDetected" objectStore="Object_store" target="userDetected">
             <os:default-value><![CDATA[false]]></os:default-value>
         </os:retrieve>
-        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="673e7163-77eb-44ab-8241-643cb828bb2a">
+        <os:retrieve doc:name="Retrieve display" doc:id="5f228482-bfef-491e-b4be-6bb03f156608" key="display" objectStore="Object_store" target="display">
+			<os:default-value><![CDATA[false]]></os:default-value>
+		</os:retrieve>
+		<ee:transform xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd 
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="673e7163-77eb-44ab-8241-643cb828bb2a">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -365,7 +373,8 @@ output application/json
   fanOn: vars.fanOn as Boolean,
   saying: trim(vars.saying as String),
   droneDelivered: vars.droneDelivered as Boolean,
-  userRecognized: vars.userDetected as Boolean
+  userRecognized: vars.userDetected as Boolean,
+  display: vars.display as Boolean
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
@@ -407,6 +416,9 @@ output application/java
 		</choice>
     </flow>
     <sub-flow name="putDynamicShelfDisplaySub_Flow" doc:id="8a18d0e1-761b-47dd-a9ef-aab4d9066dc8" >
+		<os:store doc:name="Store" doc:id="8b6644db-bcb4-4d79-bb3b-ff31b2557820" key="display" objectStore="Object_store">
+			<os:value><![CDATA[#[payload.activated]]]></os:value>
+		</os:store>
 		<logger level="INFO" message="put:\dynamic_shelf\display:application\json:dynamic_shelf-api-config" doc:name="Logger" />
 	</sub-flow>
 	<flow name="delete:\dynamic_shelf\items:dynamic_shelf-api-config">
