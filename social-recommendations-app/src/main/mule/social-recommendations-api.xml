@@ -184,16 +184,13 @@ output application/java
 payload]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
-        
         <os:retrieve doc:name="Retrieve personalized info" key="personalized" objectStore="ObjectStore" target="personalized">
-			<os:default-value ><![CDATA[ZERO]]></os:default-value>
-		</os:retrieve>
-        
-        <ee:transform doc:name="Transform Message" doc:id="08840303-e2e3-400b-a31c-536fe2d8e6c3" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="personalized" ><![CDATA[%dw 2.0
+            <os:default-value><![CDATA[ZERO]]></os:default-value>
+        </os:retrieve>
+        <ee:transform doc:name="Transform Message" doc:id="08840303-e2e3-400b-a31c-536fe2d8e6c3">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="personalized"><![CDATA[%dw 2.0
 output application/java
 ---
 if (vars.personalized == 'ZERO')
@@ -201,16 +198,14 @@ if (vars.personalized == 'ZERO')
 		personalized: false
 	}
 else
-	vars.personalized
-]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<os:clear doc:name="Clear everything (AKA starts a new game)" doc:id="39c28f40-4b13-4c22-b4d3-ef0041203c7f" objectStore="ObjectStore" />
-        
+	vars.personalized]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <os:clear doc:name="Clear everything (AKA starts a new game)" doc:id="39c28f40-4b13-4c22-b4d3-ef0041203c7f" objectStore="ObjectStore" />
         <os:store doc:name="Store the new choices" doc:id="54dd4c3f-1070-4193-a430-173f9c88858d" key="choices" objectStore="ObjectStore" />
-		<os:store doc:name="Storing personalized info" key="personalized" objectStore="ObjectStore">
-			<os:value ><![CDATA[#[vars.personalized]]]></os:value>
-		</os:store>
+        <os:store doc:name="Storing personalized info" key="personalized" objectStore="ObjectStore">
+            <os:value><![CDATA[#[vars.personalized]]]></os:value>
+        </os:store>
         <ee:transform doc:name="Transform Message" doc:id="86576c77-6d82-46f9-b33c-e16f1ff7f296">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -410,10 +405,43 @@ output application/java
         </ee:transform>
     </flow>
     <flow name="post:\recommendations:social-recommendations-api-config">
-		<flow-ref doc:name="postRecommendationsSub_Flow" doc:id="d6f993b9-1428-49ad-baa2-e0b492d5caad" name="postRecommendationsSub_Flow"/>
+        <os:retrieve doc:name="Retrieve blocked status" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="blocked" objectStore="ObjectStore" target="blockStatus">
+			<os:default-value><![CDATA[ZERO]]></os:default-value>
+		</os:retrieve>
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="7a2099b4-1a0f-4e93-95ee-92fde03d4efe">
+            <ee:message>
+            </ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="isBlocked" ><![CDATA[%dw 2.0
+output application/java
+---
+if (vars.blockStatus == 'ZERO')
+	true
+else
+	vars.blockStatus.blocked]]></ee:set-variable>
+			</ee:variables>
+        </ee:transform>
+        
+        <choice doc:name="Choice" doc:id="c84778bd-0b87-4f3b-8fce-30c60128137c" >
+			<when expression="#[vars.isBlocked == false]" >
+				<flow-ref doc:name="postRecommendationsSub_Flow" doc:id="d6f993b9-1428-49ad-baa2-e0b492d5caad" name="postRecommendationsSub_Flow" />
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="b7938cee-788b-4400-9a2b-af02d333abd2" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	msg: "The voting session is blocked right at this moment."
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
     </flow>
-    <sub-flow name="postRecommendationsSub_Flow" doc:id="12d19a4b-400c-4054-886a-7e1f0b4d4bc1" >
-    		<ee:transform doc:name="Transform Message" doc:id="f594df65-d592-4a4a-8189-f8c3c56e03c8">
+    <sub-flow name="postRecommendationsSub_Flow" doc:id="12d19a4b-400c-4054-886a-7e1f0b4d4bc1">
+        <ee:transform doc:name="Transform Message" doc:id="f594df65-d592-4a4a-8189-f8c3c56e03c8">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/java
@@ -512,7 +540,7 @@ output application/java
             </otherwise>
         </choice>
     </sub-flow>
-	<flow name="get:\recommendations\summary\top:social-recommendations-api-config">
+    <flow name="get:\recommendations\summary\top:social-recommendations-api-config">
         <os:retrieve doc:name="getChoicesArray" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="choicesArray" objectStore="ObjectStore">
             <os:default-value><![CDATA[ZERO]]></os:default-value>
         </os:retrieve>
@@ -565,9 +593,75 @@ output application/java
         </ee:transform>
     </flow>
     <flow name="put:\status:application\json:social-recommendations-api-config">
-		<choice doc:name="Choice" doc:id="a8f07320-c365-4bfa-934e-571e1d160288" >
+        <choice doc:name="Choice" doc:id="a8f07320-c365-4bfa-934e-571e1d160288">
+            <when expression="#[attributes.headers.authorization == vars.magicPASSWD]">
+                <flow-ref doc:name="putStatusSub_Flow" doc:id="e596bddb-9c32-4a98-b19e-603cf3a96b56" name="putStatusSub_Flow" />
+            </when>
+            <otherwise>
+                <ee:transform doc:name="Forbiden" doc:id="81161568-8c40-4eb4-bf0d-ad569f6c697a">
+                    <ee:message />
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
+output application/java
+---
+403]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </otherwise>
+        </choice>
+    </flow>
+    <sub-flow name="putStatusSub_Flow" doc:id="0f9cd8b6-1ed0-4bdc-bf81-c65db63107ba">
+        <ee:transform doc:name="saving the payload" doc:id="7ae2203a-4d11-4353-a729-ba4217f83be0">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="payloadbkp"><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform doc:name="Transform Message" doc:id="f884de40-2449-43ee-b389-1b12975edc52">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+	personalized: payload.personalized default false 
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <os:store doc:name="Storing personalized info" doc:id="d34c9283-004a-4846-b90a-661e3c52bde5" key="personalized" objectStore="ObjectStore" />
+        <ee:transform doc:name="Transform Message" doc:id="18dadbbd-2618-48a4-b3ee-c99608e8a3bc">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.payloadbkp]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </sub-flow>
+    <flow name="get:\status:social-recommendations-api-config">
+        <os:retrieve doc:name="Retrieve personalized info" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="personalized" objectStore="ObjectStore">
+            <os:default-value><![CDATA[ZERO]]></os:default-value>
+        </os:retrieve>
+        <ee:transform doc:name="Transform Message" doc:id="0a3fdc26-5219-482d-a352-9ad15f9e6534">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+if (payload == 'ZERO')
+	{
+		personalized: false
+	}
+else
+	payload]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="put:\recommendations\block:application\json:social-recommendations-api-config">
+		<choice doc:name="Choice" doc:id="81c19685-6e0c-4219-93d1-32e4bcb055cb" >
 			<when expression="#[attributes.headers.authorization == vars.magicPASSWD]" >
-				<flow-ref doc:name="putStatusSub_Flow" doc:id="e596bddb-9c32-4a98-b19e-603cf3a96b56" name="putStatusSub_Flow"/>
+				<flow-ref doc:name="putRecomendationsBlockSub_Flow" doc:id="e596bddb-9c32-4a98-b19e-603cf3a96b56" name="putRecomendationsBlockSub_Flow" />
 			</when>
 			<otherwise >
 				<ee:transform doc:name="Forbiden" doc:id="81161568-8c40-4eb4-bf0d-ad569f6c697a" >
@@ -582,54 +676,52 @@ output application/java
 			</otherwise>
 		</choice>
     </flow>
-    <sub-flow name="putStatusSub_Flow" doc:id="0f9cd8b6-1ed0-4bdc-bf81-c65db63107ba" >
-		<ee:transform doc:name="saving the payload" doc:id="7ae2203a-4d11-4353-a729-ba4217f83be0">
-			<ee:message>
-			</ee:message>
-			<ee:variables>
-				<ee:set-variable variableName="payloadbkp"><![CDATA[%dw 2.0
+    <sub-flow name="putRecomendationsBlockSub_Flow" doc:id="70029499-634a-4e3a-b704-925204f13b10" >
+    <ee:transform doc:name="saving the payload" doc:id="7ae2203a-4d11-4353-a729-ba4217f83be0">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="payloadbkp"><![CDATA[%dw 2.0
 output application/java
 ---
 payload]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<ee:transform doc:name="Transform Message" doc:id="f884de40-2449-43ee-b389-1b12975edc52">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+            </ee:variables>
+        </ee:transform>
+        <ee:transform doc:name="Transform Message" doc:id="f884de40-2449-43ee-b389-1b12975edc52">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 {
-	personalized: payload.personalized default false 
+	blocked: payload.blocked default false 
 }]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-		<os:store doc:name="Storing personalized info" doc:id="d34c9283-004a-4846-b90a-661e3c52bde5" key="personalized" objectStore="ObjectStore">
-		</os:store>
-		<ee:transform doc:name="Transform Message" doc:id="18dadbbd-2618-48a4-b3ee-c99608e8a3bc">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+            </ee:message>
+        </ee:transform>
+        <os:store doc:name="Storing blocked status" doc:id="d34c9283-004a-4846-b90a-661e3c52bde5" key="blocked" objectStore="ObjectStore" />
+        <ee:transform doc:name="Transform Message" doc:id="18dadbbd-2618-48a4-b3ee-c99608e8a3bc">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 vars.payloadbkp]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-	</sub-flow>
-	<flow name="get:\status:social-recommendations-api-config">
-		<os:retrieve doc:name="Retrieve personalized info" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="personalized" objectStore="ObjectStore">
-			<os:default-value ><![CDATA[ZERO]]></os:default-value>
+            </ee:message>
+        </ee:transform>
+    </sub-flow>
+	<flow name="get:\recommendations\block:social-recommendations-api-config">
+        <os:retrieve doc:name="Retrieve blocked status" doc:id="7b06b806-af3b-432f-9bca-ed39cc9713d8" key="blocked" objectStore="ObjectStore">
+			<os:default-value><![CDATA[ZERO]]></os:default-value>
 		</os:retrieve>
-		<ee:transform doc:name="Transform Message" doc:id="0a3fdc26-5219-482d-a352-9ad15f9e6534" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="7a2099b4-1a0f-4e93-95ee-92fde03d4efe">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 if (payload == 'ZERO')
 	{
-		personalized: false
+	  blocked: true
 	}
 else
 	payload]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
+            </ee:message>
+        </ee:transform>
     </flow>
 </mule>

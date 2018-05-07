@@ -8,6 +8,9 @@ uses:
   traits: exchange_modules/a6d4cdc7-ecb0-4315-a6a6-216c71ba0b54/commons-traits/1.1.0/traits.raml
 
 types:
+  IsVotesBlocked:
+    properties:
+      blocked: boolean
   ArtPiece:
     type: string
   PaintColor:
@@ -91,6 +94,27 @@ types:
       example: []
     responses:
       200:
+
+  /block:
+    put:
+      description: |
+        This operation changes the blocking vote status
+      is: [ traits.secure ]
+      body: 
+        type: IsVotesBlocked
+        example:
+          blocked: true
+      responses:
+        204:
+    get:
+      description: |
+        Retrieve the current block status
+      responses:
+        200:
+          body:
+            type: IsVotesBlocked
+            example:
+              blocked: false
   /summary:
     get:
       responses: 
