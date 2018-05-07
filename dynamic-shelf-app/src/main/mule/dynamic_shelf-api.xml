@@ -228,6 +228,23 @@ output application/java
 	deviceName : vars.deviceName
 }]]]></http:uri-params>
 		</http:request>
+		<choice doc:name="Choice" doc:id="8618b4e6-166f-4eff-9083-8389253f9ab4" >
+			<when expression="#[vars.activated == true]" >
+				<ee:transform doc:name="Transform Message" doc:id="179cbdb4-7547-411b-90db-5864d023ff34" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	itemId: "87623",
+	location: 1,
+	change: "added"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<flow-ref doc:name="postDynamicShelfItemUpdatesSub_Flow" doc:id="61f45204-d417-4c1f-9176-168adc9e466e" name="postDynamicShelfItemUpdatesSub_Flow"/>
+			</when>
+		</choice>
 		<logger level="INFO" message="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config" doc:name="Logger"/>
     </sub-flow>
     <sub-flow name="postDynamicShelfItemUpdatesSub_Flow" doc:id="bede2672-8364-4e21-806f-e46b90bed415">
@@ -465,6 +482,6 @@ output application/java
         <os:store doc:name="Store" doc:id="8b6644db-bcb4-4d79-bb3b-ff31b2557820" key="userDetected" objectStore="Object_store">
             <os:value><![CDATA[#[payload.activated]]]></os:value>
         </os:store>
-        <logger level="INFO" message="put:\dynamic_shelf\userDetected:application\json:dynamic_shelf-api-config" />
+		<logger level="INFO" message="put:\dynamic_shelf\userDetected:application\json:dynamic_shelf-api-config" />
     </sub-flow>
 </mule>

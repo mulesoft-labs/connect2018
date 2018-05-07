@@ -130,14 +130,20 @@ output application/json
         </error-handler>
     </flow>
     <flow name="post:\faceCandidates:application\json:customer_recognition-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="897ec406-9a20-437e-95fe-e73365c5dc5e">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
+var image = payload.imageBase64 default 'ZERO'
 ---
-{
-  customerRecognized: false
-}]]></ee:set-payload>
+if (image == 'handsomeuri')
+	{
+	  customerRecognized: true
+	}
+else
+	{
+	  customerRecognized: false
+	}]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>
