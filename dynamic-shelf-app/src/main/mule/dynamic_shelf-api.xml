@@ -229,8 +229,8 @@ output application/java
 }]]]></http:uri-params>
 		</http:request>
 		<choice doc:name="Choice" doc:id="8618b4e6-166f-4eff-9083-8389253f9ab4" >
-			<when expression="#[vars.activated == true]" >
-				<ee:transform doc:name="Transform Message" doc:id="179cbdb4-7547-411b-90db-5864d023ff34" >
+			<when expression="#[vars.activated == true]">
+                <ee:transform doc:name="Transform Message" doc:id="179cbdb4-7547-411b-90db-5864d023ff34" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/java
@@ -375,6 +375,22 @@ output application/java
         <os:retrieve doc:name="Retrieve display" doc:id="5f228482-bfef-491e-b4be-6bb03f156608" key="display" objectStore="Object_store" target="display">
 			<os:default-value><![CDATA[false]]></os:default-value>
 		</os:retrieve>
+		<os:retrieve doc:name="Retrieve shelvesStatus" doc:id="4450d72f-93a7-4051-9342-ff0f931c8b45" key="shelvesStatus" objectStore="Object_store" target="shelvesStatus">
+			<os:default-value><![CDATA[false]]></os:default-value>
+		</os:retrieve>
+		<ee:transform doc:name="Transform Message" doc:id="46aff14a-bc50-4aa6-a039-2ac3d1528d12" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="shevesActivated" ><![CDATA[%dw 2.0
+output application/java
+---
+if (vars.shelvesStatus == 'false')
+	"false"
+else
+	vars.shelvesStatus.activated]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<ee:transform xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
@@ -391,7 +407,8 @@ output application/json
   saying: trim(vars.saying as String),
   droneDelivered: vars.droneDelivered as Boolean,
   userRecognized: vars.userDetected as Boolean,
-  display: vars.display as Boolean
+  display: vars.display as Boolean,
+  shelvesActivated: vars.shevesActivated as Boolean
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
@@ -482,6 +499,62 @@ output application/java
         <os:store doc:name="Store" doc:id="8b6644db-bcb4-4d79-bb3b-ff31b2557820" key="userDetected" objectStore="Object_store">
             <os:value><![CDATA[#[payload.activated]]]></os:value>
         </os:store>
-		<logger level="INFO" message="put:\dynamic_shelf\userDetected:application\json:dynamic_shelf-api-config" />
+        <logger level="INFO" message="put:\dynamic_shelf\userDetected:application\json:dynamic_shelf-api-config" />
     </sub-flow>
+    <flow name="put:\dynamic_shelf\shelvesStatus:application\json:dynamic_shelf-api-config">
+		<choice doc:name="Choice" doc:id="7ee0a037-2f23-4834-91e3-093714c76830" >
+			<when expression="#[attributes.headers.authorization == vars.magicPASSWD ]" >
+				<flow-ref doc:name="putDynamic_shelfShelvesStatusSub_Flow" doc:id="4a7dcafd-3635-49e7-910b-571e523a3b91" name="putDynamic_shelfShelvesStatusSub_Flow" />
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Forbiden" doc:id="af3bd0e5-86c9-4ad6-a239-d4ca1b5cb842" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+403]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</otherwise>
+		</choice>
+    </flow>
+    <sub-flow name="putDynamic_shelfShelvesStatusSub_Flow"  >
+    		
+        <ee:transform doc:name="Transform Message" doc:id="699dad54-eabe-46f9-983f-98b7d8ae0474">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+	activated: payload.activated default false 
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <os:store doc:name="Storing shelvesStatus" key="shelvesStatus" objectStore="Object_store" />
+        
+    </sub-flow>
+    <flow name="get:\dynamic_shelf\shelvesStatus:dynamic_shelf-api-config">
+        <os:retrieve doc:name="Retrieve shelvesStatus" key="shelvesStatus" objectStore="Object_store">
+			<os:default-value ><![CDATA[ZERO]]></os:default-value>
+		</os:retrieve>
+		<ee:transform xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd 
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="576f09da-60ee-41e9-8c48-e56eb8651c16">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+if (payload == 'ZERO')
+	{
+	  activated: false
+	}
+else
+	payload]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
 </mule>

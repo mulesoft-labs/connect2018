@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<munit:config name="dynamic_shelf-api-test-suite.xml" />
+	<munit:test name="dynamic_shelf-api-test-suite-put:\dynamic_shelf\droneDelivered:application\json:dynamic_shelf-api-configTest" description="Test" doc:id="26af233c-9902-4c03-b6d6-020e4cd19ead" >
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="39167031-ae7b-4031-8673-eed07b632c3f" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "activated": true
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="Flow-ref to put:\dynamic_shelf\droneDelivered:application\json:dynamic_shelf-api-config" doc:id="642bbea2-6f49-4d86-8ba4-76a6278b0e1a" name="put:\dynamic_shelf\droneDelivered:application\json:dynamic_shelf-api-config"/>
+			<logger level="INFO" doc:name="Logger" doc:id="f3cccdc9-5635-4984-8b80-ef3585a6dfc4" message="&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;"/>
+			<logger level="INFO" doc:name="Logger" doc:id="0f3e543f-8708-42b5-904f-2659bb21736f" message="#[payload]"/>
+			<logger level="INFO" doc:name="Logger" doc:id="a4060e60-3037-4a58-811d-48b6712296c1" message="#[vars.httpStatus]"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="dynamic_shelf-api-test-suite-put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-configTest" description="Test" doc:id="b98b091c-e26a-44ec-a0a3-cc39745ff451" >
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="39167031-ae7b-4031-8673-eed07b632c3f">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "activated": true
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config" doc:id="f5dc1155-6492-4a4a-b02d-63af18e464bc" name="put:\dynamic_shelf\fanOn:application\json:dynamic_shelf-api-config"/>
+			<logger level="INFO" doc:name="Logger" doc:id="f3cccdc9-5635-4984-8b80-ef3585a6dfc4" message="&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;" />
+			<logger level="INFO" doc:name="Logger" doc:id="0f3e543f-8708-42b5-904f-2659bb21736f" message="#[payload]" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="dynamic_shelf-api-test-suite-put:\dynamic_shelf\itemUpdates:application\json:dynamic_shelf-api-configTest" description="Test" doc:id="5044b2cd-ab75-41c2-a137-5658cb636e27" >
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="39167031-ae7b-4031-8673-eed07b632c3f">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "itemId": 7890001,
+  "location": 1,
+  "change": "removed"
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="Flow-ref to post:\dynamic_shelf\itemUpdates:application\json:dynamic_shelf-api-config" doc:id="937b4bea-b0b0-4421-b463-9fbe7246bc57" name="post:\dynamic_shelf\itemUpdates:application\json:dynamic_shelf-api-config"/>
+			<logger level="INFO" doc:name="Logger" doc:id="f3cccdc9-5635-4984-8b80-ef3585a6dfc4" message="&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;" />
+			<logger level="INFO" doc:name="Logger" doc:id="0f3e543f-8708-42b5-904f-2659bb21736f" message="#[payload]" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="dynamic_shelf-api-test-suite-put:\dynamic_shelf\saying:application\json:dynamic_shelf-api-configTest" description="Test" doc:id="9ed4251f-b5db-467c-8767-252e7861a3cd" >
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="39167031-ae7b-4031-8673-eed07b632c3f">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "text": "saying something..."
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="put:\dynamic_shelf\saying:application\json:dynamic_shelf-api-config" doc:id="46a8f42d-a98b-4a71-93f2-dd267b150442" name="put:\dynamic_shelf\saying:application\json:dynamic_shelf-api-config"/>
+			<logger level="INFO" doc:name="Logger" doc:id="f3cccdc9-5635-4984-8b80-ef3585a6dfc4" message="&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;" />
+			<logger level="INFO" doc:name="Logger" doc:id="0f3e543f-8708-42b5-904f-2659bb21736f" message="#[payload]" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="dynamic_shelf-api-test-suite-get:\dynamic_shelf\status:dynamic_shelf-api-configTest" description="Test" doc:id="29a937f2-d62e-4914-82e3-7b4e2bea3869" >
+		<munit:execution >
+			<flow-ref doc:name="get:\dynamic_shelf\status:dynamic_shelf-api-config" doc:id="1a08b045-0dd5-4903-a335-e5ac7b800b22" name="get:\dynamic_shelf\status:dynamic_shelf-api-config"/>
+			<logger level="INFO" doc:name="Logger" doc:id="f3cccdc9-5635-4984-8b80-ef3585a6dfc4" message="&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;" />
+			<logger level="INFO" doc:name="Logger" doc:id="0f3e543f-8708-42b5-904f-2659bb21736f" message="#[payload]" />
+		</munit:execution>
+	</munit:test>
+
+</mule>
