@@ -391,6 +391,22 @@ else
 	vars.shelvesStatus.activated]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<os:retrieve doc:name="Retrieve userRecognized" doc:id="4450d72f-93a7-4051-9342-ff0f931c8b45" key="userRecognized" objectStore="Object_store" target="userRecognizedStatus">
+			<os:default-value><![CDATA[false]]></os:default-value>
+		</os:retrieve>
+		<ee:transform doc:name="Transform Message" doc:id="46aff14a-bc50-4aa6-a039-2ac3d1528d12" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="userRecognized" ><![CDATA[%dw 2.0
+output application/java
+---
+if (vars.userRecognizedStatus == 'false')
+	"false"
+else
+	vars.userRecognizedStatus.activated]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<ee:transform xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
@@ -406,9 +422,10 @@ output application/json
   fanOn: vars.fanOn as Boolean,
   saying: trim(vars.saying as String),
   droneDelivered: vars.droneDelivered as Boolean,
-  userRecognized: vars.userDetected as Boolean,
+  userDetected: vars.userDetected as Boolean,
   display: vars.display as Boolean,
-  shelvesActivated: vars.shevesActivated as Boolean
+  shelvesActivated: vars.shevesActivated as Boolean,
+  userRecognized: vars.userRecognized as Boolean
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
@@ -536,6 +553,60 @@ output application/java
     </sub-flow>
     <flow name="get:\dynamic_shelf\shelvesStatus:dynamic_shelf-api-config">
         <os:retrieve doc:name="Retrieve shelvesStatus" key="shelvesStatus" objectStore="Object_store">
+			<os:default-value ><![CDATA[ZERO]]></os:default-value>
+		</os:retrieve>
+		<ee:transform xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd 
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="576f09da-60ee-41e9-8c48-e56eb8651c16">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+if (payload == 'ZERO')
+	{
+	  activated: false
+	}
+else
+	payload]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="put:\dynamic_shelf\userRecognized:application\json:dynamic_shelf-api-config">
+        <choice doc:name="Choice">
+			<when expression="#[attributes.headers.authorization == vars.magicPASSWD ]" >
+				<flow-ref doc:name="putDynamic_shelfUserRecognizedSub_Flow"  name="putDynamic_shelfUserRecognizedSub_Flow" />
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Forbiden" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+403]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</otherwise>
+		</choice>
+    </flow>
+    <sub-flow name="putDynamic_shelfUserRecognizedSub_Flow" >
+    		<ee:transform doc:name="Transform Message" >
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+	activated: payload.activated default false 
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <os:store doc:name="Storing userRecognized" key="userRecognized" objectStore="Object_store" />
+    </sub-flow>
+	<flow name="get:\dynamic_shelf\userRecognized:dynamic_shelf-api-config">
+        <os:retrieve doc:name="Retrieve userRecognized" key="userRecognized" objectStore="Object_store">
 			<os:default-value ><![CDATA[ZERO]]></os:default-value>
 		</os:retrieve>
 		<ee:transform xsi:schemaLocation="
