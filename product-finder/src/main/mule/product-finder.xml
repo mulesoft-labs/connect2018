@@ -160,7 +160,17 @@ vars.fullProductList]]></ee:set-payload>
     </flow>
     <sub-flow name="build_full_product_Flow" doc:id="97aaf00e-c810-40fe-928e-545bb21c31f1" >
 		<catalog-api:get-product-by-product-id doc:name="Get product by product id" doc:id="c48f9187-6d05-4164-a84f-e60f9f47602c" product-id="#[vars.productID]" config-ref="Catalog_API_Config" target="productData" targetValue="#[payload as Object]" />
-		<inventory-api:get-inventory-by-product-id doc:name="Get inventory by product id" doc:id="30edf8ad-7c79-4607-ad42-fa842aa8309e" config-ref="Inventory_API_Config" product-id="#[vars.productData.id]" target="inventoryData" targetValue="#[payload as Object]" />
+		<ee:transform doc:name="Transform Message" doc:id="2d346a3a-4338-43a4-9fc2-9ca1082b3b19" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	id: vars.productData.id default 123
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<inventory-api:get-inventory-by-product-id doc:name="Get inventory by product id" doc:id="30edf8ad-7c79-4607-ad42-fa842aa8309e" config-ref="Inventory_API_Config" product-id="#[payload.id]" target="inventoryData" targetValue="#[payload as Object]" />
 		<location-api:get-location-by-location-id doc:name="Get location by location id" doc:id="3eb44293-ceb9-4a8c-9d61-873f04809646" config-ref="Location_API_Config" location-id="#[vars.inventoryData.location_id]" target="locationData" targetValue="#[payload as Object]" />
 		<ee:transform doc:name="Build complete product data" doc:id="e1976893-0663-41e8-bb31-7158d26c175d">
                 <ee:message >
