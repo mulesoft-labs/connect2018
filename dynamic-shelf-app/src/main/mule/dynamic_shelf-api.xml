@@ -7,7 +7,7 @@
             </tls:context>
         </http:listener-connection>
     </http:listener-config>
-    <apikit:config name="dynamic_shelf-api-config" raml="dynamic_shelf-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="dynamic_shelf-api-config" raml="dynamic_shelf-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" disableValidations="true"/>
     <global-property doc:name="Global Property" doc:id="5cc586ba-fe96-4a69-97b4-d30d74cebb79" name="https.port" value="8082" />
     <os:object-store name="Object_store" doc:name="Object store" doc:id="ad8f1fac-e718-4958-8c1f-09768991633f" persistent="false" />
     <api-gateway:autodiscovery apiId="12136280" doc:name="API Autodiscovery" doc:id="2663210a-2bec-42a9-aac5-99dc882264a3" flowRef="dynamic_shelf-api-main" />
@@ -37,7 +37,7 @@ output application/java
         </ee:transform>
         <apikit:router config-ref="dynamic_shelf-api-config" doc:name="APIkit Router" />
         <error-handler>
-            <on-error-propagate type="APIKIT:BAD_REQUEST">
+            <on-error-propagate type="APIKIT:BAD_REQUEST" doc:name="On Error Propagate">
                 <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
@@ -150,13 +150,13 @@ output application/json
                 <flow-ref doc:name="putDynamicShelfDroneDeliveredSub_Flow" name="putDynamicShelfDroneDeliveredSub_Flow" />
             </when>
             <otherwise>
-                <ee:transform doc:name="Forbiden" doc:id="672ee0ca-c09c-4afb-a259-19f061a2ac99">
+                <ee:transform doc:name="Unauthorized" doc:id="672ee0ca-c09c-4afb-a259-19f061a2ac99">
                     <ee:message />
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </otherwise>
@@ -174,13 +174,13 @@ output application/java
                 <flow-ref doc:name="putDynamicShelfFanOnSub_Flow" name="putDynamicShelfFanOnSub_Flow" />
             </when>
             <otherwise>
-                <ee:transform doc:name="Forbiden" doc:id="e5d894bd-8726-4d18-994c-36446e9a6263">
+                <ee:transform doc:name="Unauthorized" doc:id="e5d894bd-8726-4d18-994c-36446e9a6263">
                     <ee:message />
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </otherwise>
@@ -267,7 +267,7 @@ payload.itemId]]></ee:set-variable>
         </ee:transform>
         <os:retrieve doc:name="Retrieve" doc:id="b58a203f-4428-4e85-b766-db84fbec83d1" key="locations" objectStore="Object_store" target="locations">
             <os:default-value><![CDATA[#[
-			output application/java 
+			output application/java
 			---
 			""
 ]]]></os:default-value>
@@ -334,13 +334,13 @@ vars.locations[vars.location] = productString</scripting:code>
                 <flow-ref doc:name="putDynamicShelfSayingSub_Flow" name="putDynamicShelfSayingSub_Flow" />
             </when>
             <otherwise>
-                <ee:transform doc:name="Forbiden" doc:id="5eaaa658-9e04-4b49-b5ca-c3e6db583198">
+                <ee:transform doc:name="Unauthorized" doc:id="5eaaa658-9e04-4b49-b5ca-c3e6db583198">
                     <ee:message />
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </otherwise>
@@ -364,7 +364,7 @@ output application/java
         </os:retrieve>
         <os:retrieve doc:name="Retrieve locations" doc:id="5766b084-5d54-4334-8051-9ac3619e9cd8" key="locations" objectStore="Object_store" target="locations">
             <os:default-value><![CDATA[#[
-			output application/json 
+			output application/json
 			---
 			["","","","","",""]
 ]]]></os:default-value>
@@ -408,10 +408,10 @@ else
 			</ee:variables>
 		</ee:transform>
 		<ee:transform xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd 
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="673e7163-77eb-44ab-8241-643cb828bb2a">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -436,13 +436,13 @@ output application/json
                 <flow-ref doc:name="putDynamicShelfUserDetectedSub_Flow" name="putDynamicShelfUserDetectedSub_Flow" />
             </when>
             <otherwise>
-                <ee:transform doc:name="Forbiden" doc:id="fd236541-ac60-47e0-9bd3-c32d5db23ac5">
+                <ee:transform doc:name="Unauthorized" doc:id="fd236541-ac60-47e0-9bd3-c32d5db23ac5">
                     <ee:message />
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </otherwise>
@@ -454,13 +454,13 @@ output application/java
 				<flow-ref doc:name="putDynamicShelfDisplaySub_Flow" doc:id="4a7dcafd-3635-49e7-910b-571e523a3b91" name="putDynamicShelfDisplaySub_Flow"/>
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Forbiden" >
+				<ee:transform doc:name="Unauthorized" >
 					<ee:message />
 					<ee:variables >
 						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</otherwise>
@@ -478,13 +478,13 @@ output application/java
 				<flow-ref doc:name="deleteItensSubiFlow" doc:id="cb8e7be1-6a32-42b6-aa0b-a5fc66c82358" name="deleteItensSubiFlow"/>
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Forbiden" doc:id="fd236541-ac60-47e0-9bd3-c32d5db23ac5" >
+				<ee:transform doc:name="Unauthorized" doc:id="fd236541-ac60-47e0-9bd3-c32d5db23ac5" >
 					<ee:message />
 					<ee:variables >
 						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</otherwise>
@@ -500,13 +500,13 @@ output application/java
                 <flow-ref doc:name="postDynamicShelfItemUpdatesSub_Flow" name="postDynamicShelfItemUpdatesSub_Flow" />
             </when>
             <otherwise>
-                <ee:transform doc:name="Forbiden" >
+                <ee:transform doc:name="Unauthorized" >
                     <ee:message />
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </otherwise>
@@ -524,42 +524,42 @@ output application/java
 				<flow-ref doc:name="putDynamic_shelfShelvesStatusSub_Flow" doc:id="4a7dcafd-3635-49e7-910b-571e523a3b91" name="putDynamic_shelfShelvesStatusSub_Flow" />
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Forbiden" doc:id="af3bd0e5-86c9-4ad6-a239-d4ca1b5cb842" >
+				<ee:transform doc:name="Unauthorized" doc:id="af3bd0e5-86c9-4ad6-a239-d4ca1b5cb842" >
 					<ee:message />
 					<ee:variables >
 						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</otherwise>
 		</choice>
     </flow>
     <sub-flow name="putDynamic_shelfShelvesStatusSub_Flow"  >
-    		
+
         <ee:transform doc:name="Transform Message" doc:id="699dad54-eabe-46f9-983f-98b7d8ae0474">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 {
-	activated: payload.activated default false 
+	activated: payload.activated default false
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
         <os:store doc:name="Storing shelvesStatus" key="shelvesStatus" objectStore="Object_store" />
-        
+
     </sub-flow>
     <flow name="get:\dynamic_shelf\shelvesStatus:dynamic_shelf-api-config">
         <os:retrieve doc:name="Retrieve shelvesStatus" key="shelvesStatus" objectStore="Object_store">
 			<os:default-value ><![CDATA[ZERO]]></os:default-value>
 		</os:retrieve>
 		<ee:transform xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd 
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="576f09da-60ee-41e9-8c48-e56eb8651c16">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -580,13 +580,13 @@ else
 				<flow-ref doc:name="putDynamic_shelfUserRecognizedSub_Flow"  name="putDynamic_shelfUserRecognizedSub_Flow" />
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Forbiden" >
+				<ee:transform doc:name="Unauthorized" >
 					<ee:message />
 					<ee:variables >
 						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</otherwise>
@@ -599,7 +599,7 @@ output application/java
 output application/java
 ---
 {
-	activated: payload.activated default false 
+	activated: payload.activated default false
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
@@ -610,10 +610,10 @@ output application/java
 			<os:default-value ><![CDATA[ZERO]]></os:default-value>
 		</os:retrieve>
 		<ee:transform xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd 
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="576f09da-60ee-41e9-8c48-e56eb8651c16">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0

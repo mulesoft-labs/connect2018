@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+    <http:listener-config name="face-recognition-api-httpsListenerConfig" host="0.0.0.0" port="${https.port}" doc:name="HTTP Listener Configuration" protocol="HTTPS">
+        <tls:context>
+            <tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password"/>
+        </tls:context>
+    </http:listener-config>
+    <apikit:config name="face-recognition-api-config" raml="face-recognition-api.raml" consoleEnabled="false" doc:name="Router"/>
+    <global-property name="https.port" value="8082" doc:name="Global Property"/>
+    <flow name="face-recognition-api-main">
+        <http:listener config-ref="face-recognition-api-httpsListenerConfig" path="/api/*" doc:name="HTTP"/>
+        <apikit:router config-ref="face-recognition-api-config" doc:name="APIkit Router"/>
+        <exception-strategy ref="face-recognition-api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    </flow>
+    <flow name="face-recognition-api-console">
+        <http:listener config-ref="face-recognition-api-httpsListenerConfig" path="/console/*" doc:name="HTTP"/>
+        <apikit:console config-ref="face-recognition-api-config" doc:name="APIkit Console"/>
+    </flow>
+    <flow name="get:/collections:face-recognition-api-config">
+        <flow-ref name="get:/collections:image-config" doc:name="get:/collections:image-config"/>
+    </flow>
+    <flow name="get:/faceIndex:face-recognition-api-config">
+        <flow-ref name="get:/faceIndex:image-config" doc:name="get:/faceIndex:image-config"/>
+    </flow>
+    <flow name="get:/loadedImage:face-recognition-api-config">
+        <flow-ref name="get:/loadedImage:image-config" doc:name="get:/loadedImage:image-config"/>
+    </flow>
+    <flow name="get:/bucket/storedImages:face-recognition-api-config">
+        <flow-ref name="get:/bucket/storedImages:image-config" doc:name="get:/bucket/storedImages:image-config"/>
+    </flow>
+    <flow name="get:/collections/{collectionId}:face-recognition-api-config">
+        <flow-ref name="get:/collections/{collectionId}:image-config" doc:name="get:/collections/{collectionId}:image-config"/>
+    </flow>
+    <flow name="get:/bucket/storedImages/{imageId}:face-recognition-api-config">
+        <flow-ref name="get:/bucket/storedImages/{imageId}:image-config" doc:name="get:/bucket/storedImages/{imageId}:image-config"/>
+    </flow>
+    <flow name="post:/collections:face-recognition-api-config">
+        <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+        <set-payload value="&quot;&quot;" doc:name="Set Payload"/>
+    </flow>
+    <flow name="post:/faceIndex:face-recognition-api-config">
+        <flow-ref name="post:/faceIndex:image-config" doc:name="post:/faceIndex:image-config"/>
+    </flow>
+    <flow name="post:/loadImage:face-recognition-api-config">
+        <flow-ref name="post:/loadImage:image-config" doc:name="post:/loadImage:image-config"/>
+    </flow>
+    <flow name="post:/bucket/newImage:application/json:face-recognition-api-config">
+        <flow-ref name="post:/bucket/newImage:image-config" doc:name="post:/bucket/newImage:image-config"/>
+    </flow>
+    <apikit:mapping-exception-strategy name="face-recognition-api-apiKitGlobalExceptionMapping">
+        <apikit:mapping statusCode="404">
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="405">
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="415">
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="406">
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="400">
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+    </apikit:mapping-exception-strategy>
+</mule>

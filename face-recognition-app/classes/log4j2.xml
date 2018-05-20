@@ -10,8 +10,8 @@
 
 
     <Appenders>
-        <RollingFile name="file" fileName="${sys:mule.home}${sys:file.separator}logs${sys:file.separator}connect2017-uridemo-image-analysis-live.log" 
-                 filePattern="${sys:mule.home}${sys:file.separator}logs${sys:file.separator}connect2017-uridemo-image-analysis-live-%i.log">
+        <RollingFile name="file" fileName="${sys:mule.home}${sys:file.separator}logs${sys:file.separator}connect2017-uridemo-image-analysis.log" 
+                 filePattern="${sys:mule.home}${sys:file.separator}logs${sys:file.separator}connect2017-uridemo-image-analysis-%i.log">
             <PatternLayout pattern="%d [%t] %-5p %c - %m%n" />
             <SizeBasedTriggeringPolicy size="10 MB" />
             <DefaultRolloverStrategy max="10"/>

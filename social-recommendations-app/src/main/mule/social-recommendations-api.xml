@@ -7,7 +7,7 @@
             </tls:context>
         </http:listener-connection>
     </http:listener-config>
-    <apikit:config name="social-recommendations-api-config" raml="social-recommendations-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" />
+    <apikit:config name="social-recommendations-api-config" raml="social-recommendations-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" disableValidations="true"/>
     <global-property doc:name="Global Property" doc:id="63d994eb-f3c6-4bbc-a4fa-8f389fb19946" name="https.port" value="8082" />
     <os:object-store name="ObjectStore" doc:name="Object store" doc:id="42b2a3da-c0f9-450d-bdbf-eb2e97e6f8f6" persistent="false" />
     <api-gateway:autodiscovery apiId="11383496" doc:name="API Autodiscovery" doc:id="aac9b3a2-0f31-4e16-bd23-38e90aa7b827" flowRef="social-recommendations-api-main" />
@@ -145,13 +145,13 @@ output application/json
                 <flow-ref doc:name="putChoices-Sub_Flow" doc:id="9eb0351d-0bc5-40c0-a0c2-26683fc8d66a" name="putChoices-Sub_Flow" />
             </when>
             <otherwise>
-                <ee:transform doc:name="Forbiden" doc:id="a3102554-da03-45d1-b95c-62702d4df5f5">
+                <ee:transform doc:name="Unauthorized" doc:id="a3102554-da03-45d1-b95c-62702d4df5f5">
                     <ee:message />
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </otherwise>
@@ -297,13 +297,13 @@ output application/java
                 <flow-ref doc:name="putRecomendations-Sub_Flow" doc:id="ecd6824b-e3e0-4593-b482-02d963cd1ef6" name="putRecomendations-Sub_Flow" />
             </when>
             <otherwise>
-                <ee:transform doc:name="Forbiden" doc:id="81161568-8c40-4eb4-bf0d-ad569f6c697a">
+                <ee:transform doc:name="Unauthorized" doc:id="81161568-8c40-4eb4-bf0d-ad569f6c697a">
                     <ee:message />
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </otherwise>
@@ -421,7 +421,7 @@ else
 	vars.blockStatus.blocked]]></ee:set-variable>
 			</ee:variables>
         </ee:transform>
-        
+
         <choice doc:name="Choice" doc:id="c84778bd-0b87-4f3b-8fce-30c60128137c" >
 			<when expression="#[vars.isBlocked == false]" >
 				<flow-ref doc:name="postRecommendationsSub_Flow" doc:id="d6f993b9-1428-49ad-baa2-e0b492d5caad" name="postRecommendationsSub_Flow" />
@@ -495,7 +495,7 @@ output application/java
             <otherwise>
                 <os:retrieve doc:name="Retrieve current recommendation for the clientId" doc:id="a958fed1-dd40-411d-bce2-5f848c93eca1" key="#[vars.clientId]" objectStore="ObjectStore" target="clientChoice">
                     <os:default-value><![CDATA[#[
-			output application/java 
+			output application/java
 			---
 			""
 ]]]></os:default-value>
@@ -598,13 +598,13 @@ output application/java
                 <flow-ref doc:name="putStatusSub_Flow" doc:id="e596bddb-9c32-4a98-b19e-603cf3a96b56" name="putStatusSub_Flow" />
             </when>
             <otherwise>
-                <ee:transform doc:name="Forbiden" doc:id="81161568-8c40-4eb4-bf0d-ad569f6c697a">
+                <ee:transform doc:name="Unauthorized" doc:id="81161568-8c40-4eb4-bf0d-ad569f6c697a">
                     <ee:message />
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </otherwise>
@@ -626,7 +626,7 @@ payload]]></ee:set-variable>
 output application/java
 ---
 {
-	personalized: payload.personalized default false 
+	personalized: payload.personalized default false
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
@@ -664,13 +664,13 @@ else
 				<flow-ref doc:name="putRecomendationsBlockSub_Flow" doc:id="e596bddb-9c32-4a98-b19e-603cf3a96b56" name="putRecomendationsBlockSub_Flow" />
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Forbiden" doc:id="81161568-8c40-4eb4-bf0d-ad569f6c697a" >
+				<ee:transform doc:name="Unauthorized" doc:id="81161568-8c40-4eb4-bf0d-ad569f6c697a" >
 					<ee:message />
 					<ee:variables >
 						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</otherwise>
@@ -692,7 +692,7 @@ payload]]></ee:set-variable>
 output application/java
 ---
 {
-	blocked: payload.blocked default false 
+	blocked: payload.blocked default false
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>

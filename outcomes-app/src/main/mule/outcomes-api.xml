@@ -8,7 +8,7 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
             </tls:context>
         </http:listener-connection>
     </http:listener-config>
-    <apikit:config name="outcomes-api-config" raml="outcomes-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="outcomes-api-config" raml="outcomes-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" disableValidations="true"/>
     <global-property doc:name="Global Property" doc:id="0be5c505-8094-4927-8e21-2d9e68918103" name="https.port" value="8082" />
     <product-finder:config name="Product_finder_Config" doc:name="Product-finder Config" doc:id="ccc1d812-2f58-445f-a9dd-2ba836e6d450" property_host="product-finder.cloudhub.io" property_basePath="/api" />
     <api-gateway:autodiscovery apiId="12383054" doc:name="API Autodiscovery" doc:id="ea9a5315-57ab-477a-abaf-da3b86a98331" flowRef="outcomes-api-main" />
@@ -151,25 +151,25 @@ output application/json
   id: 612009,
   "type": "tent camping",
   keywords: [
-    "camping", 
+    "camping",
     "outdoor",
-    "tent", 
-    "sleeping bag", 
+    "tent",
+    "sleeping bag",
     "lantern"
   ],
   questions: [
     {
       question: "Where are you going?",
       id: 1001
-    }, 
+    },
     {
       question: "When are you going?",
       id: 1002
-    }, 
+    },
     {
       question: "How many people on your group?",
       id: 1003
-    }, 
+    },
     {
       question: "Any kids on the group?",
       id: 1004
@@ -189,7 +189,7 @@ output application/json
   id: 612010,
   "type": "furniture",
   keywords: [
-    "furniture",    
+    "furniture",
     "kids",
     "bedroom"
   ],
@@ -197,15 +197,15 @@ output application/json
     {
       question: "Are you looking for furniture?",
       id: 1005
-    }, 
+    },
     {
       question: "Ok, The furniture it's for a bedroom?",
       id: 1006
-    }, 
+    },
     {
       question: "What's the age?",
       id: 1007
-    }, 
+    },
     {
       question: "Is it a boy?",
       id: 1008
@@ -260,13 +260,13 @@ output application/java
 				<flow-ref doc:name="postOutcomesSub_Flow" doc:id="974908e5-42af-4ef5-a503-4a7489e5ed85" name="postOutcomesSub_Flow"/>
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Forbiden" doc:id="a3102554-da03-45d1-b95c-62702d4df5f5" >
+				<ee:transform doc:name="Unauthorized" doc:id="a3102554-da03-45d1-b95c-62702d4df5f5" >
 					<ee:message />
 					<ee:variables >
 						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</otherwise>
@@ -506,13 +506,13 @@ output application/json
 				<flow-ref doc:name="deleteOutComesSub_Flow" doc:id="9957ad9a-1816-4583-b778-5bc7cfe7ebe9" name="deleteOutComesSub_Flow"/>
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Forbiden" doc:id="a3102554-da03-45d1-b95c-62702d4df5f5" >
+				<ee:transform doc:name="Unauthorized" doc:id="a3102554-da03-45d1-b95c-62702d4df5f5" >
 					<ee:message />
 					<ee:variables >
 						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</otherwise>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:aws="http://www.mulesoft.org/schema/mule/aws" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/aws http://www.mulesoft.org/schema/mule/aws/current/mule-aws.xsd">
+    <ee:object-store-caching-strategy name="Caching_Strategy" doc:name="Caching Strategy">
+        <in-memory-store name="cache" expirationInterval="300000"/>
+    </ee:object-store-caching-strategy>
+    <flow name="image-analysisFlow">
+        <ee:cache doc:name="Cache">
+            <logger level="INFO" doc:name="Logger"/>
+        </ee:cache>
+    </flow>
+    <flow name="rekognition-search-for-face">
+        <object-to-string-transformer doc:name="Object to String"/>
+        <dw:transform-message doc:name="payloadToBase64" metadata:id="806c7003-e88f-4d18-805b-fe800e52e564">
+            <dw:input-payload mimeType="application/java"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload]]></dw:set-payload>
+        </dw:transform-message>
+        <expression-component doc:name="Expression"><![CDATA[flowVars.collectionid = 'muleyCollectionWorkday';
+flowVars.access_key_id = 'AKIAJQ2J6DCDGMC4MV5Q':
+flowVars.secret_key_id = 'KeXBRvyyvNMNxPlNu2hkkJkKo5KC+wvapvpbOEbi';
+flowVars.maxFaces =5;
+]]></expression-component>
+        <custom-transformer class="com.mulesoft.base64.DetectFacesImageBytes" doc:name="Java"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger message="face matchresult  -- #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+</mule>

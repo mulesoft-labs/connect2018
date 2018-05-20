@@ -7,14 +7,14 @@
             </tls:context>
         </http:listener-connection>
     </http:listener-config>
-    <apikit:config name="chat-api-config" raml="chat-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="chat-api-config" raml="chat-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" disableValidations="true" />
     <os:object-store name="messages" doc:name="Object store" doc:id="5626fa3e-a428-4adf-ae73-60dedc78b33a" persistent="false" />
     <api-gateway:autodiscovery apiId="12625989" doc:name="API Autodiscovery" doc:id="d7dfa3ed-bf07-4dcd-9a0a-797c9255e198" flowRef="chat-api-main" />
     <global-property doc:name="Global Property" doc:id="dfc090d7-4f60-4840-979b-a67a10870aae" name="https.port" value="8082" />
     <http:request-config name="order-change-fullfilment" doc:name="HTTP Request configuration" doc:id="068263d4-cae6-4248-9665-922e0337707d" >
 		<http:request-connection protocol="HTTPS" host="order-change-fullfilment.cloudhub.io" />
 	</http:request-config>
-    
+
     <flow name="chat-api-main">
         <http:listener config-ref="chat-api-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -131,7 +131,7 @@ output application/json
         <error-handler>
             <on-error-propagate type="APIKIT:NOT_FOUND">
                 <ee:transform xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
@@ -149,7 +149,7 @@ output application/json
     <flow name="get:\messages:chat-api-config">
         <os:retrieve doc:name="Retrieve" doc:id="68db1664-8ced-4f8d-9b95-357135a587f9" key="messages" objectStore="messages" target="messageList">
             <os:default-value><![CDATA[#[
-			output application/java 
+			output application/java
 			---
 			""
 ]]]></os:default-value>
@@ -174,14 +174,14 @@ messages: vars.messageList]]></ee:set-payload>
 				<flow-ref doc:name="postMessageiSub_Flow" doc:id="9d1a2f5f-37a4-4365-a850-056c7e5b65e5" name="postMessageiSub_Flow"/>
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Forbiden Access" doc:id="bc2bc83b-9f8d-4db1-80cd-feaa0dfb9b22" >
+				<ee:transform doc:name="Unauthorized Access" doc:id="bc2bc83b-9f8d-4db1-80cd-feaa0dfb9b22" >
 					<ee:message >
 					</ee:message>
 					<ee:variables >
 						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</otherwise>
@@ -214,7 +214,7 @@ output application/java
         </ee:transform>
 		<os:retrieve doc:name="Retrieve" doc:id="2c5d0bcd-b7ba-4357-a953-814a6763c2ad" key="messages" objectStore="messages" target="messageList">
             <os:default-value><![CDATA[#[
-			output application/java 
+			output application/java
 			---
 			""
 ]]]></os:default-value>
@@ -239,7 +239,7 @@ vars.message]]></ee:set-payload>
             </ee:message>
         </ee:transform>
 	</sub-flow>
-    
+
     <sub-flow name="postMessageiSub_Flow" doc:id="552bb802-35d7-4192-8cc5-5dcd5ed8e81c" >
         <ee:transform doc:name="Transform Message" doc:id="e62472c9-d086-4fd3-a684-df87c1f4788a">
 					<ee:message>
@@ -259,7 +259,7 @@ payload.text]]></ee:set-variable>
 			<when expression='#[payload.destination == "bot"]' >
 				<os:retrieve doc:name="Retrieve Messages" doc:id="2c5d0bcd-b7ba-4357-a953-814a6763c2ad" key="messages" objectStore="messages" target="messageList">
 			<os:default-value><![CDATA[#[
-			output application/java 
+			output application/java
 			---
 			""
 ]]]></os:default-value>
@@ -345,14 +345,14 @@ output application/java
 				</ee:transform>
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Forbiden Access" doc:id="b1dc7ee5-b445-4fe8-acf2-b3478bb7b8e5" >
+				<ee:transform doc:name="Unauthorized Access" doc:id="b1dc7ee5-b445-4fe8-acf2-b3478bb7b8e5" >
 					<ee:message >
 					</ee:message>
 					<ee:variables >
 						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
 output application/java
 ---
-403]]></ee:set-variable>
+401]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</otherwise>
